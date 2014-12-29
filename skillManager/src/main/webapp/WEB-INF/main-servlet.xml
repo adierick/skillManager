@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	
+	<bean class="com.springmvc.web.LoginController"	p:indexPath="index"/>
+	<bean class="com.springmvc.web.LogoutController" />
+	<bean class="com.springmvc.web.PersonController" />
+	<bean class="com.springmvc.web.BusinessUnitController" />
+	<bean class="com.springmvc.web.ItemController" />
+	<bean class="com.springmvc.web.CategoryController" />
+	<bean class="com.springmvc.web.SkillController" />
+	<bean class="com.springmvc.web.SearchController" />
+	<bean class="com.springmvc.web.TemplateController" />
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:viewClass="com.springmvc.JstlView"
+		p:prefix="/WEB-INF/pages/"
+		p:suffix=".jsp"/>
+		 
+	<!-- TRANSLATIONS -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>translations</value>
+				<value>errors</value>
+			</list>
+		</property>
+		<property name="useCodeAsDefaultMessage" value="true"/> 
+	</bean>
+	
+	<!-- Enable annotation : especially hibernate validator annotation  -->
+	<mvc:annotation-driven />
+	
+</beans>
