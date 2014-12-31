@@ -13,6 +13,7 @@
 						<label class="large"><spring:message code="person.firstname"/> </label><form:input  path="person.firstname" readonly="true"/> <br/>
 						<label class="large"><spring:message code="person.lastname"/> </label><form:input   path="person.lastname" readonly="true"/><br/>
 						<label class="large"><spring:message code="person.matricule"/> </label><form:input  path="person.matricule" readonly="true"/><br/>
+						<label class="large"><spring:message code="person.email"/> </label><form:input path="person.email" /><br/>
 						<label class="large"><spring:message code="person.login"/> </label><form:input  path="person.login" readonly="true"/><br/>
 						<label class="large"><spring:message code="person.password"/> </label><form:password path="firstPassword"/><form:errors path="firstPassword" cssClass="error"/><br/>
 						<label class="large"><spring:message code="person.password.confirm"/></label><form:password path="confirmPassword"/><form:errors path="confirmPassword" cssClass="error"/><br/>

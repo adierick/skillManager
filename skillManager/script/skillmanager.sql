@@ -188,6 +188,8 @@ INSERT INTO `skill` (`id`, `person_id`, `level`, `item_id`) VALUES
 --
 ALTER TABLE `person`
   ADD CONSTRAINT `bu_id` FOREIGN KEY (`id_bu`) REFERENCES `bu` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  
+ALTER TABLE `person` ADD COLUMN `email` varchar(45) DEFAULT NULL;
 
 --
 -- Contraintes pour la table `skill`
