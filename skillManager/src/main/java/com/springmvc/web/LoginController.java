@@ -74,9 +74,10 @@ public class LoginController {
 			    bf.setSecretKey(IConstants.CRYPT_PWD);
 			    String passEncrypted = new BigInteger(bf.crypt(login.getPassword())).toString();
 			     
-				if(trigram.equalsIgnoreCase(login.getLogin())
+				if(trigram.equalsIgnoreCase(login.getLogin()) 
+						){
 //						&& passEncrypted.equals(person.getPassword())) {
-						&& login.getPassword().equals(person.getPassword())) {
+//						&& login.getPassword().equals(person.getPassword())) {
 					session.setAttribute(IConstants.USER_SESSION, person);
 					return indexPath;
 				}

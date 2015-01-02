@@ -55,7 +55,7 @@ public class PersonController {
 	private List<Person> listePersons;
 	
 	/** The service. */
-	private PersonService service = (PersonService) Context.getInstance().getApplicationContext().getBean(PersonService.class);
+	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
@@ -168,8 +168,10 @@ public class PersonController {
 			MyBlowfish bf = new MyBlowfish();
 		    bf.setSecretKey(IConstants.CRYPT_PWD);
 		    personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
+		    personForMerge.setEmail(person.getPerson().getEmail());
 			Person personMerged = service.mergePerson(personForMerge);
-			session.setAttribute(IConstants.USER_SESSION, personMerged);	
+			session.setAttribute(IConstants.USER_SESSION, personMerged);
+			
 			
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
 			return SUCCESS_COLAB_EDIT;
@@ -214,8 +216,9 @@ public class PersonController {
 				personForm.setPassword(service.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB)).getPassword());
 			}
 			
+			personForm.setEmail(person.getPerson().getEmail());
 			Person personMerged = service.mergePerson(personForm);
-			if(connected.getId().equals((Long)session.getAttribute(IConstants.ID_COLLAB))) {
+			if(connected.getId().equals(session.getAttribute(IConstants.ID_COLLAB))) {
 				session.setAttribute(IConstants.USER_SESSION, personMerged);
 			}		
 			
