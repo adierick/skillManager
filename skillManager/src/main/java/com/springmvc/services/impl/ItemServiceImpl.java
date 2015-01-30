@@ -49,7 +49,12 @@ public class ItemServiceImpl extends Service implements ItemService {
 	}
 	
 	@Override
-	public List<Item> listeAllItems(Category category) {
+	public List<Item> listeAllItemsOrderByCategory() {
+		return getSession().createQuery(" from Item order by category").list();
+	}
+	
+	@Override
+	public List<Item> listeItemsFromCategory(Category category) {
 		return getSession().getNamedQuery("findItemByCategory").setEntity("category", category).list();
 	}	
 

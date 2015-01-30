@@ -6,13 +6,20 @@
 <html lang="en">
 <head>
 	<title><spring:message code="skillmanager.title"/></title>
-	<link rel="icon" type="image/png" href="<c:url value='/img/icon.png' />" />
+	<link rel="icon" type="image/png" href="<c:url value='/img/icon.png' />" />	
 	<link href="<c:url value='/css/main.css' />" rel="stylesheet"  type="text/css" />
-	<link href="<c:url value='/css/ui-lightness/jquery-ui-1.10.4.css' />" rel="stylesheet"  type="text/css" />
+	<link href="<c:url value='/css/custom-theme/jquery-ui-1.10.4.custom.css' />" rel="stylesheet"  type="text/css" />
+	<link href="<c:url value='/css/semi-bootstrap.css' />" rel="stylesheet"  type="text/css" />
+	<link href="<c:url value='/css/bootstrap-duallistbox.css' />" rel="stylesheet"  type="text/css" />	
+		
 	<script src="<c:url value='/js/utils.js' />"></script>
 	<script src="<c:url value='/js/jquery-1.10.2.js' />"></script>
-	<script src="<c:url value='/js/jquery-ui-1.10.4.js' />"></script>
+	<script src="<c:url value='/js/jquery-ui-1.10.4.js' />"></script>	
 	<script src="<c:url value='/js/config-jquery.js' />"></script>
+ 	<script src="<c:url value='/js/bootstrap/bootstrap.js' />"></script>
+	<script src="<c:url value='/js/jquery.bootstrap-duallistbox.min.js' />"></script>
+	<script src="<c:url value='/js/load.js' />"></script>		
+	
 </head>
 <body class="body">
     <header>

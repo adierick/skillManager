@@ -70,6 +70,18 @@ INSERT INTO `file` (`id`, `name`, `type`, `size`, `content`) VALUES
 
 -- --------------------------------------------------------
 
+-- --------------------------------------------------------
+--
+-- Structure de la table `category`
+--
+
+CREATE TABLE IF NOT EXISTS `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(45) DEFAULT NULL,
+  `trs_label_key` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 --
 -- Structure de la table `item`
 --
@@ -101,17 +113,6 @@ INSERT INTO `item` (`id`, `code`, `trs_label_key`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Structure de la table `category`
---
-
-CREATE TABLE IF NOT EXISTS `category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
-  `trs_label_key` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
--- --------------------------------------------------------
 
 
 

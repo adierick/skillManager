@@ -28,6 +28,7 @@ public class Person implements Serializable {
 	@NotEmpty(message="{person.matricule.notBlank}")
 	private String matricule;
 	private String email;
+	private byte[] picture;
 	private BusinessUnit bu;
 	private Boolean admin;
 	@NotEmpty(message="{person.login.notBlank}")
@@ -43,12 +44,13 @@ public class Person implements Serializable {
 	 * @param dateEmbauche
 	 * @param fonction
 	 */
-	public Person(String firstname, String lastname, String matricule, String email, BusinessUnit bu, Boolean admin, String login, String password) {
+	public Person(String firstname, String lastname, String matricule, String email, byte[] picture, BusinessUnit bu, Boolean admin, String login, String password) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.matricule = matricule;
 		this.email = email;
+		this.picture = picture;
 		this.bu = bu;
 		this.admin = admin;
 		this.login = login;
@@ -99,10 +101,17 @@ public class Person implements Serializable {
 		return email;
 	}
 
-
-
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+
+	public byte[] getPicture() {
+		return picture;
+	}
+
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
 	}
 
 	@ManyToOne

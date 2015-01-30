@@ -35,6 +35,14 @@ public interface ItemService extends ISearchService<Item> {
 	 */
 	public List<Item> listeAllItems();
 	public List<Item> listeAllItems(int rowStart, int numberResults);
+		
+
+	/**
+	 * Liste all Items ordered by category.
+	 *
+	 * @return the list
+	 */
+	public List<Item> listeAllItemsOrderByCategory();
 	
 	/**
 	 * Creates the Item.
@@ -63,7 +71,7 @@ public interface ItemService extends ISearchService<Item> {
 	
 	public int itemCount();
 	
-	public List<Item> listeAllItems(Category category);
+	public List<Item> listeItemsFromCategory(Category category);
 
 	public void mergeItem(Item item);
 }

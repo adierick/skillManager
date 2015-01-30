@@ -10,7 +10,7 @@
 		</span>
 		
 			<div>
-				<div class="" style="font-size: 12px;margin-top: 40px;">
+				<div class="" style="font-size: 12px;margin-top: 20px;">
 						<img src="<c:url value='/img/main/main_perso_data.png' />"  
 						title="<spring:message code='index.personnal.data'/>"
 						onmouseover="setImageOver(this);" onmouseout="setImageOut(this);"
