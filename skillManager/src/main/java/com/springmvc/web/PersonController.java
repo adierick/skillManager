@@ -8,15 +8,20 @@
  */
 package com.springmvc.web;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +32,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springmvc.Context;
 import com.springmvc.IConstants;
@@ -142,6 +148,58 @@ public class PersonController {
 		
 		
 	}
+	/**
+	 * Person upload picture.
+	 * 
+	 * @param matricule
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/person/imageUpload", method = RequestMethod.POST)
+		public String pictureUpload (@RequestParam("matricule") String matricule, @RequestParam("file") MultipartFile file) throws IOException {
+			if(!file.isEmpty()) {
+				Person personForForm = service.getPerson(matricule);
+				byte [] picture = IOUtils.toByteArray(file.getInputStream());
+				personForForm.setPicture(picture);
+				service.updatePerson(personForForm);
+				
+				return SUCCESS_EDIT;
+			}
+			else {
+				return ERROR_FORWARD;
+			}	
+			
+	}
+		
+		
+	/**
+	 * Person display picture.
+	 * 
+	 * @param matricule
+	 * @param response
+	 * @param request
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/person/imageDisplay", method = RequestMethod.GET)
+	  public void showPicture(@RequestParam("matricule") String matricule, HttpServletResponse response,HttpServletRequest request) 
+	          throws ServletException, IOException{
+		
+		Person personForForm = service.getPerson(matricule);
+		if (personForForm.getPicture() == null) {
+			response.sendRedirect(request.getContextPath() + "img/main/avatar.png");
+		}
+		else {
+			OutputStream out = response.getOutputStream();
+			IOUtils.copy(new ByteArrayInputStream(personForForm.getPicture()), out);
+			
+			out.flush();
+			out.close();
+		}
+
+	
+	}
 	
 	/**
 	 * Update person.
@@ -169,6 +227,7 @@ public class PersonController {
 		    bf.setSecretKey(IConstants.CRYPT_PWD);
 		    personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 		    personForMerge.setEmail(person.getPerson().getEmail());
+		    personForMerge.setPicture(person.getPerson().getPicture());
 			Person personMerged = service.mergePerson(personForMerge);
 			session.setAttribute(IConstants.USER_SESSION, personMerged);
 			

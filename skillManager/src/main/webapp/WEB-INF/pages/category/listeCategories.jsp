@@ -23,6 +23,11 @@
 									<input type="submit" title="Delete" class="deleteButton"/>
 								</form>
 							</td>
+
+							<td>
+								<a href="editionCategorySkills.do?id=${category.id}" class="addmodifButton"><spring:message code="category.editskills"/></a>								
+							</td>													
+							
 						</tr>
 						</c:forEach>
 					</table>

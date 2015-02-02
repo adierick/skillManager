@@ -2,15 +2,22 @@ package com.springmvc.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +32,7 @@ import com.springmvc.services.ItemService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.Translation;
 import com.springmvc.utils.Security;
+import com.springmvc.web.editor.CategoryEditor;
 
 @Controller
 @RequestMapping("/category/*")
@@ -32,6 +40,7 @@ public class CategoryController {
 
 	/** The list categories. */
 	private List<Category> listCategory;
+	private Map<String, Item> itemCache;
 	
 	/** The service. */
 	private CategoryService service = (CategoryService) Context.getInstance().getApplicationContext().getBean(CategoryService.class);
@@ -39,6 +48,7 @@ public class CategoryController {
 	
 	private static final String SUCCESS_LIST = "category/listeCategories";
 	private static final String SUCCESS_EDIT = "category/editionCategory";
+	private static final String SUCCESS_EDITSKILLS = "category/editionCategorySkills";
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 
 	
@@ -80,12 +90,13 @@ public class CategoryController {
 	@RequestMapping(method=RequestMethod.GET, value="/category/editionCategory.do")
 	public String categoryDetail(@RequestParam("id") Integer id, Model model, HttpSession session, HttpServletRequest request) throws NumberFormatException, IOException {
 		Security secure = Security.getInstance();
-		if (secure.verifyAdmin(session, request)) {
-			 
-			Category category=service.getCategory(Long.parseLong(""+id));
-			List<Item> listItems= itemService.listeAllItems(category);			
-			model.addAttribute("category", category);
-			model.addAttribute("itemList", listItems);			
+		if (secure.verifyAdmin(session, request)) {			 
+			Category category=service.getCategory(Long.parseLong(""+id));						
+			model.addAttribute("category", category);				
+			
+			List<Item> itemListCategory=itemService.listeItemsFromCategory(category);
+			model.addAttribute("itemListCategory", itemListCategory);		
+			
 			model.addAttribute("type", "update");
 			return SUCCESS_EDIT;
 		} else {
@@ -93,6 +104,31 @@ public class CategoryController {
 		}
 
 	}
+	
+	/**
+	 * Category' skill list.
+	 *
+	 * @param id the id
+	 * @param model the model
+	 * @return 
+	 * @throws IOException 
+	 * @throws NumberFormatException 
+	 */
+	@RequestMapping(method=RequestMethod.GET, value="/category/editionCategorySkills.do")
+	public String categorySkillsDetail(@RequestParam("id") Integer id, Model model, HttpSession session, HttpServletRequest request) throws NumberFormatException, IOException {
+		Security secure = Security.getInstance();
+		if (secure.verifyAdmin(session, request)) {			 
+			Category category=service.getCategory(Long.parseLong(""+id));						
+			model.addAttribute("category", category);			
+			List<Item> allItemList=itemService.listeAllItems();
+			model.addAttribute("allItemsList", allItemList);
+			model.addAttribute("type", "update");
+			return SUCCESS_EDITSKILLS;
+		} else {
+			return ERROR_FORWARD;
+		}
+	}
+	
 	
 	/**
 	 * Update category.
@@ -110,8 +146,22 @@ public class CategoryController {
 			if(!category.getCode().isEmpty()
 					&& !category.getTrs_label_key().isEmpty()) {
 				
-				if(category.getId()!=null) {
-					service.updateCategory(category);
+				if(category.getId()!=null) {					
+					// gestion des suppressions
+					List<Item> itemsEnBase = itemService.listeItemsFromCategory(category);					
+					for(Item item : itemsEnBase) {
+						if (!category.getItems().contains(item)) {
+							item.setCategory(null);
+							itemService.updateItem(item);
+						}
+					}
+					
+					// gestion des ajouts/conservation
+					for(Item item : category.getItems()) {						
+						item.setCategory(category);
+					} service.updateCategory(category);
+					
+					model.addAttribute("category", category);
 					forward = SUCCESS_EDIT;
 				} else {
 					service.createCategory(category);
@@ -126,6 +176,7 @@ public class CategoryController {
 		return forward;
 	}
 	
+		
 	@RequestMapping(method=RequestMethod.POST, value="/category/delete.do")
 	public String deleteCategory(@RequestParam("id") Integer id, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
@@ -148,5 +199,36 @@ public class CategoryController {
 		}
 		else return ERROR_FORWARD;
 	}
+	
+
+	
+	
+	// mapper les items 
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) throws Exception {
+		binder.registerCustomEditor(List.class, "items", new CustomCollectionEditor(List.class) {
+			@Override
+			protected Object convertElement(Object element) {
+				Long id=null;
+				
+				if(element instanceof String && !((String)element).equals("")){ // id=String dans la JSP                    
+                    try{
+                        id = Long.parseLong((String) element);
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println("Erreur conversion element was " + ((String) element));
+                        e.printStackTrace();
+                    }
+                }
+                else if(element instanceof Long) { // id=Long dans la bdd
+                    id = (Long) element;
+                }
+
+                return (id != null) ? itemService.getItem(id) : null; 
+						
+						
+			}
+		});
+	}		
 	
 }

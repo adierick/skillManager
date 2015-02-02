@@ -11,6 +11,7 @@
 				<form:form modelAttribute="businessunit" action="update.do" class="formulaire">
 					<div>
 						<label class="large"><spring:message code='businessunit.label'/> </label><form:input path="label"/><br/>
+						<label class="large"><spring:message code='businessunit.buManager'/> </label><form:input path=" "/><br/>
 					</div>
 					<form:hidden path="id"/>
 					<div>
