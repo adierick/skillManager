@@ -227,7 +227,7 @@ public class PersonController {
 		    bf.setSecretKey(IConstants.CRYPT_PWD);
 		    personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 		    personForMerge.setEmail(person.getPerson().getEmail());
-		    personForMerge.setPicture(person.getPerson().getPicture());
+		    //personForMerge.setPicture(person.getPerson().getPicture());
 			Person personMerged = service.mergePerson(personForMerge);
 			session.setAttribute(IConstants.USER_SESSION, personMerged);
 			

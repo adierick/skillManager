@@ -24,7 +24,7 @@
 						</form:select>
 					
 				
-				<img src="imageDisplay?matricule=${person.person.matricule}"/>
+<%-- 				<img src="imageDisplay?matricule=${person.person.matricule}"/> --%>
 						
 					</div>
 					<form:hidden path="person.bu"/>

@@ -9,13 +9,14 @@
 			<div>
 				<img src="<c:url value='/img/main/main_perso_data.png' />" style="float:left; padding: 10px;" />
 				
-				<form:form modelAttribute="person" action="${type}AsAdmin.do" class="formulaire" enctype="mutipart/form-data">
+				<form:form modelAttribute="person" action="${type}AsAdmin.do" class="formulaire">
+<%-- 				<form:form modelAttribute="person" action="${type}AsAdmin.do" class="formulaire" enctype="multipart/form-data"> --%>
 					<div>
 						<label class="large"><spring:message code="person.firstname"/> </label><form:input path="person.firstname"/><form:errors path="person.firstname" cssClass="error"/><br/>
 						<label class="large"><spring:message code="person.lastname"/> </label><form:input path="person.lastname"/><form:errors path="person.lastname" cssClass="error"/><br/>
 						<label class="large"><spring:message code="person.matricule"/> </label><form:input path="person.matricule"/><form:errors path="person.matricule" cssClass="error"/><br/>
 						<label class="large"><spring:message code="person.email"/> </label><form:input path="person.email"/><form:errors path="person.email" cssClass="error"/><br/>
-						<label class="large"><spring:message code="person.picture"/> </label><form:input path="person.picture" type="file"/><form:errors path="person.picture" cssClass="error"/><br/>
+<%-- 						<label class="large"><spring:message code="person.picture"/> </label><form:input path="person.picture" type="file"/><form:errors path="person.picture" cssClass="error"/><br/> --%>
 						<label class="large"><spring:message code="person.admin"/> </label><form:checkbox path="person.admin" /><br/>
 						<label class="large"><spring:message code="person.login"/> </label><form:input path="person.login"/><form:errors path="person.login" cssClass="error"/><br/>
 						<label class="large"><spring:message code="person.password"/> </label><form:password path="firstPassword"/><form:errors path="firstPassword" cssClass="error"/><br/>
