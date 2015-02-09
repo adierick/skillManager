@@ -1,14 +1,9 @@
 package com.springmvc.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -30,9 +25,8 @@ import com.springmvc.bo.Item;
 import com.springmvc.services.CategoryService;
 import com.springmvc.services.ItemService;
 import com.springmvc.utils.ITranslations;
-import com.springmvc.utils.Translation;
 import com.springmvc.utils.Security;
-import com.springmvc.web.editor.CategoryEditor;
+import com.springmvc.utils.Translation;
 
 @Controller
 @RequestMapping("/category/*")
@@ -43,8 +37,8 @@ public class CategoryController {
 	private Map<String, Item> itemCache;
 	
 	/** The service. */
-	private CategoryService service = (CategoryService) Context.getInstance().getApplicationContext().getBean(CategoryService.class);
-	private ItemService itemService = (ItemService) Context.getInstance().getApplicationContext().getBean(ItemService.class);
+	private final CategoryService service = Context.getInstance().getApplicationContext().getBean(CategoryService.class);
+	private final ItemService itemService = Context.getInstance().getApplicationContext().getBean(ItemService.class);
 	
 	private static final String SUCCESS_LIST = "category/listeCategories";
 	private static final String SUCCESS_EDIT = "category/editionCategory";
@@ -162,6 +156,10 @@ public class CategoryController {
 					} service.updateCategory(category);
 					
 					model.addAttribute("category", category);
+					List<Item> itemListCategory=itemService.listeItemsFromCategory(category);
+					model.addAttribute("itemListCategory", itemListCategory);		
+					
+					model.addAttribute("type", "update");
 					forward = SUCCESS_EDIT;
 				} else {
 					service.createCategory(category);

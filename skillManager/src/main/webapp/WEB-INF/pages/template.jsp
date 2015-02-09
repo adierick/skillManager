@@ -27,10 +27,10 @@
     </header>
     <div id="main-page">
 		<div class="validDiv">
-			<label>${msgSaved}</label>
+			<label class="labelMsg">${msgSaved}</label>
 		</div>
 		<div class="errorDiv">
-			<label>${msgError}</label>
+			<label class="labelMsg">${msgError}</label>
 		</div>
     	<jsp:include page="${partial}"/>
     </div>

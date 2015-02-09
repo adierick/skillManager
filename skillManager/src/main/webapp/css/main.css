@@ -743,3 +743,6 @@ form.formulaire fieldset div th span {
  }
  
  
+.labelMsg {
+	display: inline;	
+}
