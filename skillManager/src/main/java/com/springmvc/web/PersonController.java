@@ -148,6 +148,7 @@ public class PersonController {
 		
 		
 	}
+	
 	/**
 	 * Person upload picture.
 	 * 
@@ -156,6 +157,7 @@ public class PersonController {
 	 * @return
 	 * @throws IOException
 	 */
+	/*
 	@RequestMapping(value="/person/imageUpload", method = RequestMethod.POST)
 		public String pictureUpload (@RequestParam("matricule") String matricule, @RequestParam("file") MultipartFile file) throws IOException {
 			if(!file.isEmpty()) {
@@ -182,6 +184,7 @@ public class PersonController {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	/*
 	@RequestMapping(value = "/person/imageDisplay", method = RequestMethod.GET)
 	  public void showPicture(@RequestParam("matricule") String matricule, HttpServletResponse response,HttpServletRequest request) 
 	          throws ServletException, IOException{
@@ -200,6 +203,7 @@ public class PersonController {
 
 	
 	}
+	*/
 	
 	/**
 	 * Update person.
