@@ -35,6 +35,13 @@ public class PictureServiceImpl extends Service implements PictureService {
 	public Picture getPicture(String picture_name) {
 		Criteria sqlCriteria = getSession().createCriteria(Picture.class);
 		sqlCriteria.add(Restrictions.eq("picture_name", picture_name));
+		
+		List result = sqlCriteria.list();
+		
+		if(result.size()==0) {
+			return null;
+		}
+		
 		return (Picture) sqlCriteria.list().get(0);
 	}
 
