@@ -21,7 +21,7 @@ public class PictureServiceImpl extends Service implements PictureService {
 
 	@Override
 	public void updatePicture(Picture picture) {
-		getSession().save(picture);
+		getSession().merge(picture);
 		
 	}
 	

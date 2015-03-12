@@ -35,6 +35,16 @@
 						<input type="submit" title="${type}" class="submitButton"/>
 					</div>
 				</form:form>
+				<br/>
+				<form:form modelAttribute="picture" action="loadPicture.do" class="formulaire" enctype="multipart/form-data">
+					<div>
+					<label class="large"><spring:message code="person.picture"/>
+					<form:input path="file" type="file"/>
+					</label><form:errors path="file" cssClass="error"/><br/>
+					<input type="submit" value="Envoyer"><br/>
+					</div>
+					<img src="data:image/jpeg;base64,${Img}" alt="avatar" height="200px" >
+				</form:form>
 			</div>
 		</fieldset>
 

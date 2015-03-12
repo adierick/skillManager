@@ -60,8 +60,7 @@ public class Picture {
 	 * @return the picture_data
 	 */
 	
-	@OneToMany
-	@JoinColumn(name="id_picture")
+
 	public byte[] getPicture_data() {
 		return picture_data;
 	}

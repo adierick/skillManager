@@ -31,94 +31,70 @@ public class PictureController {
 
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
 	private final PersonService personService = Context.getInstance().getApplicationContext().getBean(PersonService.class);
-	
+
 	private static final String LOAD_PICTURE_PATH = "C:/Users/jmasset/Pictures";
 	private static final String SUCCESS_FORM = "person/uploadPicture"; 
 	private static final String SUCCESS_EDIT = "person/editionPerson";
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
-	
+
 	public PictureController() {
 		super();
 	}
-	
-	
+
+
 	@RequestMapping(value="/person/uploadPicture.do")
 	public String formUploadPicture(Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		model.addAttribute("picture", new PictureFormData());
-		
-		InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
-		ByteArrayOutputStream bos=new ByteArrayOutputStream();
-		int b;
-		byte[] buffer = new byte[1024];
-		while((b=fis.read(buffer))!=-1){
-		   bos.write(buffer,0,b);
+		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
+		Picture picture = pictureService.getPicture(connected.getMatricule());
+		byte [] fileBytes = null;
+
+		if (picture == null) {
+
+			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
+			ByteArrayOutputStream bos=new ByteArrayOutputStream();
+			int b;
+			byte[] buffer = new byte[1024];
+			while((b=fis.read(buffer))!=-1){
+				bos.write(buffer,0,b);
+			}
+			fileBytes=bos.toByteArray();
+			fis.close();
+			bos.close();
+
+
 		}
-		byte[] fileBytes=bos.toByteArray();
-		fis.close();
-		bos.close();
-		
+		else {
+			fileBytes = picture.getPicture_data();
+		}
+
 		byte [] encoded = Base64.encode(fileBytes);
 		String encodedString = new String (encoded);
-		
+
 		model.addAttribute("Img", encodedString);
-		
-		
-		
+
+
+
+
+
 		return SUCCESS_FORM;
 	}
-	/*
-	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-	public String loadPicture(HttpSession session, HttpServletRequest request, @RequestParam MultipartFile file) throws IllegalStateException, IOException {
-		
-		if (!(file == null && file.getOriginalFilename().equals(""))) {
-			
-			file.transferTo(new File (LOAD_PICTURE_PATH + file.getOriginalFilename()));
-			return SUCCESS_EDIT;
-			
-		} else {
-			return ERROR_FORWARD;
-		}
-		
-	}
-	*/
-	
+
 //	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-//	public String loadPicture(HttpServletRequest request, @RequestParam CommonsMultipartFile [] file, @ModelAttribute("picture") Picture pictureToLoad, BindingResult binding) throws Exception {
-//		
-//		for (CommonsMultipartFile aFile : file) {
-//			
-//			if (file != null && file.length > 0) {
-//				pictureToLoad.setPicture_name(aFile.getOriginalFilename());
-//				pictureToLoad.setPicture_data(aFile.getBytes());
-//				pictureService.savePicture(pictureToLoad);
-//			}
-//		}
-//		
-//		return SUCCESS_EDIT;
+//	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+//
+//		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);	
+//		byte [] encoded = Base64.encode(pictureToLoad.getFile().getBytes());
+//		Picture pictureToSave = new Picture();
+//		pictureToSave.setPicture_name(connected.getMatricule());
+//		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
+//		pictureService.savePicture(pictureToSave);
+//
+//		String encodedString = new String (encoded);
+//
+//		model.addAttribute("Img", encodedString);
+//
+//		return SUCCESS_FORM;
 //	}
-	
-	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
-	
-	Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);	
-	byte [] encoded = Base64.encode(pictureToLoad.getFile().getBytes());
-	Picture pictureToSave = new Picture();
-	pictureToSave.setPicture_name(connected.getMatricule());
-	pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
-	pictureService.savePicture(pictureToSave);
-	
-	String encodedString = new String (encoded);
-	
-	model.addAttribute("Img", encodedString);
-//			if (file != null && file.getSize() > 0) {
-//				byte [] bytes = file.getBytes();
-//				pictureToLoad.setPicture_name(file.getOriginalFilename());
-//				pictureToLoad.setPicture_data(file.getBytes());
-//				pictureService.savePicture(pictureToLoad);
-//			}
-		
-		
-		return SUCCESS_FORM;
-	}
 
 }
