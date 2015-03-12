@@ -12,10 +12,11 @@
 				<form:form modelAttribute="picture" action="loadPicture.do" class="formulaire" enctype="multipart/form-data">>
 					<div>
 					<label class="large"><spring:message code="person.picture"/>
-					<form:input path="picture_data" type="file"/>
-					</label><form:errors path="picture_data" cssClass="error"/><br/>
+					<form:input path="file" type="file"/>
+					</label><form:errors path="file" cssClass="error"/><br/>
 					<input type="submit" value="Envoyer"><br/>
 					</div>
+					<img src="data:image/jpeg;base64,${Img}" alt="avatar">
 				</form:form>
 				
 			</div>

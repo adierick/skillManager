@@ -1,31 +1,42 @@
 package com.springmvc.formdata;
 
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Component;
-
-import com.springmvc.bo.Picture;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PictureFormData {
 	
-	@Valid
-	private Picture picture;
+	
+	private String picture_name;
+	private MultipartFile file;
 
-	public PictureFormData(Picture picture) {
-		this.picture = picture;
+	public MultipartFile getFile() {
+		return file;
 	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+
+	public String getPicture_name() {
+		return picture_name;
+	}
+
+	public void setPicture_name(String picture_name) {
+		this.picture_name = picture_name;
+	}
+
 	
 	public PictureFormData() {
-		
-	}
+			
+		}
 
-	public Picture getPicture() {
-		return picture;
+	public PictureFormData(String picture_name, MultipartFile file) {
+		super();
+		this.picture_name = picture_name;
+		this.file = file;
 	}
-
-	public void setPicture(Picture picture) {
-		this.picture = picture;
-	}
+	
+	
 
 }
