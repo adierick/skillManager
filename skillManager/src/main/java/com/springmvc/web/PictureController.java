@@ -1,30 +1,20 @@
 package com.springmvc.web;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.bouncycastle.util.encoders.Base64;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.springmvc.Context;
 import com.springmvc.IConstants;
@@ -33,7 +23,6 @@ import com.springmvc.bo.Picture;
 import com.springmvc.formdata.PictureFormData;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
-import com.springmvc.services.impl.PictureServiceImpl;
 
 
 @Controller
@@ -57,12 +46,7 @@ public class PictureController {
 	public String formUploadPicture(Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		model.addAttribute("picture", new PictureFormData());
 		
-		URL resource = this.getClass().getClassLoader().getResource("/img/person-avatar.png");
-		
-//		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
-//		Picture pictureToDisplay = pictureService.getPicture(connected.getMatricule());
-		
-		InputStream fis= resource.openStream();
+		InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
 		ByteArrayOutputStream bos=new ByteArrayOutputStream();
 		int b;
 		byte[] buffer = new byte[1024];
