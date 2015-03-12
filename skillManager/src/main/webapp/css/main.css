@@ -88,7 +88,7 @@ input[type=submit],input[type=button] {
 	background: url('../img/upload.gif') no-repeat 0px 0px transparent;
 	display: block;
 	float: right;
-	height: 25px;
+	height: 25px !important;
 	margin-left: 5px;
 	overflow: hidden;
 	text-indent: 2000px;
@@ -96,6 +96,14 @@ input[type=submit],input[type=button] {
 	margin-top: 5px;
 	cursor: pointer;
 	border: none;
+}
+
+.pictureSubmit {
+	margin-top: 10px;
+}
+
+.formUpload {
+	width: 50px !important;
 }
 
 .pictureDiv {
