@@ -122,6 +122,10 @@ function listSkill(context, param) {
 	location.href=context + '/main/skill/listeSkills.do?matricule=' + param;
 }
 
+function uploadPicture(context, param) {
+	location.href=context + '/main/person/uploadPicture.do';
+}
+
 function setSkillLevel(context, lvl, param, id, itemId) {
 	location.href=context + '/main/skill/updateSkills.do?matricule=' + param+'&lvl='+lvl+'&id='+id+'&itemId='+itemId;
 }

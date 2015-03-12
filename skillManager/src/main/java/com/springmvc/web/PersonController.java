@@ -356,6 +356,8 @@ public class PersonController {
 		}
 	}
 	
+	
+	
 	/**
 	 * Permet d'afficher la liste de societes dans la jsp avec ${listeSocietes}
 	 * @return

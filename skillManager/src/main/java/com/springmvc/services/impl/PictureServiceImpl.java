@@ -3,29 +3,39 @@ package com.springmvc.services.impl;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.springmvc.bo.Picture;
 import com.springmvc.services.PictureService;
 import com.springmvc.services.Service;
 
+
+@Component
+@Transactional
 public class PictureServiceImpl extends Service implements PictureService {
 
 
 
 	@Override
-	public void savePicture(Picture picture) {
+	public void updatePicture(Picture picture) {
 		getSession().save(picture);
-		
-	}
-
-	@Override
-	public void deletePicture(Picture picture) {
-		getSession().delete(picture);
 		
 	}
 	
 	@Override
+	public Picture savePicture(Picture picture) {
+		getSession().save(picture);
+		return picture;
+	}
+	
+	@Override
 	public Picture getPicture(String picture_name) {
-		return (Picture) getSession().get(Picture.class, picture_name);
+		Criteria sqlCriteria = getSession().createCriteria(Picture.class);
+		sqlCriteria.add(Restrictions.eq("picture_name", picture_name));
+		return (Picture) sqlCriteria.list().get(0);
 	}
 
 	@Override
@@ -39,6 +49,10 @@ public class PictureServiceImpl extends Service implements PictureService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
+
+	
 
 	
 

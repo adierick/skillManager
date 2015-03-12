@@ -26,22 +26,19 @@
 							<form:option value="" label="---"/>
 							<form:options items="${listBu}" itemLabel="label"/>
 						</form:select>
+						<br/>
+						<label class="large"><spring:message code="person.picture"/> </label><form:input path="" type="file"/><form:errors path="" cssClass="error"/><br/>
+				
 					</div>
-				</form:form>
-				<br/>
-				<form:form modelAttribute="picture" action="${type}AsAdmin.do" class="formulaire" enctype="multipart/form-data">
-					<div>
-						<label class="large"><spring:message code="person.picture" /> </label><form:input path="picture.picture_data" type="file"/><form:errors path="picture.picture_data" cssClass="error"/>
-					</div>
-					<div>
-						<input type="button" title="${type}" class="submitButton"/>
-					</div>
+					
 					<div>
 						<input type="button" title="<spring:message code='person.edit.back'/>" onclick="listePersons('<%=request.getContextPath()%>', '${userSession.id}')" class="backButton" />		  
 						
 						<input type="submit" title="${type}" class="submitButton"/>
 					</div>
 				</form:form>
+				
+				
 				
 			</div>
 		</fieldset>
