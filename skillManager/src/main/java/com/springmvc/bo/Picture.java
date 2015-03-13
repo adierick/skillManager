@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 @Table(name="picture")
 public class Picture {
@@ -17,6 +19,7 @@ public class Picture {
 	private int id;
 	private String picture_name;
 	private byte[] picture_data;
+	
 	
 	
 	public Picture() {
@@ -57,8 +60,7 @@ public class Picture {
 	 * @return the picture_data
 	 */
 	
-	@OneToMany
-	@JoinColumn(name="id_picture")
+
 	public byte[] getPicture_data() {
 		return picture_data;
 	}
@@ -68,8 +70,6 @@ public class Picture {
 	public void setPicture_data(byte[] picture_data) {
 		this.picture_data = picture_data;
 	}
-	
-	
-	
+
 
 }

@@ -9,7 +9,9 @@
 package com.springmvc.web;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.util.encoders.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,9 +41,12 @@ import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.Picture;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PersonFormDataAdmin;
+import com.springmvc.formdata.PictureFormData;
 import com.springmvc.services.PersonService;
+import com.springmvc.services.PictureService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.MyBlowfish;
 import com.springmvc.utils.Security;
@@ -62,6 +68,7 @@ public class PersonController {
 	
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
+	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
 
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
@@ -106,19 +113,35 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/person/editionPerson.do")
 	public String personDetail(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
+		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
+		if (isAdmin) {
+			return loadPersonDetailAsAdmin(matricule, model, session, request);
+		}
+		return loadPersonDetail(matricule, model, session, request);
+		
+		
+	}
 
+	private String loadPersonDetail(String matricule, Model model,
+			HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrAdmin(matricule, session, request)){
 			Person personForForm = service.getPerson(matricule);
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
+			
+			try {
+				this.formUploadPicture(model, session, request);
+			} catch (Exception e) {
+			
+				e.printStackTrace();
+			}
+			
 			return SUCCESS_COLAB_EDIT;
 		} else {
 			return ERROR_FORWARD;
 		}
-		
-		
 	}
 	
 	/**
@@ -130,13 +153,28 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/person/editionPersonAsAdmin.do")
 	public String personDetailAsAdmin(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
+		
+		return loadPersonDetailAsAdmin(matricule, model, session, request);
+		
+		
+	}
 
+	private String loadPersonDetailAsAdmin(String matricule, Model model,
+			HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrAdmin(matricule, session, request)){
 			Person personForForm = service.getPerson(matricule);
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
+			
+			try {
+				this.formUploadPicture(model, session, request);
+			} catch (Exception e) {
+			
+				e.printStackTrace();
+			}
+			
 			if(secure.verifyAdmin(session, request)){
 				return SUCCESS_EDIT;
 			}else{
@@ -145,60 +183,71 @@ public class PersonController {
 		} else {
 			return ERROR_FORWARD;
 		}
-		
-		
 	}
-	/**
-	 * Person upload picture.
-	 * 
-	 * @param matricule
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value="/person/imageUpload", method = RequestMethod.POST)
-		public String pictureUpload (@RequestParam("matricule") String matricule, @RequestParam("file") MultipartFile file) throws IOException {
-			if(!file.isEmpty()) {
-				Person personForForm = service.getPerson(matricule);
-				byte [] picture = IOUtils.toByteArray(file.getInputStream());
-				personForForm.setPicture(picture);
-				service.updatePerson(personForForm);
-				
-				return SUCCESS_EDIT;
+	
+	
+	private void formUploadPicture(Model model, HttpSession session, HttpServletRequest request) throws Exception {
+		model.addAttribute("picture", new PictureFormData());
+		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
+		Picture picture = pictureService.getPicture(connected.getMatricule());
+		byte [] fileBytes = null;
+
+		if (picture == null) {
+
+			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
+			ByteArrayOutputStream bos=new ByteArrayOutputStream();
+			int b;
+			byte[] buffer = new byte[1024];
+			while((b=fis.read(buffer))!=-1){
+				bos.write(buffer,0,b);
 			}
-			else {
-				return ERROR_FORWARD;
-			}	
-			
-	}
-		
-		
-	/**
-	 * Person display picture.
-	 * 
-	 * @param matricule
-	 * @param response
-	 * @param request
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/person/imageDisplay", method = RequestMethod.GET)
-	  public void showPicture(@RequestParam("matricule") String matricule, HttpServletResponse response,HttpServletRequest request) 
-	          throws ServletException, IOException{
-		
-		Person personForForm = service.getPerson(matricule);
-		if (personForForm.getPicture() == null) {
-			response.sendRedirect(request.getContextPath() + "img/main/avatar.png");
+			fileBytes=bos.toByteArray();
+			fis.close();
+			bos.close();
+
+
 		}
 		else {
-			OutputStream out = response.getOutputStream();
-			IOUtils.copy(new ByteArrayInputStream(personForForm.getPicture()), out);
-			
-			out.flush();
-			out.close();
+			fileBytes = picture.getPicture_data();
 		}
 
-	
+		byte [] encoded = Base64.encode(fileBytes);
+		String encodedString = new String (encoded);
+
+		model.addAttribute("Img", encodedString);
+
+
+
+
+
+	}
+
+	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
+	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+
+		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);	
+		Picture picture = pictureService.getPicture(connected.getMatricule());
+		Picture pictureToSave = null;
+		
+		if (picture == null) {
+			pictureToSave = new Picture();
+		}
+		else {
+			pictureToSave = picture;
+		}
+		
+		pictureToSave.setPicture_name(connected.getMatricule());
+		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
+		pictureService.updatePicture(pictureToSave);
+		
+		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
+		if (isAdmin) {
+			
+			return loadPersonDetailAsAdmin(connected.getMatricule(), model, session, request);
+		}
+		
+		return loadPersonDetail(connected.getMatricule(), model, session, request);
+
 	}
 	
 	/**
@@ -351,6 +400,8 @@ public class PersonController {
 			return ERROR_FORWARD;
 		}
 	}
+	
+	
 	
 	/**
 	 * Permet d'afficher la liste de societes dans la jsp avec ${listeSocietes}

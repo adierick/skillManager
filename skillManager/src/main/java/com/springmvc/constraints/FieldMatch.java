@@ -23,6 +23,10 @@ import javax.validation.Payload;
  *   @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
  *   @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")})
  *   
+ *   
+ *   
+ *   
+ *   
  *   The message will be affected to the second field as an error if isn't valid in case.
  */
 

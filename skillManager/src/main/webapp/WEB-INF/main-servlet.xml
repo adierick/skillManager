@@ -19,12 +19,17 @@
 	<bean class="com.springmvc.web.SkillController" />
 	<bean class="com.springmvc.web.SearchController" />
 	<bean class="com.springmvc.web.TemplateController" />
+	<bean class="com.springmvc.web.PictureController" />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:viewClass="com.springmvc.JstlView"
 		p:prefix="/WEB-INF/pages/"
 		p:suffix=".jsp"/>
-		 
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1048576"/>
+	</bean> 
+	
 	<!-- TRANSLATIONS -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
