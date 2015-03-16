@@ -29,23 +29,25 @@
 							<br/>
 					
 						</div>
-						
+						<br/>
 						<div>
 							<input type="button" title="<spring:message code='person.edit.back'/>" onclick="listePersons('<%=request.getContextPath()%>', '${userSession.id}')" class="backButton" />		  
 							
 							<input type="submit" title="${type}" class="submitButton"/>
 						</div>
 					</form:form>
+					
 					</div>
 					<br/>
 					<div class="pictureDiv">
 						<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px">
 						<br/>
+						<c:if test="${userSession.admin}">
 						<form:form modelAttribute="picture" action="loadPicture.do" class="formulaire formUpload" enctype="multipart/form-data">
-							
 							<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo"/><form:errors path="file" cssClass="error"/><br/>
 							<input type="submit" value="Envoyer" class="pictureSubmit"><br/>
 						</form:form>
+						</c:if>
 					</div>
 			</div>
 		</fieldset>

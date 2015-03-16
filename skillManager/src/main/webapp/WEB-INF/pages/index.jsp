@@ -55,12 +55,6 @@
 							onclick="listeCategories('<%=request.getContextPath()%>', '${userSession.id}')" 
 							style="cursor: pointer; float:left; padding: 10px;" />
 							
-							<img src="<c:url value='/img/main/main_admin_category.png' />"  
-							title="<spring:message code='index.admin.picture'/>"
-							onmouseover="setImageOver(this);" onmouseout="setImageOut(this);"
-							onclick="uploadPicture('<%=request.getContextPath()%>', '${userSession.id}')" 
-							style="cursor: pointer; float:left; padding: 10px;" />
-							
 							<img src="<c:url value='/img/main/main_admin_search.png' />"  
 							title="<spring:message code='index.admin.search'/>"
 							onmouseover="setImageOver(this);" onmouseout="setImageOut(this);"

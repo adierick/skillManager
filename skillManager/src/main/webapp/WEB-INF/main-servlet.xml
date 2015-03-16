@@ -19,7 +19,7 @@
 	<bean class="com.springmvc.web.SkillController" />
 	<bean class="com.springmvc.web.SearchController" />
 	<bean class="com.springmvc.web.TemplateController" />
-	<bean class="com.springmvc.web.PictureController" />
+	<!--  <bean class="com.springmvc.web.PictureController" />-->
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:viewClass="com.springmvc.JstlView"
