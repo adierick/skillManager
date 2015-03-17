@@ -200,7 +200,7 @@ public class PersonController {
 
 		if (picture == null) {
 
-			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
+			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar1.png").getInputStream();
 			ByteArrayOutputStream bos=new ByteArrayOutputStream();
 			int b;
 			byte[] buffer = new byte[1024];
@@ -305,7 +305,7 @@ public class PersonController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/update.do")
-	public String updatePerson(@ModelAttribute("person") @Valid PersonFormData person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+	public String updatePerson(@ModelAttribute("person") @Valid PersonFormData person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		
 		Person personForMerge;
 		Security secure = Security.getInstance();
@@ -345,7 +345,7 @@ public class PersonController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/updateAsAdmin.do")
-	public String updatePersonAsAdmin(@ModelAttribute("person") @Valid PersonFormDataAdmin person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
+	public String updatePersonAsAdmin(@ModelAttribute("person") @Valid PersonFormDataAdmin person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
 		
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
@@ -393,7 +393,7 @@ public class PersonController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/createAsAdmin.do")
-	public String createPersonAsAdmin(@ModelAttribute("person") @Valid PersonFormData person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
+	public String createPersonAsAdmin(@ModelAttribute("person") @Valid PersonFormData person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			Person personForm;
@@ -440,6 +440,7 @@ public class PersonController {
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			model.addAttribute("person", new PersonFormData(new Person()));
+			model.addAttribute("picture", new PictureFormData());
 			model.addAttribute("type", "create");
 			return SUCCESS_EDIT;
 		} else {
