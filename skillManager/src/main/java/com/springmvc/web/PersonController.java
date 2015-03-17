@@ -8,6 +8,11 @@
  */
 package com.springmvc.web;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,6 +22,7 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.pdf.qrcode.ByteArray;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
@@ -159,8 +166,7 @@ public class PersonController {
 		
 	}
 
-	private String loadPersonDetailAsAdmin(String matricule, Model model,
-			HttpSession session, HttpServletRequest request) throws IOException {
+	private String loadPersonDetailAsAdmin(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrAdmin(matricule, session, request)){
 			Person personForForm = service.getPerson(matricule);
@@ -194,7 +200,7 @@ public class PersonController {
 
 		if (picture == null) {
 
-			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar.png").getInputStream();
+			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar1.png").getInputStream();
 			ByteArrayOutputStream bos=new ByteArrayOutputStream();
 			int b;
 			byte[] buffer = new byte[1024];
@@ -238,6 +244,25 @@ public class PersonController {
 		
 		pictureToSave.setPicture_name(connected.getMatricule());
 		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
+		
+		try {
+
+			BufferedImage imageToResize = ImageIO.read(new ByteArrayInputStream(pictureToSave.getPicture_data()));
+			imageToResize = resizePersonPicture(imageToResize, 150, 150);
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(imageToResize, "jpg", baos);
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			pictureToSave.setPicture_data(imageInByte);
+			
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		
+		
+		
 		pictureService.updatePicture(pictureToSave);
 		
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
@@ -249,6 +274,27 @@ public class PersonController {
 		return loadPersonDetail(connected.getMatricule(), model, session, request);
 
 	}
+	/**
+	 * Resize automatically Person picture to 150*150 px and get better quality after resizing
+	 * 
+	 * @param image
+	 * @param img_width
+	 * @param img_height
+	 * @return
+	 */
+	private static BufferedImage resizePersonPicture (BufferedImage image, int img_width, int img_height) {
+		
+		BufferedImage resizedPersonPicture = new BufferedImage(img_width, img_height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graph = resizedPersonPicture.createGraphics();
+		graph.drawImage(image, 0, 0, img_width, img_height, null);
+		graph.dispose();
+		graph.setComposite(AlphaComposite.Src);
+		graph.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graph.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		return resizedPersonPicture;
+	}
 	
 	/**
 	 * Update person.
@@ -259,7 +305,7 @@ public class PersonController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/update.do")
-	public String updatePerson(@ModelAttribute("person") @Valid PersonFormData person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+	public String updatePerson(@ModelAttribute("person") @Valid PersonFormData person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		
 		Person personForMerge;
 		Security secure = Security.getInstance();
@@ -299,7 +345,7 @@ public class PersonController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/updateAsAdmin.do")
-	public String updatePersonAsAdmin(@ModelAttribute("person") @Valid PersonFormDataAdmin person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
+	public String updatePersonAsAdmin(@ModelAttribute("person") @Valid PersonFormDataAdmin person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
 		
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
@@ -347,7 +393,7 @@ public class PersonController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/createAsAdmin.do")
-	public String createPersonAsAdmin(@ModelAttribute("person") @Valid PersonFormData person, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
+	public String createPersonAsAdmin(@ModelAttribute("person") @Valid PersonFormData person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			Person personForm;
@@ -394,6 +440,7 @@ public class PersonController {
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			model.addAttribute("person", new PersonFormData(new Person()));
+			model.addAttribute("picture", new PictureFormData());
 			model.addAttribute("type", "create");
 			return SUCCESS_EDIT;
 		} else {
