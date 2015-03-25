@@ -134,6 +134,10 @@ function search(contextPath) {
 	location.href=contextPath+"/main/search/search.do";
 }
 
+function showTrombinoscope(context, param) {
+	location.href=context + '/main/person/showTrombinoscope.do';
+}
+
 /** skill part **/
 function refreshSkillStars(id, lvl) {
 	

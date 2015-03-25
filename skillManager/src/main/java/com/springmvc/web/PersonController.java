@@ -235,7 +235,7 @@ public class PersonController {
 		
 		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
 		Person person = service.getPerson(matricule);
-		Picture picture = pictureService.getPicture(connected.getMatricule());
+		Picture picture = pictureService.getPicture(person.getMatricule());
 		Picture pictureToSave = null;
 		
 		
@@ -246,7 +246,7 @@ public class PersonController {
 			pictureToSave = picture;
 		}
 		
-		pictureToSave.setPicture_name(connected.getMatricule());
+		pictureToSave.setPicture_name(person.getMatricule());
 		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
 		
 		try {
