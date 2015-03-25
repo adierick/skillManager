@@ -39,10 +39,11 @@
 					</div>
 					<br/>
 					<div class="pictureDiv">
+					<br/>${matricule}
 						<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px" >
 						<br/>
 						<c:if test="${userSession.admin}">
-						<form:form modelAttribute="picture" action="loadPicture.do" class="formulaire formUpload" enctype="multipart/form-data">
+						<form:form modelAttribute="picture" action="loadPicture.do?selectedMatricule=${selectedMatricule}" class="formulaire formUpload" enctype="multipart/form-data">
 							<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo"/><form:errors path="file" cssClass="error"/><br/>
 							<input type="submit" value="Envoyer" class="pictureSubmit"><br/>	
 						</form:form>
