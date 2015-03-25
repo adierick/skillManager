@@ -10,27 +10,21 @@ package com.springmvc.web;
 
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Base64;
 import org.springframework.stereotype.Controller;
@@ -44,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.itextpdf.text.pdf.qrcode.ByteArray;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
@@ -183,7 +176,6 @@ public class PersonController {
 			
 				e.printStackTrace();
 			}
-			model.addAttribute("matricule", matricule);
 			
 			if(secure.verifyAdmin(session, request)){
 				return SUCCESS_EDIT;
@@ -198,7 +190,7 @@ public class PersonController {
 	
 	private void formUploadPicture(String matricule, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		model.addAttribute("picture", new PictureFormData());
-		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
+		
 		Picture picture = pictureService.getPicture(matricule);
 		byte [] fileBytes = null;
 
@@ -225,19 +217,21 @@ public class PersonController {
 		String encodedString = new String (encoded);
 
 		model.addAttribute("Img", encodedString);
+		//Add attribute here in aim to add this field each time we load a picture to keep the current editing matricule
+		model.addAttribute("selectedMatricule", matricule);
 		
 	}
 	
 
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("matricule") String matricule, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
-
+	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad,  @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+		// get the current matricule parameter from the request
+		String selectedMatricule = request.getParameter("selectedMatricule");
 		
-		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
-		Person person = service.getPerson(matricule);
-		Picture picture = pictureService.getPicture(connected.getMatricule());
+		// get the corresponding picture if exist
+		Picture picture = pictureService.getPicture(selectedMatricule);
+		
 		Picture pictureToSave = null;
-		
 		
 		if (picture == null) {
 			pictureToSave = new Picture();
@@ -246,11 +240,13 @@ public class PersonController {
 			pictureToSave = picture;
 		}
 		
-		pictureToSave.setPicture_name(connected.getMatricule());
+		// update the matricule value with the current
+		pictureToSave.setPicture_name(selectedMatricule);
+		// update the file data
 		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
 		
+		// rezise the picture as default value
 		try {
-
 			BufferedImage imageToResize = ImageIO.read(new ByteArrayInputStream(pictureToSave.getPicture_data()));
 			imageToResize = resizePersonPicture(imageToResize, 150, 150);
 			
@@ -260,22 +256,19 @@ public class PersonController {
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
 			pictureToSave.setPicture_data(imageInByte);
-			
 		} catch (Exception e) {
-			e.getMessage();
+			e.printStackTrace();
 		}
 		
-		
-		
+		// save picture in database
 		pictureService.updatePicture(pictureToSave);
 		
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
 		if (isAdmin) {
-			
-			return loadPersonDetailAsAdmin(connected.getMatricule(), model, session, request);
+			return loadPersonDetailAsAdmin(selectedMatricule, model, session, request);
 		}
 		
-		return loadPersonDetail(connected.getMatricule(), model, session, request);
+		return loadPersonDetail(selectedMatricule, model, session, request);
 
 	}
 	/**
