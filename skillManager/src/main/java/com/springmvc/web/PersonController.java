@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class PersonController {
 
 	/** The liste persons. */
 	private List<Person> listePersons;
+	private List<Picture> listePictures;
 	
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
@@ -83,6 +85,7 @@ public class PersonController {
 	private static final String SUCCESS_EDIT = "person/editionPerson";
 	/** Modification view for collaborator (restrict field)*/
 	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonCollab";
+	private static final String TROMBINOSCOPE = "person/trombinoscope";
 	
 	/**
 	 * Constructor for person controller.
@@ -129,8 +132,7 @@ public class PersonController {
 		
 	}
 
-	private String loadPersonDetail(String matricule, Model model,
-			HttpSession session, HttpServletRequest request) throws IOException {
+	private String loadPersonDetail(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrAdmin(matricule, session, request)){
 			Person personForForm = service.getPerson(matricule);
@@ -139,7 +141,7 @@ public class PersonController {
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
 			
 			try {
-				this.formUploadPicture(model, session, request);
+				this.formUploadPicture(matricule, model, session, request);
 			} catch (Exception e) {
 			
 				e.printStackTrace();
@@ -175,11 +177,13 @@ public class PersonController {
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
 			
 			try {
-				this.formUploadPicture(model, session, request);
+				this.formUploadPicture(matricule, model, session, request);
+				
 			} catch (Exception e) {
 			
 				e.printStackTrace();
 			}
+			model.addAttribute("matricule", matricule);
 			
 			if(secure.verifyAdmin(session, request)){
 				return SUCCESS_EDIT;
@@ -192,10 +196,10 @@ public class PersonController {
 	}
 	
 	
-	private void formUploadPicture(Model model, HttpSession session, HttpServletRequest request) throws Exception {
+	private void formUploadPicture(String matricule, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		model.addAttribute("picture", new PictureFormData());
 		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
-		Picture picture = pictureService.getPicture(connected.getMatricule());
+		Picture picture = pictureService.getPicture(matricule);
 		byte [] fileBytes = null;
 
 		if (picture == null) {
@@ -221,19 +225,19 @@ public class PersonController {
 		String encodedString = new String (encoded);
 
 		model.addAttribute("Img", encodedString);
-
-
-
-
-
+		
 	}
+	
 
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("matricule") String matricule, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 
-		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);	
+		
+		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
+		Person person = service.getPerson(matricule);
 		Picture picture = pictureService.getPicture(connected.getMatricule());
 		Picture pictureToSave = null;
+		
 		
 		if (picture == null) {
 			pictureToSave = new Picture();
@@ -294,6 +298,41 @@ public class PersonController {
 		graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		return resizedPersonPicture;
+	}
+	
+	@RequestMapping(value="/person/showTrombinoscope.do", method=RequestMethod.GET)
+	public String showTrombinoscope(@ModelAttribute("person") Person person, @ModelAttribute("picture") Picture picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+		
+//			model.addAttribute("picturesList", listePictures);
+//			model.addAttribute("personsList", listePersons);
+//			
+//			listePictures = pictureService.listeAllPictures();
+//			listePersons = service.listeAllPersons();
+//			
+//			for (Person personList : listePersons) {
+//				
+//			}
+//			
+//			List<String> listEncodedString = new ArrayList<String>();
+//			for (Picture pictureList : listePictures) {
+//				
+//			
+//				byte [] encoded = Base64.encode(pictureList.getPicture_data());
+//				String encodedString = new String (encoded);
+//				listEncodedString.add(encodedString);
+//				
+//				model.addAttribute("Img", listEncodedString);
+//			
+//			}	
+//				
+//
+//				model.addAttribute("ImgList", listEncodedString);
+			
+			
+			
+		
+		return TROMBINOSCOPE;
+		
 	}
 	
 	/**
