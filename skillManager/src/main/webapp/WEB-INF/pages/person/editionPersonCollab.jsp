@@ -39,6 +39,7 @@
 					</div>
 					<br/>
 					<div class="pictureDiv">
+					<br/>${matricule}
 						<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px" >
 						<br/>
 						<c:if test="${userSession.admin}">

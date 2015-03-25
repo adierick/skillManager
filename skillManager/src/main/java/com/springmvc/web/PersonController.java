@@ -230,7 +230,6 @@ public class PersonController {
 		
 		// get the corresponding picture if exist
 		Picture picture = pictureService.getPicture(selectedMatricule);
-		
 		Picture pictureToSave = null;
 		
 		if (picture == null) {
