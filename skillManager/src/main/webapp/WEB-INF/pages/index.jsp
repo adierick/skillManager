@@ -29,6 +29,12 @@
 						onclick="generateCv('<%=request.getContextPath()%>')" 
 						style="cursor: pointer; float:left; padding-top: 10px;" />
 						
+						<img src="<c:url value='/img/main/main_admin_person.png' />"  
+						title="<spring:message code='index.trombinoscope'/>"
+						onmouseover="setImageOver(this);" onmouseout="setImageOut(this);"
+						onclick="showTrombinoscope('<%=request.getContextPath()%>')" 
+						style="cursor: pointer; float:left; padding: 10px;" />
+						
 						<!-- Admin part -->
 						<c:if test="${userSession.admin}">
 							<img src="<c:url value='/img/main/main_admin_person.png' />"  

@@ -17,8 +17,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +45,7 @@ import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.PersonPicture;
 import com.springmvc.bo.Picture;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PersonFormDataAdmin;
@@ -67,10 +71,14 @@ public class PersonController {
 	/** The liste persons. */
 	private List<Person> listePersons;
 	private List<Picture> listePictures;
+	private List<PersonPicture> listePersonsPictures = new ArrayList<PersonPicture>();
+	private Map<String, Picture> personsPicturesMap = new HashMap<String, Picture>();
+	private String defaultEncodedString = getDefaultEncodedPicture();
 	
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
+	
 
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
@@ -222,7 +230,6 @@ public class PersonController {
 		
 	}
 	
-
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
 	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad,  @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		// get the current matricule parameter from the request
@@ -270,6 +277,51 @@ public class PersonController {
 		return loadPersonDetail(selectedMatricule, model, session, request);
 
 	}
+	
+	/**
+	 * Encode pictures stored in database to display 
+	 * @param picture
+	 * @return
+	 * @throws Exception
+	 */
+	private String encodePicture(Picture picture) throws Exception {
+		
+		byte [] encoded = Base64.encode(picture.getPicture_data());
+		String encodedString = new String (encoded);
+		return encodedString;
+	}
+	
+	/**
+	 * Encode default avatar to display if the parson has not a picture stored in database
+	 * @return
+	 */
+	private String getDefaultEncodedPicture () {
+		
+		InputStream fis;
+		try {
+			fis = Context.getInstance().getApplicationContext().getResource("classpath:person-avatar1.png").getInputStream();
+			
+			ByteArrayOutputStream bos=new ByteArrayOutputStream();
+			int b;
+			byte[] buffer = new byte[1024];
+			while((b=fis.read(buffer))!=-1){
+				bos.write(buffer,0,b);
+			}
+			byte[] fileBytes=bos.toByteArray();
+			fis.close();
+			bos.close();
+			
+			byte [] encoded = Base64.encode(fileBytes);
+			String defaultEncodedString = new String (encoded);
+			return defaultEncodedString;
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		return defaultEncodedString;
+		
+	}
 	/**
 	 * Resize automatically Person picture to 150*150 px and get better quality after resizing
 	 * 
@@ -293,34 +345,27 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value="/person/showTrombinoscope.do", method=RequestMethod.GET)
-	public String showTrombinoscope(@ModelAttribute("person") Person person, @ModelAttribute("picture") Picture picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+	public String showTrombinoscope(@ModelAttribute("person") Person person, @ModelAttribute("picture") Picture picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		
-//			model.addAttribute("picturesList", listePictures);
-//			model.addAttribute("personsList", listePersons);
-//			
-//			listePictures = pictureService.listeAllPictures();
-//			listePersons = service.listeAllPersons();
-//			
-//			for (Person personList : listePersons) {
-//				
-//			}
-//			
-//			List<String> listEncodedString = new ArrayList<String>();
-//			for (Picture pictureList : listePictures) {
-//				
-//			
-//				byte [] encoded = Base64.encode(pictureList.getPicture_data());
-//				String encodedString = new String (encoded);
-//				listEncodedString.add(encodedString);
-//				
-//				model.addAttribute("Img", listEncodedString);
-//			
-//			}	
-//				
-//
-//				model.addAttribute("ImgList", listEncodedString);
+			listePictures = pictureService.listeAllPictures();
+			listePersons = service.listeAllPersons();
+				
 			
+			for (Picture pictureInList : listePictures) {
+				personsPicturesMap.put(pictureInList.getPicture_name(), pictureInList);
+			}
 			
+			for (Person personInList : listePersons) {
+				String matricule = personInList.getMatricule();
+				if(personsPicturesMap.containsKey(matricule)) {
+					String encodedString = encodePicture(personsPicturesMap.get(matricule));
+					listePersonsPictures.add(new PersonPicture(personInList, encodedString));
+				}
+				else {
+					listePersonsPictures.add(new PersonPicture(personInList, defaultEncodedString));
+				}
+			}
+			model.addAttribute("personsPicturesList", listePersonsPictures);
 			
 		
 		return TROMBINOSCOPE;

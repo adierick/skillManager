@@ -44,6 +44,11 @@ public class PictureServiceImpl extends Service implements PictureService {
 		
 		return (Picture) sqlCriteria.list().get(0);
 	}
+	
+	@Override
+	public List<Picture> listeAllPictures() {
+		return getSession().createQuery("from Picture").list();
+	}
 
 	@Override
 	public List<Picture> find(String criteria, int rowStart, int numberResults) {
@@ -56,6 +61,8 @@ public class PictureServiceImpl extends Service implements PictureService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 	
 
