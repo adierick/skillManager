@@ -11,11 +11,11 @@
 						<c:set var="i" value ="${0}"/>
 						<c:forEach var="personPicture" items="${personsPicturesList}" varStatus="status">
 							<c:set var="i" value="${i+1}"/>
-								<c:if test="${i>4}">
+								<c:if test="${i<1}">
 									<tr>
 								</c:if>
 								
-									<td align="center">
+									<td align="center" height="200px" width="200px">
 										<br/>
 										<c:out value="${personPicture.person.firstname}"/><br>
 										<c:out value="${personPicture.person.lastname}"/><br>
@@ -28,6 +28,9 @@
 								</c:if>
 						
 						</c:forEach>
+						<c:if test="${i>4}">
+							</tr>
+						</c:if>
 					</table>
 					
 				</div>
