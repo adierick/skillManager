@@ -9,12 +9,10 @@
 					<table cellspacing="30">
 						
 						<c:set var="i" value="${0}"/>
-						<c:forEach var="personPicture" items="${personsPicturesList}" varStatus="status">
-							
+						<c:forEach var="personPicture" items="${personsPicturesList}" varStatus="status">	
 								<c:if test="${i<=0}">
 									<tr>
 								</c:if>
-								
 									<td align="center">
 										<c:choose>
 											<c:when test="${userSession.admin}">
@@ -24,12 +22,10 @@
 												<img src="data:image/jpeg;base64,${personPicture.encoded}" alt="avatar" width="100px">
 											</c:otherwise>
 										</c:choose>
-												<br/>
-												<c:out value="${personPicture.person.firstname}"/><br>
-												<c:out value="${personPicture.person.lastname}"/><br>	
-										
+										<br/>
+										<c:out value="${personPicture.person.firstname}"/><br>
+										<c:out value="${personPicture.person.lastname}"/><br>	
 									</td>
-									
 								<c:set var="i" value="${i+1}"/>
 								
 								<c:if test="${i>3}">
@@ -38,7 +34,9 @@
 								</c:if>
 						
 						</c:forEach>
-						</tr>
+						<c:if test="${i>0}">
+							</tr>
+						</c:if>
 					</table>
 					
 				</div>
