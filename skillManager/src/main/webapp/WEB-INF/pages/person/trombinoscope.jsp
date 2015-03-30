@@ -14,19 +14,22 @@
 								<c:if test="${i<1}">
 									<tr>
 								</c:if>
-								
 									<td align="center" height="200px" width="200px">
+										<c:if test="${userSession.admin}">
+											<a href="editionPersonAsAdmin.do?matricule=${personPicture.person.matricule}">
+										</c:if> 
 										<br/>
 										<c:out value="${personPicture.person.firstname}"/><br>
 										<c:out value="${personPicture.person.lastname}"/><br>
 										<img src="data:image/jpeg;base64,${personPicture.encoded}" alt="avatar" width="100px">
+										<c:if test="${userSession.admin}">
+											</a>
+										</c:if>
 									</td>
-								
 								<c:if test="${i>4}">
 									<c:set var="i" value="${0}"/>
 									</tr>
 								</c:if>
-						
 						</c:forEach>
 						<c:if test="${i>4}">
 							</tr>
