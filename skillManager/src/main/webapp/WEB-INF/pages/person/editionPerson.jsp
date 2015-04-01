@@ -40,12 +40,27 @@
 					</div>
 					<br/>
 					<div class="pictureDiv">
-						<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px">
+						<c:choose>
+							<c:when test="${person.person.matricule != null}">
+								<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px">
+							</c:when>
+							<c:otherwise>
+								<img src="<c:url value='/img/person-avatar1.png'/>" alt="default-avatar" width="150px">
+							</c:otherwise>
+						</c:choose>
+						
 						<br/>
 						<c:if test="${userSession.admin}">
 						<form:form modelAttribute="picture" action="loadPicture.do?selectedMatricule=${selectedMatricule}" class="formulaire formUpload" enctype="multipart/form-data">
-							<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo"/><form:errors path="file" cssClass="error"/><br/>
-							<input type="submit" value="Envoyer" class="pictureSubmit"><br/>
+							<c:choose>
+								<c:when test="${person.person.matricule != null}">
+									<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo" /><form:errors path="file" cssClass="error"/><br/>
+									<input type="submit" value="Envoyer" class="pictureSubmit"><br/>
+								</c:when>
+								<c:otherwise>
+									<input type="submit" value="Envoyer" class="pictureSubmit" disabled="disabled" title="Le profil doit d'abord être créé avant de pouvoir charger une photo"><br/>
+								</c:otherwise>
+							</c:choose>
 						</form:form>
 						</c:if>
 					</div>
