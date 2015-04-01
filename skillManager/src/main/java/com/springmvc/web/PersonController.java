@@ -350,7 +350,7 @@ public class PersonController {
 	}
 
 	@RequestMapping(value="/person/showTrombinoscope.do", method=RequestMethod.GET)
-	public String showTrombinoscope(@ModelAttribute("person") Person person, @ModelAttribute("picture") Picture picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+	public String showTrombinoscope(Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		List<PersonPicture> listePersonsPictures = new ArrayList<PersonPicture>();
 		Map<String, Picture> personsPicturesMap = new HashMap<String, Picture>();
 		listePictures = pictureService.listeAllPictures();
