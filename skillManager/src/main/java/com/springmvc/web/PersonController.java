@@ -71,12 +71,12 @@ public class PersonController {
 	/** The liste persons. */
 	private List<Person> listePersons;
 	private List<Picture> listePictures;
-	private String defaultEncodedString = getDefaultEncodedPicture();
-	
+	private final String defaultEncodedString = getDefaultEncodedPicture();
+
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
-	
+
 
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
@@ -85,14 +85,14 @@ public class PersonController {
 	/** Modification view for collaborator (restrict field)*/
 	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonCollab";
 	private static final String TROMBINOSCOPE = "person/trombinoscope";
-	
+
 	/**
 	 * Constructor for person controller.
 	 */
 	public PersonController() {
 		super();
 	} 
-	
+
 	/**
 	 * Liste persons.
 	 *
@@ -106,13 +106,13 @@ public class PersonController {
 		if (secure.verifyAdmin(session, request)) {
 			listePersons = service.listeAllPersons();
 			model.addAttribute("personsList", listePersons);
-			
+
 			return SUCCESS_LIST;
 		} else {
 			return ERROR_FORWARD;
 		}
 	}
-	
+
 	/**
 	 * Person detail.
 	 *
@@ -127,8 +127,8 @@ public class PersonController {
 			return loadPersonDetailAsAdmin(matricule, model, session, request);
 		}
 		return loadPersonDetail(matricule, model, session, request);
-		
-		
+
+
 	}
 
 	private String loadPersonDetail(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
@@ -138,20 +138,20 @@ public class PersonController {
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
-			
+
 			try {
 				this.formUploadPicture(matricule, model, session, request);
 			} catch (Exception e) {
-			
+
 				e.printStackTrace();
 			}
-			
+
 			return SUCCESS_COLAB_EDIT;
 		} else {
 			return ERROR_FORWARD;
 		}
 	}
-	
+
 	/**
 	 * Person detail.
 	 *
@@ -161,10 +161,10 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/person/editionPersonAsAdmin.do")
 	public String personDetailAsAdmin(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
-		
+
 		return loadPersonDetailAsAdmin(matricule, model, session, request);
-		
-		
+
+
 	}
 
 	private String loadPersonDetailAsAdmin(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
@@ -174,15 +174,15 @@ public class PersonController {
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
-			
+
 			try {
 				this.formUploadPicture(matricule, model, session, request);
-				
+
 			} catch (Exception e) {
-			
+
 				e.printStackTrace();
 			}
-			
+
 			if(secure.verifyAdmin(session, request)){
 				return SUCCESS_EDIT;
 			}else{
@@ -192,11 +192,11 @@ public class PersonController {
 			return ERROR_FORWARD;
 		}
 	}
-	
-	
+
+
 	private void formUploadPicture(String matricule, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		model.addAttribute("picture", new PictureFormData());
-		
+
 		Picture picture = pictureService.getPicture(matricule);
 		byte [] fileBytes = null;
 
@@ -225,35 +225,42 @@ public class PersonController {
 		model.addAttribute("Img", encodedString);
 		//Add attribute here in aim to add this field each time we load a picture to keep the current editing matricule
 		model.addAttribute("selectedMatricule", matricule);
-		
+
 	}
-	
+
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
 	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad,  @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		// get the current matricule parameter from the request
 		String selectedMatricule = request.getParameter("selectedMatricule");
-		
+
 		// get the corresponding picture if exist
 		Picture picture = pictureService.getPicture(selectedMatricule);
 		Picture pictureToSave = null;
-		
+
 		if (picture == null) {
 			pictureToSave = new Picture();
 		}
 		else {
 			pictureToSave = picture;
 		}
-		
+
 		// update the matricule value with the current
 		pictureToSave.setPicture_name(selectedMatricule);
 		// update the file data
 		pictureToSave.setPicture_data(pictureToLoad.getFile().getBytes());
-		
+
 		// rezise the picture as default value
 		try {
 			BufferedImage imageToResize = ImageIO.read(new ByteArrayInputStream(pictureToSave.getPicture_data()));
-			imageToResize = resizePersonPicture(imageToResize, 150, 150);
-			
+
+			int initHeight = imageToResize.getHeight();
+			int initWidth = imageToResize.getWidth();
+
+			double ratio = ((double)initWidth / (double)150);
+			double newHeight = initHeight / ratio;
+
+			imageToResize = resizePersonPicture(imageToResize, 150, (int)newHeight);
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(imageToResize, "jpg", baos);
 			baos.flush();
@@ -263,19 +270,19 @@ public class PersonController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// save picture in database
 		pictureService.updatePicture(pictureToSave);
-		
+
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
 		if (isAdmin) {
 			return loadPersonDetailAsAdmin(selectedMatricule, model, session, request);
 		}
-		
+
 		return loadPersonDetail(selectedMatricule, model, session, request);
 
 	}
-	
+
 	/**
 	 * Encode pictures stored in database to display 
 	 * @param picture
@@ -283,22 +290,22 @@ public class PersonController {
 	 * @throws Exception
 	 */
 	private String encodePicture(Picture picture) throws Exception {
-		
+
 		byte [] encoded = Base64.encode(picture.getPicture_data());
 		String encodedString = new String (encoded);
 		return encodedString;
 	}
-	
+
 	/**
 	 * Encode default avatar to display if the parson has not a picture stored in database
 	 * @return
 	 */
 	private String getDefaultEncodedPicture () {
-		
+
 		InputStream fis;
 		try {
 			fis = Context.getInstance().getApplicationContext().getResource("classpath:person-avatar1.png").getInputStream();
-			
+
 			ByteArrayOutputStream bos=new ByteArrayOutputStream();
 			int b;
 			byte[] buffer = new byte[1024];
@@ -308,17 +315,17 @@ public class PersonController {
 			byte[] fileBytes=bos.toByteArray();
 			fis.close();
 			bos.close();
-			
+
 			byte [] encoded = Base64.encode(fileBytes);
 			String defaultEncodedString = new String (encoded);
 			return defaultEncodedString;
-			
+
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 		return defaultEncodedString;
-		
+
 	}
 	/**
 	 * Resize automatically Person picture to 150*150 px and get better quality after resizing
@@ -329,7 +336,7 @@ public class PersonController {
 	 * @return
 	 */
 	private static BufferedImage resizePersonPicture (BufferedImage image, int img_width, int img_height) {
-		
+
 		BufferedImage resizedPersonPicture = new BufferedImage(img_width, img_height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graph = resizedPersonPicture.createGraphics();
 		graph.drawImage(image, 0, 0, img_width, img_height, null);
@@ -338,41 +345,38 @@ public class PersonController {
 		graph.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graph.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
+
 		return resizedPersonPicture;
 	}
-	
+
 	@RequestMapping(value="/person/showTrombinoscope.do", method=RequestMethod.GET)
 	public String showTrombinoscope(Model model, HttpSession session, HttpServletRequest request) throws Exception {
-			
 		List<PersonPicture> listePersonsPictures = new ArrayList<PersonPicture>();
 		Map<String, Picture> personsPicturesMap = new HashMap<String, Picture>();
-		
-			listePictures = pictureService.listeAllPictures();
-			listePersons = service.listeAllPersons();
-				
-			
-			for (Picture pictureInList : listePictures) {
-				personsPicturesMap.put(pictureInList.getPicture_name(), pictureInList);
+		listePictures = pictureService.listeAllPictures();
+		listePersons = service.listeAllPersons();
+
+
+		for (Picture pictureInList : listePictures) {
+			personsPicturesMap.put(pictureInList.getPicture_name(), pictureInList);
+		}
+
+		for (Person personInList : listePersons) {
+			String matricule = personInList.getMatricule();
+			if(personsPicturesMap.containsKey(matricule)) {
+				String encodedString = encodePicture(personsPicturesMap.get(matricule));
+				listePersonsPictures.add(new PersonPicture(personInList, encodedString));
 			}
-			
-			for (Person personInList : listePersons) {
-				String matricule = personInList.getMatricule();
-				if(personsPicturesMap.containsKey(matricule)) {
-					String encodedString = encodePicture(personsPicturesMap.get(matricule));
-					listePersonsPictures.add(new PersonPicture(personInList, encodedString));
-				}
-				else {
-					listePersonsPictures.add(new PersonPicture(personInList, defaultEncodedString));
-				}
+			else {
+				listePersonsPictures.add(new PersonPicture(personInList, defaultEncodedString));
 			}
-			model.addAttribute("personsPicturesList", listePersonsPictures);
-			
-		
+		}
+		model.addAttribute("personsPicturesList", listePersonsPictures);
+
+
 		return TROMBINOSCOPE;
-		
 	}
-	
+
 	/**
 	 * Update person.
 	 *
@@ -383,27 +387,27 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/update.do")
 	public String updatePerson(@ModelAttribute("person") @Valid PersonFormData person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException {
-		
+
 		Person personForMerge;
 		Security secure = Security.getInstance();
 		if (secure.verifyLogin(request)) {
-			
+
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "update");
 				return SUCCESS_COLAB_EDIT;	
 			}else{
 				personForMerge = service.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB));
 			}
-			
+
 			MyBlowfish bf = new MyBlowfish();
-		    bf.setSecretKey(IConstants.CRYPT_PWD);
-		    personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
-		    personForMerge.setEmail(person.getPerson().getEmail());
-		    //personForMerge.setPicture(person.getPerson().getPicture());
+			bf.setSecretKey(IConstants.CRYPT_PWD);
+			personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
+			personForMerge.setEmail(person.getPerson().getEmail());
+			//personForMerge.setPicture(person.getPerson().getPicture());
 			Person personMerged = service.mergePerson(personForMerge);
 			session.setAttribute(IConstants.USER_SESSION, personMerged);
-			
-			
+
+
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
 			return SUCCESS_COLAB_EDIT;
 
@@ -411,7 +415,7 @@ public class PersonController {
 		else return ERROR_FORWARD;
 
 	}
-	
+
 	/**
 	 * @param person
 	 * @param binding
@@ -423,12 +427,12 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/person/updateAsAdmin.do")
 	public String updatePersonAsAdmin(@ModelAttribute("person") @Valid PersonFormDataAdmin person, @ModelAttribute("picture") @Valid PictureFormData picture, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws IOException{
-		
+
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			Person connected;
 			Person personForm;
-			
+
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "update");
 				return SUCCESS_EDIT;
@@ -437,29 +441,29 @@ public class PersonController {
 				personForm = person.getPerson();
 				personForm.setId((Long)session.getAttribute(IConstants.ID_COLLAB));
 			}
-			
+
 			if(!StringUtils.isBlank(person.getFirstPassword())){
 				MyBlowfish bf = new MyBlowfish();
-			    bf.setSecretKey(IConstants.CRYPT_PWD);
-			    personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
+				bf.setSecretKey(IConstants.CRYPT_PWD);
+				personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 			}else{
 				/** retrieve the current password if any new was send*/
 				personForm.setPassword(service.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB)).getPassword());
 			}
-			
+
 			personForm.setEmail(person.getPerson().getEmail());
 			Person personMerged = service.mergePerson(personForm);
 			if(connected.getId().equals(session.getAttribute(IConstants.ID_COLLAB))) {
 				session.setAttribute(IConstants.USER_SESSION, personMerged);
 			}		
-			
+
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
 			return SUCCESS_EDIT;
-			
+
 		}
 		else return ERROR_FORWARD;
 	}
-	
+
 	/**
 	 * @param person
 	 * @param binding
@@ -474,31 +478,31 @@ public class PersonController {
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			Person personForm;
-			
+
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "create");
 				return SUCCESS_EDIT;
 			}else{
 				personForm = person.getPerson();
 			}
-			
+
 			MyBlowfish bf = new MyBlowfish();
-		    bf.setSecretKey(IConstants.CRYPT_PWD);
-		    personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
-		
-		    service.createPerson(personForm);		
-			
+			bf.setSecretKey(IConstants.CRYPT_PWD);
+			personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
+
+			service.createPerson(personForm);		
+
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
 			return SUCCESS_EDIT;
-			
+
 		}
 		else return ERROR_FORWARD;
 	}
-	
-	
+
+
 	@RequestMapping(method=RequestMethod.POST, value="/person/delete.do")
 	public String deletePerson(@RequestParam("matricule") String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
-		
+
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
 			service.deletePerson(matricule);
@@ -510,8 +514,8 @@ public class PersonController {
 		}
 
 	}
-	
-	
+
+
 	@RequestMapping(method=RequestMethod.POST, value="/person/create.do")
 	public String createPerson(Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
@@ -524,20 +528,20 @@ public class PersonController {
 			return ERROR_FORWARD;
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Permet d'afficher la liste de societes dans la jsp avec ${listeSocietes}
 	 * @return
 	 */
 	@ModelAttribute("listBu")
-    public Collection<BusinessUnit> populateBusinessUnit() {
-	    return service.listeAllBusinessUnits();
+	public Collection<BusinessUnit> populateBusinessUnit() {
+		return service.listeAllBusinessUnits();
 	}
-	
+
 	@InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-        dataBinder.registerCustomEditor(BusinessUnit.class, new BusinessUnitEditor());
-    }
+	public void initBinder(WebDataBinder dataBinder) {
+		dataBinder.registerCustomEditor(BusinessUnit.class, new BusinessUnitEditor());
+	}
 }

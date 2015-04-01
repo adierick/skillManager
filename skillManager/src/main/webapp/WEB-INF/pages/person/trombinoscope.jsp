@@ -6,39 +6,34 @@
 		<fieldset class="ellipse01">
 			<legend> <spring:message code="person.trombinoscope"/></legend>
 				<div>
-					<table cellspacing="30">
+					<table>
 						
-						<c:set var="i" value="${0}"/>
+						<c:set var="i" value ="${0}"/>
 						<c:forEach var="personPicture" items="${personsPicturesList}" varStatus="status">
-							
 								<c:if test="${i<=0}">
 									<tr>
 								</c:if>
-								
-									<td align="center">
-										<c:choose>
-											<c:when test="${userSession.admin}">
-												<a href="editionPersonAsAdmin.do?matricule=${personPicture.person.matricule}"><img src="data:image/jpeg;base64,${personPicture.encoded}" title="Modifier le profil" alt="avatar" width="100px"></a>
-											</c:when>
-											<c:otherwise>
-												<img src="data:image/jpeg;base64,${personPicture.encoded}" alt="avatar" width="100px">
-											</c:otherwise>
-										</c:choose>
-												<br/>
-												<c:out value="${personPicture.person.firstname}"/><br>
-												<c:out value="${personPicture.person.lastname}"/><br>	
-										
+									<td align="center" height="200px" width="200px">
+										<c:if test="${userSession.admin}">
+											<a href="editionPersonAsAdmin.do?matricule=${personPicture.person.matricule}">
+										</c:if> 
+										<br/>
+										<c:out value="${personPicture.person.firstname}"/><br>
+										<c:out value="${personPicture.person.lastname}"/><br>
+										<img src="data:image/jpeg;base64,${personPicture.encoded}" alt="avatar" width="100px">
+										<c:if test="${userSession.admin}">
+											</a>
+										</c:if>
 									</td>
-									
 								<c:set var="i" value="${i+1}"/>
-								
-								<c:if test="${i>3}">
+								<c:if test="${i>4}">
+									<c:set var="i" value="${0}"/>
 									</tr>
-									<c:set var="i" value="0"/>
 								</c:if>
-						
 						</c:forEach>
-						</tr>
+						<c:if test="${i>0}">
+							</tr>
+						</c:if>
 					</table>
 					
 				</div>
