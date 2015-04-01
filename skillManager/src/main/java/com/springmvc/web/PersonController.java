@@ -71,8 +71,8 @@ public class PersonController {
 	/** The liste persons. */
 	private List<Person> listePersons;
 	private List<Picture> listePictures;
-	private String defaultEncodedString = getDefaultEncodedPicture();
-	
+	private final String defaultEncodedString = getDefaultEncodedPicture();
+
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);

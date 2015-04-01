@@ -31,7 +31,7 @@
 									</tr>
 								</c:if>
 						</c:forEach>
-						<c:if test="${i>4}">
+						<c:if test="${i>0}">
 							</tr>
 						</c:if>
 					</table>
