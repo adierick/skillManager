@@ -229,7 +229,7 @@ public class PersonController {
 	}
 
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
-	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad,  @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
+	public String loadPicture(@ModelAttribute("picture") PictureFormData pictureToLoad, @RequestParam("file") MultipartFile file, BindingResult binding, Model model, HttpSession session, HttpServletRequest request) throws Exception {
 		// get the current matricule parameter from the request
 		String selectedMatricule = request.getParameter("selectedMatricule");
 
@@ -453,12 +453,15 @@ public class PersonController {
 
 			personForm.setEmail(person.getPerson().getEmail());
 			Person personMerged = service.mergePerson(personForm);
+			
 			if(connected.getId().equals(session.getAttribute(IConstants.ID_COLLAB))) {
 				session.setAttribute(IConstants.USER_SESSION, personMerged);
 			}		
 
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
-			return SUCCESS_EDIT;
+			
+		
+			return loadPersonDetailAsAdmin(personMerged.getMatricule(), model, session, request);
 
 		}
 		else return ERROR_FORWARD;
@@ -493,7 +496,7 @@ public class PersonController {
 			service.createPerson(personForm);		
 
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
-			return SUCCESS_EDIT;
+			return loadPersonDetailAsAdmin(personForm.getMatricule(), model, session, request);
 
 		}
 		else return ERROR_FORWARD;
