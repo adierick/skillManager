@@ -44,6 +44,9 @@
 							<c:when test="${person.person.matricule != null}">
 								<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px">
 							</c:when>
+							<c:when test="${person.person.matricule != null && picture.file == null}">
+								<img src="<c:url value='/img/person-avatar1.png'/>" alt="default-avatar" width="150px">
+							</c:when>
 							<c:otherwise>
 								<img src="<c:url value='/img/person-avatar1.png'/>" alt="default-avatar" width="150px">
 							</c:otherwise>
