@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
-import com.springmvc.bo.Item;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.PersonPicture;
 import com.springmvc.bo.Picture;
@@ -59,7 +57,9 @@ import com.springmvc.services.PictureService;
 import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.MyBlowfish;
+import com.springmvc.utils.PersonUtils;
 import com.springmvc.utils.Security;
+import com.springmvc.utils.SkillUtils;
 import com.springmvc.utils.Translation;
 import com.springmvc.web.editor.BusinessUnitEditor;
 
@@ -70,7 +70,8 @@ import com.springmvc.web.editor.BusinessUnitEditor;
  * @version 5.1, //2014
  */
 @Controller
-@RequestMapping("/person/*")
+//@RequestMapping("/person/*")
+@RequestMapping(value={"/person/*", "/skill/*"})
 public class PersonController {
 
 	/** The liste persons. */
@@ -79,23 +80,12 @@ public class PersonController {
 	private final String defaultEncodedString = getDefaultEncodedPicture();
 
 	/** The service. */
-	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
-	
+	private final PersonService servicePerson = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 	private final SkillService serviceSkill = Context.getInstance().getApplicationContext().getBean(SkillService.class);
-	/** The service item. */
-	private final ItemService serviceItem = Context.getInstance().getApplicationContext().getBean(ItemService.class);
-	
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
+	private final ItemService serviceItem = Context.getInstance().getApplicationContext().getBean(ItemService.class);
 
-
-	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
-	/** Modification view for admin*/
-	private static final String SUCCESS_EDIT = "person/editionPersonFull";
-//	private static final String SUCCESS_EDIT = "person/editionPerson";
-	/** Modification view for collaborator (restrict field)*/
-	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonFull";
-//	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonCollab";
 	private static final String TROMBINOSCOPE = "person/trombinoscope";
 	
 	/**
@@ -116,12 +106,12 @@ public class PersonController {
 
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
-			listePersons = service.listeAllPersons();
+			listePersons = servicePerson.listeAllPersons();
 			model.addAttribute("personsList", listePersons);
 
 			return SUCCESS_LIST;
 		} else {
-			return ERROR_FORWARD;
+			return PersonUtils.ERROR_FORWARD;
 		}
 	}
 
@@ -136,56 +126,16 @@ public class PersonController {
 	public String personDetail(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
 		
-		Person person = service.getPerson(matricule);
-		List<Skill> listeSkills = serviceSkill.listeAllSkills(person);
-		
-		if(listeSkills!=null){
-			List<Long> itemAlreadySkilled = new ArrayList<Long>();
-			for (Skill skill: listeSkills) {
-				itemAlreadySkilled.add(skill.getItem().getId());
-			}
-			
-			List<Item> items = serviceItem.listeAllItems();
-			for (Item item : items) {
-				if(!itemAlreadySkilled.contains(item.getId())) {
-					Skill newSkill = new Skill(person, item, 0);
-					listeSkills.add(newSkill);
-				}
-			}
-		}
-		
-		Collections.sort(listeSkills);
-		
+		Person person = servicePerson.getPerson(matricule);
+		List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
 		model.addAttribute("skillsList", listeSkills);
 		
 		if (isAdmin) {
-			return loadPersonDetailAsAdmin(matricule, model, session, request);
+			return PersonUtils.loadPersonDetailAsAdmin(matricule, model, session, request, servicePerson, pictureService);
 		}
-		return loadPersonDetail(matricule, model, session, request);
-
-
+		return PersonUtils.loadPersonDetail(matricule, model, session, request, servicePerson, pictureService);
 	}
 
-	private String loadPersonDetail(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
-		Security secure = Security.getInstance();
-		if (secure.verifyPersoOrAdmin(matricule, session, request)){
-			Person personForForm = service.getPerson(matricule);
-			model.addAttribute("person", new PersonFormData(personForForm));
-			model.addAttribute("type", "update");
-			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
-
-			try {
-				this.formUploadPicture(matricule, model, session, request);
-			} catch (Exception e) {
-
-				e.printStackTrace();
-			}
-
-			return SUCCESS_COLAB_EDIT;
-		} else {
-			return ERROR_FORWARD;
-		}
-	}
 
 	/**
 	 * Person detail.
@@ -196,71 +146,106 @@ public class PersonController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/person/editionPersonAsAdmin.do")
 	public String personDetailAsAdmin(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
-
-		return loadPersonDetailAsAdmin(matricule, model, session, request);
-
-
+		Person person = servicePerson.getPerson(matricule);
+		List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
+		model.addAttribute("skillsList", listeSkills);
+		return PersonUtils.loadPersonDetailAsAdmin(matricule, model, session, request, servicePerson, pictureService);
 	}
-
-	private String loadPersonDetailAsAdmin(String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+	
+	/**
+	 * Liste skills.
+	 *
+	 * @param matricule the matricule
+	 * @param model the model
+	 * @return 
+	 */
+	@RequestMapping(value="/skill/listeSkills.do")
+	public String listeSkills(@RequestParam("matricule") String matricule, Model model, HttpSession session, HttpServletRequest request) throws IOException{
 		Security secure = Security.getInstance();
-		if (secure.verifyPersoOrAdmin(matricule, session, request)){
-			Person personForForm = service.getPerson(matricule);
-			model.addAttribute("person", new PersonFormData(personForForm));
-			model.addAttribute("type", "update");
-			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
-
-			try {
-				this.formUploadPicture(matricule, model, session, request);
-
-			} catch (Exception e) {
-
-				e.printStackTrace();
+		if (secure.verifyPersoOrAdmin(matricule,session, request)) {
+			Person person = servicePerson.getPerson(matricule);
+			List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
+			model.addAttribute("skillsList", listeSkills);
+			boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
+			if (isAdmin) {
+				return PersonUtils.loadPersonDetailAsAdmin(matricule, model, session, request, servicePerson, pictureService);
 			}
-
-			if(secure.verifyAdmin(session, request)){
-				return SUCCESS_EDIT;
-			}else{
-				return ERROR_FORWARD;
-			}
+			return PersonUtils.loadPersonDetail(matricule, model, session, request, servicePerson, pictureService);
 		} else {
-			return ERROR_FORWARD;
+			return PersonUtils.ERROR_FORWARD;
 		}
+
 	}
-
-
-	private void formUploadPicture(String matricule, Model model, HttpSession session, HttpServletRequest request) throws Exception {
-		model.addAttribute("picture", new PictureFormData());
-
-		Picture picture = pictureService.getPicture(matricule);
-		byte [] fileBytes = null;
-
-		if (picture == null) {
-
-			InputStream fis= Context.getInstance().getApplicationContext().getResource("classpath:person-avatar1.png").getInputStream();
-			ByteArrayOutputStream bos=new ByteArrayOutputStream();
-			int b;
-			byte[] buffer = new byte[1024];
-			while((b=fis.read(buffer))!=-1){
-				bos.write(buffer,0,b);
+	
+	/**
+	 * Update person.
+	 *
+	 * @param matricule the matricule
+	 * @param lvl the lvl
+	 * @param id the id
+	 * @param itemId the item id
+	 * @param model the model
+	 * @param session the session
+	 * @return the string
+	 * @throws IOException 
+	 * @throws NumberFormatException 
+	 */
+	@RequestMapping(value="/skill/updateSkills.do")
+	public String updatePerson(@RequestParam("matricule") String matricule, 
+			@RequestParam("lvl") String lvl,
+			@RequestParam("id") String id, 
+			@RequestParam("itemId") String itemId, 
+			Model model,
+			HttpSession session, HttpServletRequest request) throws NumberFormatException, IOException {
+		
+		// get person from matricule
+		Person person = servicePerson.getPerson(matricule);
+		Person connected = (Person) session.getAttribute(IConstants.USER_SESSION);
+		
+		Skill skill = null;
+		
+		// authorized update only for connected user do the update
+		if(person.getId().equals(connected.getId())) {
+			// get level
+			int level = Integer.valueOf(lvl);
+			
+			// get skill to update
+//			if(!id.isEmpty()) {
+			if(!(id==null || id.equals(""))) {
+				skill = serviceSkill.getSkill(Long.parseLong(id));
 			}
-			fileBytes=bos.toByteArray();
-			fis.close();
-			bos.close();
-
-
+			// create new skill if doesn't exist yet for this item/person
+			if(skill==null) {
+				skill = new Skill(person, serviceItem.getItem(Long.parseLong(itemId)), level);
+			}
+			
+			// update level
+			skill.setLevel(level);
+			// update skill
+			if(!(id==null || id.equals(""))) {
+				serviceSkill.updateSkill(skill);
+			} else {
+				serviceSkill.createSkill(skill);
+			}
+			
+			// update user in session
+			session.setAttribute(IConstants.USER_SESSION, person);
 		}
-		else {
-			fileBytes = picture.getPicture_data();
+		
+		// refresh list skill
+		List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
+		model.addAttribute("skillsList", listeSkills);
+		
+		if(skill!=null) {
+			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.SKILL_DATA_SAVED, new Object[]{skill.getItem().getCode()}));
 		}
-
-		byte [] encoded = Base64.encode(fileBytes);
-		String encodedString = new String (encoded);
-
-		model.addAttribute("Img", encodedString);
-		//Add attribute here in aim to add this field each time we load a picture to keep the current editing matricule
-		model.addAttribute("selectedMatricule", matricule);
-
+		
+//		return PersonUtils.SUCCESS_EDIT;
+		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
+		if (isAdmin) {
+			return PersonUtils.loadPersonDetailAsAdmin(matricule, model, session, request, servicePerson, pictureService);
+		}
+		return PersonUtils.loadPersonDetail(matricule, model, session, request, servicePerson, pictureService);
 	}
 
 	@RequestMapping(value="/person/loadPicture.do", method = RequestMethod.POST)
@@ -311,10 +296,10 @@ public class PersonController {
 
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
 		if (isAdmin) {
-			return loadPersonDetailAsAdmin(selectedMatricule, model, session, request);
+			return PersonUtils.loadPersonDetailAsAdmin(selectedMatricule, model, session, request, servicePerson, pictureService);
 		}
 
-		return loadPersonDetail(selectedMatricule, model, session, request);
+		return PersonUtils.loadPersonDetail(selectedMatricule, model, session, request, servicePerson, pictureService);
 
 	}
 
@@ -389,7 +374,7 @@ public class PersonController {
 		List<PersonPicture> listePersonsPictures = new ArrayList<PersonPicture>();
 		Map<String, Picture> personsPicturesMap = new HashMap<String, Picture>();
 		listePictures = pictureService.listeAllPictures();
-		listePersons = service.listeAllPersons();
+		listePersons = servicePerson.listeAllPersons();
 
 
 		for (Picture pictureInList : listePictures) {
@@ -429,9 +414,9 @@ public class PersonController {
 
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "update");
-				return SUCCESS_COLAB_EDIT;	
+				return PersonUtils.SUCCESS_EDIT;	
 			}else{
-				personForMerge = service.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB));
+				personForMerge = servicePerson.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB));
 			}
 
 			MyBlowfish bf = new MyBlowfish();
@@ -439,15 +424,15 @@ public class PersonController {
 			personForMerge.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 			personForMerge.setEmail(person.getPerson().getEmail());
 			//personForMerge.setPicture(person.getPerson().getPicture());
-			Person personMerged = service.mergePerson(personForMerge);
+			Person personMerged = servicePerson.mergePerson(personForMerge);
 			session.setAttribute(IConstants.USER_SESSION, personMerged);
 
 
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
-			return SUCCESS_COLAB_EDIT;
+			return PersonUtils.SUCCESS_EDIT;
 
 		}
-		else return ERROR_FORWARD;
+		else return PersonUtils.ERROR_FORWARD;
 
 	}
 
@@ -470,7 +455,7 @@ public class PersonController {
 
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "update");
-				return SUCCESS_EDIT;
+				return PersonUtils.SUCCESS_EDIT;
 			}else{
 				connected = (Person) session.getAttribute(IConstants.USER_SESSION);
 				personForm = person.getPerson();
@@ -483,11 +468,11 @@ public class PersonController {
 				personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 			}else{
 				/** retrieve the current password if any new was send*/
-				personForm.setPassword(service.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB)).getPassword());
+				personForm.setPassword(servicePerson.getPerson((Long)session.getAttribute(IConstants.ID_COLLAB)).getPassword());
 			}
 
 			personForm.setEmail(person.getPerson().getEmail());
-			Person personMerged = service.mergePerson(personForm);
+			Person personMerged = servicePerson.mergePerson(personForm);
 			
 			if(connected.getId().equals(session.getAttribute(IConstants.ID_COLLAB))) {
 				session.setAttribute(IConstants.USER_SESSION, personMerged);
@@ -496,10 +481,10 @@ public class PersonController {
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
 			
 		
-			return loadPersonDetailAsAdmin(personMerged.getMatricule(), model, session, request);
+			return PersonUtils.loadPersonDetailAsAdmin(personMerged.getMatricule(), model, session, request, servicePerson, pictureService);
 
 		}
-		else return ERROR_FORWARD;
+		else return PersonUtils.ERROR_FORWARD;
 	}
 
 	/**
@@ -519,7 +504,7 @@ public class PersonController {
 
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "create");
-				return SUCCESS_EDIT;
+				return PersonUtils.SUCCESS_EDIT;
 			}else{
 				personForm = person.getPerson();
 			}
@@ -528,13 +513,13 @@ public class PersonController {
 			bf.setSecretKey(IConstants.CRYPT_PWD);
 			personForm.setPassword(new BigInteger(bf.crypt(person.getFirstPassword())).toString());
 
-			service.createPerson(personForm);		
+			servicePerson.createPerson(personForm);		
 
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
-			return loadPersonDetailAsAdmin(personForm.getMatricule(), model, session, request);
+			return PersonUtils.loadPersonDetailAsAdmin(personForm.getMatricule(), model, session, request, servicePerson, pictureService);
 
 		}
-		else return ERROR_FORWARD;
+		else return PersonUtils.ERROR_FORWARD;
 	}
 
 
@@ -543,12 +528,12 @@ public class PersonController {
 
 		Security secure = Security.getInstance();
 		if (secure.verifyAdmin(session, request)) {
-			service.deletePerson(matricule);
+			servicePerson.deletePerson(matricule);
 			listePersons(model,session,request);
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_DELETED));
 			return SUCCESS_LIST;
 		} else {
-			return ERROR_FORWARD;
+			return PersonUtils.ERROR_FORWARD;
 		}
 
 	}
@@ -561,9 +546,9 @@ public class PersonController {
 			model.addAttribute("person", new PersonFormData(new Person()));
 			model.addAttribute("picture", new PictureFormData());
 			model.addAttribute("type", "create");
-			return SUCCESS_EDIT;
+			return PersonUtils.SUCCESS_EDIT;
 		} else {
-			return ERROR_FORWARD;
+			return PersonUtils.ERROR_FORWARD;
 		}
 	}
 
@@ -575,7 +560,7 @@ public class PersonController {
 	 */
 	@ModelAttribute("listBu")
 	public Collection<BusinessUnit> populateBusinessUnit() {
-		return service.listeAllBusinessUnits();
+		return servicePerson.listeAllBusinessUnits();
 	}
 
 	@InitBinder

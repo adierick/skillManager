@@ -16,7 +16,7 @@
 	<bean class="com.springmvc.web.BusinessUnitController" />
 	<bean class="com.springmvc.web.ItemController" />
 	<bean class="com.springmvc.web.CategoryController" />
-	<bean class="com.springmvc.web.SkillController" />
+<!-- 	<bean class="com.springmvc.web.SkillController" /> -->
 	<bean class="com.springmvc.web.SearchController" />
 	<bean class="com.springmvc.web.TemplateController" />
 	<!--  <bean class="com.springmvc.web.PictureController" />-->

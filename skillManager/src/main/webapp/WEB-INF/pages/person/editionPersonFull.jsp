@@ -45,29 +45,37 @@
 			                <div class="hidden-xs"><spring:message code="skill.data"/></div>
 			            </button>
 			        </div>
-			        <div class="btn-group" role="group">
-			            <button type="button" id="favorites" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-heart " aria-hidden="true"></span>
-			                <div class="hidden-xs">Following</div>
-			            </button>
-			        </div>
+<!-- 			        <div class="btn-group" role="group"> -->
+<!-- 			            <button type="button" id="favorites" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-heart " aria-hidden="true"></span> -->
+<%-- 			                <div class="hidden-xs"><spring:message code='index.personnal.cv'/></div> --%>
+<!-- 			            </button> -->
+<!-- 			        </div> -->
 			    </div>
 			<fieldset class="ellipse01">
 				<div class="well">
 			      <div class="tab-content">
 			        <div class="tab-pane fade in active" id="tab1">
-			        <c:if test="${userSession.admin}">
-			       		 <%@include file="../person/editionPerson.jsp" %>
-					</c:if>
-					<c:if test="${userSession.admin!=true}">
-			        	<%@include file="../person/editionPersonCollab.jsp" %>
-			        </c:if>
+				        <c:if test="${userSession.admin}">
+				       		 <%@include file="../person/editionPerson.jsp" %>
+						</c:if>
+						<c:if test="${userSession.admin!=true}">
+				        	<%@include file="../person/editionPersonCollab.jsp" %>
+				        </c:if>
 			        </div>
 			        <div class="tab-pane fade in" id="tab2">
 			         	<%@include file="../skill/listeSkills.jsp" %>
 			        </div>
-			        <div class="tab-pane fade in" id="tab3">
-			          <h3>This is tab 3</h3>
-			        </div>
+<!-- 			        <div class="tab-pane fade in" id="tab3"> -->
+<%-- 						<c:choose> --%>
+<%-- 							<c:when test="${cvPage}"> --%>
+<%-- 								<jsp:include page="../${cvPage}.jsp" /> --%>
+<%-- 						  	</c:when> --%>
+<%-- 						  	<c:otherwise> --%>
+<%-- 						  		<%@include file="../template/templateFields.jsp" %> --%>
+<%-- 						  	</c:otherwise> --%>
+<%-- 						</c:choose> --%>
+			        	
+<!-- 			        </div> -->
 			      </div>
 			    </div>
 			    

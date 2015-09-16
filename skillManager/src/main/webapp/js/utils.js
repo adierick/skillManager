@@ -130,7 +130,7 @@ function setSkillLevel(context, lvl, param, id, itemId) {
 	location.href=context + '/main/skill/updateSkills.do?matricule=' + param+'&lvl='+lvl+'&id='+id+'&itemId='+itemId;
 }
 
-function search(contextPath) {
+function searchSkillManager(contextPath) {
 	location.href=contextPath+"/main/search/search.do";
 }
 
