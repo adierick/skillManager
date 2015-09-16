@@ -43,9 +43,6 @@ import com.springmvc.utils.Translation;
 @RequestMapping("/skill/*")
 public class SkillController {
 
-	/** The liste skills. */
-	private List<Skill> listeSkills;
-	
 	/** The service. */
 	private final SkillService service = Context.getInstance().getApplicationContext().getBean(SkillService.class);
 	
@@ -78,7 +75,7 @@ public class SkillController {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrAdmin(matricule,session, request)) {
 			Person person = servicePerson.getPerson(matricule);
-			refreshListSkill(person);
+			List<Skill> listeSkills = refreshListSkill(person);
 			model.addAttribute("skillsList", listeSkills);
 			return SUCCESS_LIST;
 		} else {
@@ -143,7 +140,7 @@ public class SkillController {
 		}
 		
 		// refresh list skill
-		refreshListSkill(person);
+		List<Skill> listeSkills = refreshListSkill(person);
 		model.addAttribute("skillsList", listeSkills);
 		
 		if(skill!=null) {
@@ -157,9 +154,10 @@ public class SkillController {
 	 * Refresh list skill.
 	 *
 	 * @param person the person
+	 * @return 
 	 */
-	private void refreshListSkill(Person person) {
-		listeSkills = service.listeAllSkills(person);
+	public List<Skill> refreshListSkill(Person person) {
+		List<Skill> listeSkills = service.listeAllSkills(person);
 		
 		if(listeSkills!=null){
 			List<Long> itemAlreadySkilled = new ArrayList<Long>();
@@ -177,6 +175,7 @@ public class SkillController {
 		}
 		
 		Collections.sort(listeSkills);
+		return listeSkills;
 	}
 	
 }

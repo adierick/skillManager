@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +45,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
+import com.springmvc.bo.Item;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.PersonPicture;
 import com.springmvc.bo.Picture;
+import com.springmvc.bo.Skill;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PersonFormDataAdmin;
 import com.springmvc.formdata.PictureFormData;
+import com.springmvc.services.ItemService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
+import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.MyBlowfish;
 import com.springmvc.utils.Security;
@@ -75,17 +80,24 @@ public class PersonController {
 
 	/** The service. */
 	private final PersonService service = Context.getInstance().getApplicationContext().getBean(PersonService.class);
+	
+	private final SkillService serviceSkill = Context.getInstance().getApplicationContext().getBean(SkillService.class);
+	/** The service item. */
+	private final ItemService serviceItem = Context.getInstance().getApplicationContext().getBean(ItemService.class);
+	
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
 
 
 	private static final String ERROR_FORWARD = "redirect:"+"/main/login/login.do";
 	private static final String SUCCESS_LIST = "person/listePersons";
 	/** Modification view for admin*/
-	private static final String SUCCESS_EDIT = "person/editionPerson";
+	private static final String SUCCESS_EDIT = "person/editionPersonFull";
+//	private static final String SUCCESS_EDIT = "person/editionPerson";
 	/** Modification view for collaborator (restrict field)*/
-	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonCollab";
+	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonFull";
+//	private static final String SUCCESS_COLAB_EDIT= "person/editionPersonCollab";
 	private static final String TROMBINOSCOPE = "person/trombinoscope";
-
+	
 	/**
 	 * Constructor for person controller.
 	 */
@@ -123,6 +135,29 @@ public class PersonController {
 	@RequestMapping(method=RequestMethod.GET, value="/person/editionPerson.do")
 	public String personDetail(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
 		boolean isAdmin = Security.getInstance().verifyAdmin(session, request);
+		
+		Person person = service.getPerson(matricule);
+		List<Skill> listeSkills = serviceSkill.listeAllSkills(person);
+		
+		if(listeSkills!=null){
+			List<Long> itemAlreadySkilled = new ArrayList<Long>();
+			for (Skill skill: listeSkills) {
+				itemAlreadySkilled.add(skill.getItem().getId());
+			}
+			
+			List<Item> items = serviceItem.listeAllItems();
+			for (Item item : items) {
+				if(!itemAlreadySkilled.contains(item.getId())) {
+					Skill newSkill = new Skill(person, item, 0);
+					listeSkills.add(newSkill);
+				}
+			}
+		}
+		
+		Collections.sort(listeSkills);
+		
+		model.addAttribute("skillsList", listeSkills);
+		
 		if (isAdmin) {
 			return loadPersonDetailAsAdmin(matricule, model, session, request);
 		}

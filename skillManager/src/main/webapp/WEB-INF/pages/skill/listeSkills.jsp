@@ -4,8 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 		<fieldset class="ellipse02">
-			<legend> <spring:message code='index.personnal.skill'/></legend>
-			
 			<div>
 				<img src="<c:url value='/img/main/main_perso_skills.png' />" style="float:left; padding: 10px;" />
 				<div>

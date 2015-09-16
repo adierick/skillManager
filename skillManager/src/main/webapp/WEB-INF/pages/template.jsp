@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app>
 <head>
 	<title><spring:message code="skillmanager.title"/></title>
 	<link rel="icon" type="image/png" href="<c:url value='/img/icon.png' />" />	
@@ -20,6 +20,15 @@
 	<script src="<c:url value='/js/jquery.bootstrap-duallistbox.min.js' />"></script>
 	<script src="<c:url value='/js/load.js' />"></script>		
 	
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body class="body">
     <header>

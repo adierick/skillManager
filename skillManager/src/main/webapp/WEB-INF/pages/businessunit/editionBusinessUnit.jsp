@@ -11,7 +11,7 @@
 				<form:form modelAttribute="businessunit" action="update.do" class="formulaire">
 					<div>
 						<label class="large"><spring:message code='businessunit.label'/> </label><form:input path="label"/><br/>
-						<label class="large"><spring:message code='businessunit.buManager'/> </label><form:input path=" "/><br/>
+<%-- 						<label class="large"><spring:message code='businessunit.buManager'/> </label><form:input path=" "/><br/> --%>
 					</div>
 					<form:hidden path="id"/>
 					<div>
@@ -53,14 +53,14 @@ table.tftable td {
 }
 </style>
 
-		<table id="tfhover" class="tftable" border="1">
-			<caption>liste des personnes</caption>
-			<c:forEach var="person" items="${listPersons}">
-				<tr>
-					<td><c:out value="${person}"></c:out></td>
-				</tr>
-			</c:forEach>
-		</table>
+<!-- 		<table id="tfhover" class="tftable" border="1"> -->
+<%-- 			<caption>liste des personnes</caption> --%>
+<%-- 			<c:forEach var="person" items="${listPersons}"> --%>
+<!-- 				<tr> -->
+<%-- 					<td><c:out value="${person}"></c:out></td> --%>
+<!-- 				</tr> -->
+<%-- 			</c:forEach> --%>
+<!-- 		</table> -->
 	</div>
 
 </fieldset>
