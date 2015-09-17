@@ -383,12 +383,13 @@ public class PersonController {
 
 		for (Person personInList : listePersons) {
 			String matricule = personInList.getMatricule();
+			List<Skill> listeSkills = SkillUtils.refreshOnlyAvailableListSkill(personInList, serviceSkill, serviceItem);
 			if(personsPicturesMap.containsKey(matricule)) {
 				String encodedString = encodePicture(personsPicturesMap.get(matricule));
-				listePersonsPictures.add(new PersonPicture(personInList, encodedString));
+				listePersonsPictures.add(new PersonPicture(personInList, encodedString, listeSkills));
 			}
 			else {
-				listePersonsPictures.add(new PersonPicture(personInList, defaultEncodedString));
+				listePersonsPictures.add(new PersonPicture(personInList, defaultEncodedString, listeSkills));
 			}
 		}
 		model.addAttribute("personsPicturesList", listePersonsPictures);

@@ -55,12 +55,12 @@
 				<div class="well">
 			      <div class="tab-content">
 			        <div class="tab-pane fade in active" id="tab1">
-				        <c:if test="${userSession.admin}">
+<%-- 				        <c:if test="${userSession.admin}"> --%>
 				       		 <%@include file="../person/editionPerson.jsp" %>
-						</c:if>
-						<c:if test="${userSession.admin!=true}">
-				        	<%@include file="../person/editionPersonCollab.jsp" %>
-				        </c:if>
+<%-- 						</c:if> --%>
+<%-- 						<c:if test="${userSession.admin!=true}"> --%>
+<%-- 				        	<%@include file="../person/editionPersonCollab.jsp" %> --%>
+<%-- 				        </c:if> --%>
 			        </div>
 			        <div class="tab-pane fade in" id="tab2">
 			         	<%@include file="../skill/listeSkills.jsp" %>

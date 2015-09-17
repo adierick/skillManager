@@ -27,22 +27,22 @@
 		<div class="errorDiv">
 			<label>${msgError}</label>
 		</div>
-		<form:form modelAttribute="login" action="login.do">
-			<table align="center">
-				<tr>
-					<td align="right"><strong><spring:message code="login.user"/></strong></td>
-					<td><form:input path="login"/> <form:errors path="login" cssClass="error"/></td>
-				</tr>
-				<tr>
-					<td align="right"><strong><spring:message code="login.password"/></strong></td>
-					<td><form:password path="password"/><form:errors path="password"  cssClass="error"/></td>
-				</tr>
-				<tr>
-					<td colspan=2 align="right"><input type="submit" class="button" value="<spring:message code="login.valid"/>"/></td>
-				</tr>
-			</table>
-		</form:form>
-	
+		
+		<div class="container">
+		    <div class="row">
+		        <div class="col-sm-6 col-md-offset-4">
+		            <div class="account-wall" style="text-align: center">
+		            	<img class="media-object dp img-circle" src="<%=request.getContextPath()%>/img/person-avatar1.png" 
+		            		style="width: 100px;height:100px;">
+		                <form:form modelAttribute="login" action="login.do" cssClass="form-signin" >
+		                	<input type="text" class="form-control" name="login" value="" placeholder="<spring:message code="login.user"/>" required autofocus> 
+			                <input type="password" class="form-control" name="password" placeholder="<spring:message code="login.password"/>" required>
+			                <button class="btn btn-lg btn-primary btn-block " type="submit"><spring:message code="login.valid"/></button>
+		                </form:form>  
+		            </div>
+		        </div>
+		    </div>
+		</div>
 		<div id="foot-login"></div>
 	</div>
 </body>

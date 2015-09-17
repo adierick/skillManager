@@ -39,4 +39,17 @@ public class SkillUtils {
 		Collections.sort(listeSkills);
 		return listeSkills;
 	}
+	public static List<Skill> refreshOnlyAvailableListSkill(Person person, SkillService service, ItemService serviceItem) {
+		List<Skill> listeSkills = service.listeAllSkills(person);
+		
+		if(listeSkills!=null){
+			List<Long> itemAlreadySkilled = new ArrayList<Long>();
+			for (Skill skill: listeSkills) {
+				itemAlreadySkilled.add(skill.getItem().getId());
+			}
+		}
+		
+		Collections.sort(listeSkills);
+		return listeSkills;
+	}
 }
