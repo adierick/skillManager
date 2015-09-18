@@ -13,15 +13,15 @@
 				        <div class="col-xs-12 col-sm-12 col-md-4 well well-sm">
 							<form:form modelAttribute="item" action="update.do" class="formulaire">
 								<div>
-									<label for=""><spring:message code='item.categorie'/></label>
-						            <div class="row">
-						                <div class="col-xs-4 col-md-4">
-											<form:select path="category" cssClass="form-control">
-												<form:option value="" label="---"/>
-												<form:options items="${listCategory}" itemLabel="trs_label_key"/>
-											</form:select>
-						                </div>
-						            </div>
+<%-- 									<label for=""><spring:message code='item.categorie'/></label> --%>
+<!-- 						            <div class="row"> -->
+<!-- 						                <div class="col-xs-4 col-md-4"> -->
+<%-- 											<form:select path="category" cssClass="form-control"> --%>
+<%-- 												<form:option value="" label="---"/> --%>
+<%-- 												<form:options items="${listCategory}" itemLabel="trs_label_key"/> --%>
+<%-- 											</form:select> --%>
+<!-- 						                </div> -->
+<!-- 						            </div> -->
 									
 																						
 <%-- 									<c:choose> --%>

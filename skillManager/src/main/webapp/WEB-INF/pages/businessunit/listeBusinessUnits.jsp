@@ -10,7 +10,7 @@
 				<div class="col-md-6">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title"><spring:message code='personnal.choose.action'/></h3>
+							<h3 class="panel-title"><spring:message code='businessunit.choose.action'/></h3>
 						</div>
 						<table class="table table-hover" id="dev-table">
 							<thead>
