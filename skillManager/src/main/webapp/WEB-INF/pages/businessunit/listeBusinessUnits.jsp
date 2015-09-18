@@ -4,38 +4,49 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 		<fieldset class="ellipse04">
-			<legend> <spring:message code='bu.choose.action'/></legend>
+			<legend></legend>
 			
 			<div >
-				<img src="<c:url value='/img/main/main_admin_bu.png' />" style="float:left; padding: 10px;" />
-				<div>
-					<table>
-						<c:forEach var="businessunit" items="${businessunitsList}" varStatus="status">
-						<tr>
-							<td>
-							<a href="editionBusinessUnit.do?id=${businessunit.id }">
-								<c:out value="${businessunit}"></c:out>
-							</a>
-							</td>
-							<td>
-								<form method="post" action="delete.do">
-									<input type="hidden" name="id" value="${businessunit.id}" /> 
-									<input type="submit" title="Delete" class="deleteButton"/>
-								</form>
-							</td>
-						</tr>
-						</c:forEach>
-					</table>
-			
-					<form:form modelAttribute="businessunit" action="create.do">
-						<div>
-							<input type="button" title="<spring:message code='main.back'/>" onclick="location.href='<%=request.getContextPath()%>/main/login/login.do'" class="backButton"/>
-							<input type="submit" title="<spring:message code='businessunit.add'/>" class="addButton"/>
+				<div class="col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title"><spring:message code='businessunit.choose.action'/></h3>
 						</div>
-					</form:form>
+						<table class="table table-hover" id="dev-table">
+							<thead>
+								<tr>
+									<th>
+										<form:form modelAttribute="businessunit" action="create.do">
+											<div>
+												<input type="submit" title="<spring:message code='businessunit.add'/>" class="addButton"/>
+											</div>
+										</form:form>
+									</th>
+									<th><spring:message code='businessunit.label'/></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="businessunit" items="${businessunitsList}" varStatus="status">
+								<tr>
+									<td>
+										<a href="editionBusinessUnit.do?id=${businessunit.id }"><span class="glyphicon glyphicon-edit"></span> </a>
+									</td>
+									<td>
+										<c:out value="${businessunit}"></c:out>
+									</td>
+									<td>
+										<form method="post" action="delete.do" id="deleteForm" name="deleteForm">
+											<input type="hidden" name="id" value="${businessunit.id}" /> 
+											<span class="glyphicon glyphicon-remove" onclick="$(deleteForm).submit()" style="cursor:pointer"></span>
+										</form>
+									</td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
-	<br />
-<c:out value="${message }"></c:out>
-
-		</fieldset>
+	<c:out value="${message }"></c:out>
+	</fieldset>

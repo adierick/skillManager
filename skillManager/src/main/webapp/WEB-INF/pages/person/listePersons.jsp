@@ -4,41 +4,54 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 		<fieldset class="ellipse01">
-			<legend> <spring:message code='personnal.choose.action'/></legend>
-			
+			<legend></legend>
 			<div>
-				<img src="<c:url value='/img/main/main_admin_person.png' />" style="float:left; padding: 10px;" />
-				<div>
-					<table>
-						<c:forEach var="person" items="${personsList}" varStatus="status">
-						<tr>
-							<td>
-								<c:choose>
-									<c:when test="${person.bu != null}"> 
-										<a href="editionPersonAsAdmin.do?matricule=${person.matricule}"> 
-											<c:out value="${person}"></c:out>
-										</a>
-									</c:when>
-									<c:otherwise>
-										<label class="inactivePerson"><c:out value="${person}"></c:out></label>
-									</c:otherwise>
-								</c:choose>
-							</td>
-							<td>
-								<form:form modelAttribute="person" action="delete.do?matricule=${person.matricule}">
-									<input type="submit" value="<spring:message code='main.delete'/>" class="deleteButton"/>
-								</form:form>
-							</td>
-						</tr>
-						</c:forEach>
-					</table>
-							
-					<form:form modelAttribute="person" action="create.do">
-						<div>
-							<input type="button" title="<spring:message code='main.back'/>" onclick="location.href='<%=request.getContextPath()%>/main/login/login.do'" class="backButton"/>
-							<input type="submit" title="<spring:message code='personnal.add'/>" class="addButton"/>
+				<div class="col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title"><spring:message code='personnal.choose.action'/></h3>
 						</div>
-					</form:form>
+						<table class="table table-hover" id="dev-table">
+							<thead>
+								<tr>
+									<th>
+										<form:form modelAttribute="person" action="create.do">
+											<div>
+												<input type="submit" title="<spring:message code='personnal.add'/>" class="addButton"/>
+											</div>
+										</form:form>
+									</th>
+									<th><spring:message code='person.firstname'/></th>
+									<th><spring:message code='person.lastname'/></th>
+									<th><spring:message code='person.matricule'/></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="person" items="${personsList}" varStatus="status">
+								<tr>
+									<td>
+										<a href="editionPersonAsAdmin.do?matricule=${person.matricule}"><span class="glyphicon glyphicon-edit"></span> </a>
+									</td>
+									<td>
+										<c:out value="${person.firstname}"></c:out>
+									</td>
+									<td>
+										<c:out value="${person.lastname}"></c:out>
+									</td>
+									<td>
+										<c:out value="${person.matricule}"></c:out>
+									</td>
+									<td>
+										<form:form modelAttribute="person" action="delete.do?matricule=${person.matricule}" id="deleteForm" name="deleteForm">
+											<span class="glyphicon glyphicon-remove" onclick="$(deleteForm).submit()" style="cursor:pointer"></span>
+										</form:form>
+									</td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			

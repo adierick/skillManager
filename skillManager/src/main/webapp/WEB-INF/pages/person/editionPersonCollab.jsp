@@ -3,8 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-		<fieldset class="ellipse01">
-			<legend> <spring:message code="personnal.data"/></legend>
 				<div>
 					<img src="<c:url value='/img/main/main_perso_data.png' />" style="float:left; padding: 10px;" />
 					<div>
@@ -40,8 +38,6 @@
 					<br/>
 					<div class="pictureDiv">
 					<br/>${matricule}
-						<img src="data:image/jpeg;base64,${Img}" alt="avatar" width="150px" >
-						<br/>
 						<c:if test="${userSession.admin}">
 						<form:form modelAttribute="picture" action="loadPicture.do?selectedMatricule=${selectedMatricule}" class="formulaire formUpload" enctype="multipart/form-data">
 							<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo"/><form:errors path="file" cssClass="error"/><br/>
@@ -50,5 +46,4 @@
 						</c:if>
 					</div>
 				</div>
-			</fieldset>
 

@@ -29,11 +29,12 @@ import com.springmvc.services.SkillService;
 @Component
 @Transactional
 public class SkillServiceImpl extends Service implements SkillService {
-
+	
 		
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#updateSkill(com.springmvc.bo.Skill)
 	 */
+	@Override
 	public void updateSkill(Skill skill) {
 		getSession().update(skill);
 	}
@@ -41,16 +42,20 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#listeAllSkills()
 	 */
+	@Override
 	public List<Skill> listeAllSkills() {
 		return getSession().createQuery(" from Skill").list();
 	}
+	@Override
 	public List<Skill> listeAllSkills(Person person) {
-		return getSession().getNamedQuery("findSkillByPerson").setEntity("person", person).list();
+		List<Skill> listeSkills = getSession().getNamedQuery("findSkillByPerson").setEntity("person", person).list();
+		return listeSkills;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#createSkill(com.springmvc.bo.Skill)
 	 */
+	@Override
 	public Skill createSkill(Skill skill) {
 		getSession().save(skill);
 		return skill;
@@ -59,6 +64,7 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#getSkill(java.lang.Long)
 	 */
+	@Override
 	public Skill getSkill(Long id) {
 		return (Skill) getSession().get(Skill.class, id);
 	}
@@ -66,6 +72,7 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#deleteSkill(java.lang.Long)
 	 */
+	@Override
 	public void deleteSkill(Long id) {
 		getSession().delete(getSkill(id));
 	}
@@ -76,11 +83,13 @@ public class SkillServiceImpl extends Service implements SkillService {
 	 * @param criteria the criteria
 	 * @return the list
 	 */
+	@Override
 	public List<Skill> find(String criteria) {
 		Criteria sqlCriteria = getSession().createCriteria(Skill.class);
 		return sqlCriteria.list();
 	}
 	
+	@Override
 	public List<Skill> findAll(String criteria) {
 		Criteria sqlCriteria = getSession().createCriteria(Skill.class);
 		sqlCriteria.createAlias( "person", "person" );
@@ -99,6 +108,7 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#find(java.lang.String, int, int)
 	 */
+	@Override
 	public List<Skill> find(String criteria, int rowStart, int numberResults) {
 		Criteria sqlCriteria = getSession().createCriteria(Skill.class);
 		
@@ -111,6 +121,7 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#listeAllSkills(int, int)
 	 */
+	@Override
 	public List<Skill> listeAllSkills(int rowStart, int numberResults) {
 		
 		Criteria sqlCriteria = getSession().createCriteria(Skill.class);
@@ -123,6 +134,7 @@ public class SkillServiceImpl extends Service implements SkillService {
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.SkillService#skillCount()
 	 */
+	@Override
 	public int skillCount() {
 		Criteria sqlCriteria = getSession().createCriteria(Skill.class);
 		

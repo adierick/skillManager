@@ -9,31 +9,31 @@
 	</legend>
 
 	<div>
-		<img src="<c:url value='/img/main/main_admin_category.png' />" style="float: left; padding: 10px;" />
-		<form:form modelAttribute="category" action="update.do" class="formulaire">
-		<div>
-			<form:hidden path="id" />		
-			<label class="large"><spring:message code='category.code' /></label><form:input path="code" readonly="true"/><br />
-			<label class="large"><spring:message code='category.trs_label_key' /> </label><form:input path="trs_label_key" readonly="true" /><br />
-			<span class="col-md-6"><label class="large"><spring:message code='category.skills' /></label></span>
-			<div class="col-md-6">
- 				<form:select class="bootstrap-duallistbox-container" multiple="multiple" path="items" id="itemsDualListBox">
-					<c:forEach items="${allItemsList}" var="item">
-						<option value="${item.id}" 
-						<c:if test="${item.category.id == category.id}">selected="selected"</c:if>
-						>${item.code}</option>
-					</c:forEach>
-				</form:select>							
- 			</div>				
+				<div class="container">
+<!-- 				    <div class="row"> -->
+<!-- 				        <div class="col-xs-12 col-sm-12 col-md-4 well well-sm"> -->
+				           <form:form modelAttribute="category" action="update.do" class="formulaire">
+					            <input class="form-control" name="code" placeholder="<spring:message code='category.code'/>" type="text" required value="${category.code}" readonly="readonly" />
+					            <input class="form-control" name="trs_label_key" placeholder="<spring:message code='category.trs_label_key'/>" type="text" required value="${category.trs_label_key}" readonly="readonly" />
+								<label for=""><spring:message code="category.skills"/></label>
+					            <div class="row">
+					                <div class="col-xs-4 col-md-4" style="width: 100% !important">
+						 				<form:select class="bootstrap-duallistbox-container" multiple="multiple" path="items" id="itemsDualListBox">
+											<c:forEach items="${allItemsList}" var="item">
+												<option value="${item.id}" <c:if test="${item.category.id == category.id}">selected="selected"</c:if>>
+													${item.code}
+												</option>
+											</c:forEach>
+										</form:select>
+					                </div>
+					            </div>
+					            <br />
+					            <br />
+					            <form:hidden path="id"/>
+					            <button class="btn btn-lg btn-primary btn-block" type="submit">${type}</button>
+				            </form:form>
+<!-- 				        </div> -->
+<!-- 					</div> -->
+				</div>
 		</div>			
-		
-		<div>
-			<input type="button"
-				title="<spring:message code='category.edit.back'/>"
-				onclick="listeCategories('<%=request.getContextPath()%>', '${userSession.id}');"
-				class="backButton" /> <input type="submit" title="${type}"
-				class="submitButton" />
-		</div>
-		</form:form>
-	</div>
 </fieldset>

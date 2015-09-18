@@ -8,59 +8,19 @@
 			
 			<div>
 				<img src="<c:url value='/img/main/main_admin_bu.png' />" style="float:left; padding: 10px;" />
-				<form:form modelAttribute="businessunit" action="update.do" class="formulaire">
-					<div>
-						<label class="large"><spring:message code='businessunit.label'/> </label><form:input path="label"/><br/>
-						<label class="large"><spring:message code='businessunit.buManager'/> </label><form:input path=" "/><br/>
+				
+				<div class="container">
+				    <div class="row">
+				        <div class="col-xs-12 col-sm-12 col-md-4 well well-sm">
+				           <form:form modelAttribute="businessunit" action="update.do" class="formulaire">
+					            <input class="form-control" name="label" placeholder="<spring:message code='businessunit.label'/>" type="text" required value="${businessunit.label}" />
+					            <br />
+					            <br />
+					            <form:hidden path="id"/>
+					            <button class="btn btn-lg btn-primary btn-block" type="submit">${type}</button>
+				            </form:form>
+				        </div>
 					</div>
-					<form:hidden path="id"/>
-					<div>
-						<input type="button" title="<spring:message code='bu.edit.back'/>" onclick="listeBusinessUnits('<%=request.getContextPath()%>', '${userSession.id}')" class="backButton" />
-						<input type="submit" title="${type}" class="submitButton"/>
-					</div>
-				</form:form>
-		<br />
-		<style type="text/css">
-table.tftable {
-	font-size: 12px;
-	color: #333333;
-	width: 100%;
-	border-width: 1px;
-	border-color: #729ea5;
-	border-collapse: collapse;
-}
-
-table.tftable th {
-	font-size: 12px;
-	background-color: #acc8cc;
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #729ea5;
-	text-align: left;
-}
-
-table.tftable tr {
-	background-color: #ffffff;
-}
-
-table.tftable td {
-	font-size: 12px;
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #729ea5;
-}
-</style>
-
-		<table id="tfhover" class="tftable" border="1">
-			<caption>liste des personnes</caption>
-			<c:forEach var="person" items="${listPersons}">
-				<tr>
-					<td><c:out value="${person}"></c:out></td>
-				</tr>
-			</c:forEach>
-		</table>
-	</div>
-
-</fieldset>
+				</div>
+			</div>
+		</fieldset>
