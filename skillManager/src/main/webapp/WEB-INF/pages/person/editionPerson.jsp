@@ -55,14 +55,16 @@
 	<div class="pictureDiv">
 		<br/>
 		<c:if test="${userSession.admin}">
-		<form:form modelAttribute="picture" action="loadPicture.do?selectedMatricule=${selectedMatricule}" class="formulaire formUpload" enctype="multipart/form-data">
+		<form:form id="uploadForm" name="uploadForm" modelAttribute="picture" action="loadPicture.do?selectedMatricule=${selectedMatricule}" class="formulaire formUpload" enctype="multipart/form-data">
 			<c:choose>
 				<c:when test="${person.person.matricule != null}">
-					<form:input path="file" type="file" cssClass="inputFile" title="Charger une photo" /><form:errors path="file" cssClass="error"/><br/>
-					<input type="submit" value="Envoyer" class="pictureSubmit"><br/>
+					<form:input path="file" type="file" cssClass="glyphicon glyphicon-remove" title="Charger une photo" /><form:errors path="file" cssClass="error"/><br/>
+<!-- 					<input type="submit" value="Envoyer" class="pictureSubmit"><br/> -->
+					 <button class="btn btn-lg btn-primary btn-block" type="submit">Upload photo</button>
 				</c:when>
 				<c:otherwise>
-					<input type="submit" value="Envoyer" class="pictureSubmit" disabled="disabled" title="Le profil doit d'abord être créé avant de pouvoir charger une photo"><br/>
+					<button class="btn btn-lg btn-primary btn-block" type="submit" disabled="disabled" 
+					title="Le profil doit d'abord être créé avant de pouvoir charger une photo">Upload photo</button>
 				</c:otherwise>
 			</c:choose>
 		</form:form>
