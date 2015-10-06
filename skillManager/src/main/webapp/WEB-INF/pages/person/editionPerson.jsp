@@ -44,6 +44,9 @@
 			            <label class="radio-inline">
 			                <spring:message code="person.admin"/><form:checkbox path="person.admin"  />
 			            </label>
+			            <label class="radio-inline">
+			                <spring:message code="person.manager"/><form:checkbox path="person.manager"  />
+			            </label>
 		            </c:if>
 		            <br />
 		            <br />

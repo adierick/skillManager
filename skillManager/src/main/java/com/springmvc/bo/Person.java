@@ -2,6 +2,7 @@ package com.springmvc.bo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.ws.soap.Addressing;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -31,6 +33,7 @@ public class Person implements Serializable {
 	//private byte[] picture;
 	private BusinessUnit bu;
 	private Boolean admin;
+	private Boolean manager;
 	@NotEmpty(message="{person.login.notBlank}")
 	private String login;
 	private String password;
@@ -173,4 +176,14 @@ public class Person implements Serializable {
 	public String toString() {
 		return this.firstname + " " + this.lastname + " (" + this.matricule + ")";
 	}
+
+	public Boolean getManager() {
+		return manager;
+	}
+
+	public void setManager(Boolean manager) {
+		this.manager = manager;
+	}
+
+	
 }

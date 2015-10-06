@@ -473,6 +473,8 @@ public class PersonController {
 			}
 
 			personForm.setEmail(person.getPerson().getEmail());
+			
+			// check if a  manager doesn't exist yet for the bu
 			Person personMerged = servicePerson.mergePerson(personForm);
 			
 			if(connected.getId().equals(session.getAttribute(IConstants.ID_COLLAB))) {
