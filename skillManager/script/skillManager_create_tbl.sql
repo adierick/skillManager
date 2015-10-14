@@ -211,3 +211,8 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2015-03-12 16:14:19
+
+--
+-- Add manager statue for person. false per default.
+--
+ALTER TABLE `skillmanager`.`person` CHANGE COLUMN `is_manager` `is_manager` TINYINT(1) NULL DEFAULT '0'  ;
