@@ -26,10 +26,10 @@
 		http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd 
            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
-		>
+		default-autowire="byName">
 	
 	<!-- JDBC DECLARATION -->
-	<context:property-placeholder location="springbook.properties"/>
+	<context:property-placeholder location="classpath*:springbook.properties"/>
 	<bean id="datasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${datasource.driverClassName}"/>
 		<property name="url" value="${datasource.url}"/>
@@ -57,7 +57,14 @@
 	<!-- ANNOTATIONS -->
 	<tx:annotation-driven/>
 	
+	<context:annotation-config />
+<!-- 	<context:component-scan -->
+<!-- 		base-package="com.springmvc;  -->
+<!-- 			com.springmvc.services.impl;  -->
+<!-- 			com.springmvc.webservices.services.impl" /> -->
+	
 	<!-- AUTO SCAN PACKAGE -->
+<!-- 	<context:component-scan base-package="com.springmvc" /> -->
 	<context:component-scan base-package="com.springmvc.services.impl" />
 
 	<!-- EXTERNAL RESOURCES -->
@@ -139,9 +146,9 @@
 		<jaxws:serviceFactory>
 			<ref bean="aegis-service" />
 		</jaxws:serviceFactory>
-		<jaxws:features>
-			<bean class="org.apache.cxf.feature.LoggingFeature" />
-		</jaxws:features>
+<!-- 		<jaxws:features> -->
+<!-- 			<bean class="org.apache.cxf.feature.LoggingFeature" /> -->
+<!-- 		</jaxws:features> -->
 	</jaxws:endpoint>
 	
 	
