@@ -14,7 +14,6 @@ import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Picture;
-import com.springmvc.bo.SqlCriteria;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PictureFormData;
 import com.springmvc.services.PersonService;
