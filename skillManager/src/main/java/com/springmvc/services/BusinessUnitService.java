@@ -60,4 +60,5 @@ public interface BusinessUnitService extends ISearchService<BusinessUnit> {
 	
 	
 	public int businessUnitCount();
+
 }

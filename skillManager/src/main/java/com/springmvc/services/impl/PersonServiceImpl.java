@@ -8,6 +8,7 @@
  */
 package com.springmvc.services.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.dto.webservice.PersonDto;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.Service;
 
@@ -51,6 +53,28 @@ public class PersonServiceImpl extends Service implements PersonService {
 	@Override
 	public List<Person> listeAllPersons() {
 		return getSession().createQuery(" from Person").list();
+	}
+	
+	@Override
+	public List<PersonDto> getAllPersons() {
+		List<Person> persons = listeAllPersons();
+		List<PersonDto> personsDto = new ArrayList<>();
+		PersonDto personDto;
+		for (Person person : persons){
+			personDto = new PersonDto();
+			personDto.setAdmin(person.getAdmin());
+			personDto.setBuLabel(person.getBu().getLabel());
+			personDto.setEmail(person.getEmail());
+			personDto.setFirstname(person.getFirstname());
+			personDto.setId(person.getId());
+			personDto.setLastname(person.getLastname());
+			personDto.setLogin(person.getLogin());
+			personDto.setManager(person.getManager());
+			personDto.setMatricule(person.getMatricule());
+			personDto.setPassword(person.getPassword());
+			personsDto.add(personDto);
+	}
+		return personsDto;
 	}
 	
 	@Override

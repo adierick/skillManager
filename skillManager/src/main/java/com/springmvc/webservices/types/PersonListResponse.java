@@ -2,28 +2,28 @@ package com.springmvc.webservices.types;
 
 import java.util.List;
 
-import com.springmvc.bo.Person;
+import com.springmvc.bo.dto.webservice.PersonDto;
 
 public class PersonListResponse {
 	
-	private List<Person> personList;
+	private List<PersonDto> personList;
 	private boolean isSuccess;
 	
 	
 	public PersonListResponse() {}
 	
 	
-	public PersonListResponse(List<Person> personList, boolean isSuccess) {
+	public PersonListResponse(List<PersonDto> personList, boolean isSuccess) {
 		this.personList = personList;
 		this.isSuccess = isSuccess;
 	}
 
 	
-	public List<Person> getPersonList() {
+	public List<PersonDto> getPersonList() {
 		return personList;
 	}
 
-	public void setPersonList(List<Person> personList) {
+	public void setPersonList(List<PersonDto> personList) {
 		this.personList = personList;
 	}
 

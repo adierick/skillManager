@@ -139,16 +139,13 @@
 	</bean>
 
 		<!-- The service bean -->
-	<bean id="SkillManagerWSImpl" class="com.springmvc.webservices.service.impl.SkillManagerWSImpl" />
+	<bean id="SkillManagerWSImpl" class="com.springmvc.webservices.service.impl.SkillManagerWSImpl"/>
 	
 	<!-- End point -->
 	<jaxws:endpoint id="SkillManagerWS" implementorClass="com.springmvc.webservices.service.impl.SkillManagerWSImpl" implementor="#SkillManagerWSImpl" address="/SkillManagerWS">
 		<jaxws:serviceFactory>
 			<ref bean="aegis-service" />
 		</jaxws:serviceFactory>
-<!-- 		<jaxws:features> -->
-<!-- 			<bean class="org.apache.cxf.feature.LoggingFeature" /> -->
-<!-- 		</jaxws:features> -->
 	</jaxws:endpoint>
 	
 	
