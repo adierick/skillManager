@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springmvc.bo.BusinessUnit;
-import com.springmvc.bo.Person;
 import com.springmvc.bo.dto.webservice.PersonDto;
 import com.springmvc.services.BusinessUnitService;
 import com.springmvc.services.PersonService;
@@ -39,12 +37,8 @@ public class SkillManagerWSImpl implements SkillManagerWS {
 	public PersonListResponse getPersonListByBU(String buLabel) {		
 		PersonListResponse personListResponse = new PersonListResponse();
 		try {
-			List<BusinessUnit> bus = (List<BusinessUnit>) buService.find(buLabel);
-			BusinessUnit bu;
-			if (bus!=null){
-				bu = bus.get(0);
-//				personListResponse.setPersonList(bu.getPersons());
-			}
+			List<PersonDto> persons = personService.getPersonsByBu(buLabel);
+			personListResponse.setPersonList(persons);
 			personListResponse.setSuccess(true);									
 		} catch (Exception e) {
 			personListResponse.setSuccess(false);

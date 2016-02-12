@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,20 +60,8 @@ public class PersonServiceImpl extends Service implements PersonService {
 	public List<PersonDto> getAllPersons() {
 		List<Person> persons = listeAllPersons();
 		List<PersonDto> personsDto = new ArrayList<>();
-		PersonDto personDto;
 		for (Person person : persons){
-			personDto = new PersonDto();
-			personDto.setAdmin(person.getAdmin());
-			personDto.setBuLabel(person.getBu().getLabel());
-			personDto.setEmail(person.getEmail());
-			personDto.setFirstname(person.getFirstname());
-			personDto.setId(person.getId());
-			personDto.setLastname(person.getLastname());
-			personDto.setLogin(person.getLogin());
-			personDto.setManager(person.getManager());
-			personDto.setMatricule(person.getMatricule());
-			personDto.setPassword(person.getPassword());
-			personsDto.add(personDto);
+			personsDto.add(new PersonDto(person));
 		}
 		return personsDto;
 	}
@@ -190,6 +179,19 @@ public class PersonServiceImpl extends Service implements PersonService {
 	public Collection<Person> listpersonBu(BusinessUnit bu) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<PersonDto> getPersonsByBu(String buLabel) {
+		Criteria sqlCriteria = getSession().createCriteria(Person.class);
+		sqlCriteria.setFetchMode("bu", FetchMode.JOIN);
+		sqlCriteria.add(Restrictions.eq("bu.label", buLabel)); 
+		List<Person> persons = sqlCriteria.list();
+		List<PersonDto> personsDto = new ArrayList<PersonDto>();
+		for (Person p : persons){
+			personsDto.add(new PersonDto(p));
+		}
+		return personsDto;
 	}
 
 }

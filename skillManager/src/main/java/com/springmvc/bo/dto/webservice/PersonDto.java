@@ -1,5 +1,7 @@
 package com.springmvc.bo.dto.webservice;
 
+import com.springmvc.bo.Person;
+
 
 public class PersonDto {
 
@@ -25,6 +27,21 @@ public class PersonDto {
 		this.admin = admin;
 		this.login = login;
 		this.setPassword(password);
+	}
+	
+	public PersonDto(Person person){
+		this.admin = person.getAdmin();
+		if(person.getBu()!=null){
+			this.buLabel = person.getBu().getLabel();
+		}
+		this.email = person.getEmail();
+		this.firstname =  person.getFirstname();
+		this.id = person.getId();
+		this.lastname = person.getLastname();
+		this.login = person.getLogin();
+		this.manager = person.getManager();
+		this.matricule = person.getMatricule();
+		this.password = person.getPassword();
 	}
 	
 	public PersonDto() {}

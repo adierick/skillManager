@@ -93,7 +93,7 @@ public class BusinessUnit {
 		this.persons = persons;
 	}
 	
-	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+	@OneToMany
 	@JoinColumn(name="id_bu")
 	public List<Person> getPersons() {
 		return persons;
