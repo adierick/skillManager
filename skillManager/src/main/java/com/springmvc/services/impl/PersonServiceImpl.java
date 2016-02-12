@@ -73,7 +73,7 @@ public class PersonServiceImpl extends Service implements PersonService {
 			personDto.setMatricule(person.getMatricule());
 			personDto.setPassword(person.getPassword());
 			personsDto.add(personDto);
-	}
+		}
 		return personsDto;
 	}
 	
