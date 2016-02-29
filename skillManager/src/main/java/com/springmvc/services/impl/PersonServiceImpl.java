@@ -8,16 +8,19 @@
  */
 package com.springmvc.services.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.dto.webservice.PersonDto;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.Service;
 
@@ -51,6 +54,16 @@ public class PersonServiceImpl extends Service implements PersonService {
 	@Override
 	public List<Person> listeAllPersons() {
 		return getSession().createQuery(" from Person").list();
+	}
+	
+	@Override
+	public List<PersonDto> getAllPersons() {
+		List<Person> persons = listeAllPersons();
+		List<PersonDto> personsDto = new ArrayList<>();
+		for (Person person : persons){
+			personsDto.add(new PersonDto(person));
+		}
+		return personsDto;
 	}
 	
 	@Override
@@ -166,6 +179,19 @@ public class PersonServiceImpl extends Service implements PersonService {
 	public Collection<Person> listpersonBu(BusinessUnit bu) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<PersonDto> getPersonsByBu(String buLabel) {
+		Criteria sqlCriteria = getSession().createCriteria(Person.class);
+		sqlCriteria.setFetchMode("bu", FetchMode.JOIN);
+		sqlCriteria.add(Restrictions.eq("bu.label", buLabel)); 
+		List<Person> persons = sqlCriteria.list();
+		List<PersonDto> personsDto = new ArrayList<PersonDto>();
+		for (Person p : persons){
+			personsDto.add(new PersonDto(p));
+		}
+		return personsDto;
 	}
 
 }

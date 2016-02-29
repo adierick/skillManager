@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.dto.webservice.PersonDto;
 
 /**
  * The Interface PersonService.
@@ -36,6 +37,7 @@ public interface PersonService extends ISearchService<Person> {
 	 * @return the list
 	 */
 	public List<Person> listeAllPersons();
+	public List<PersonDto> getAllPersons();
 	public List<Person> listeAllActivePersons();
 	public List<Person> listeAllPersons(int rowStart, int numberResults);
 	
@@ -69,4 +71,6 @@ public interface PersonService extends ISearchService<Person> {
 	
 	public int personCount();
 	public Collection<Person> listpersonBu(BusinessUnit bu);
+	public List<PersonDto> getPersonsByBu(String buLabel);
+
 }
