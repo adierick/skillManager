@@ -41,10 +41,10 @@
 		            </div>
 		            
 		            <c:if test="${userSession.admin}">
-			            <label class="radio-inline">
-			                <spring:message code="person.admin"/><form:checkbox path="person.admin"  />
+			            <label class="radio-inline" >
+			                <spring:message code="person.admin"/><form:checkbox path="person.admin"/>
 			            </label>
-			            <label class="radio-inline">
+			            <label class="radio-inline" id="CocheFicheCollab" onclick="afficher_cacher()">
 			                <spring:message code="person.manager"/><form:checkbox path="person.manager"  />
 			            </label>
 		            </c:if>

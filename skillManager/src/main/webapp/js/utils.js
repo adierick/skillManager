@@ -105,6 +105,20 @@ function downloadCv(context){
 function listePersons(context, param) {
 	location.href=context + '/main/person/listePersons.do';
 }
+/********************************
+ 
+//ajout lien Fiche Collaborateurs//
+*/
+
+function listeEmploies(context, param){
+	location.href=context + '/main/collaborater/listeEmploies.do';
+}
+function RMCA(context, param){
+	location.href=context+'main/collaborater/RMCA.do';
+}
+function editionCollaborater(context, param){
+	location.href=context + '/main/collaborater/editionCollaborater.do?matricule=' + param;
+}
 
 function listeItems(context, param) {
 	location.href=context + '/main/item/listeItems.do';

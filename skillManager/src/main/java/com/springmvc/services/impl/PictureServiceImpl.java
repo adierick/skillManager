@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springmvc.bo.Picture;
 import com.springmvc.services.PictureService;
+//import com.springmvc.bo.Picture;
 import com.springmvc.services.Service;
+//import com.springmvc.services.Service;
 
 
 @Component

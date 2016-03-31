@@ -9,13 +9,15 @@
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-	
+		
 	<bean class="com.springmvc.web.LoginController"	p:indexPath="index"/>
 	<bean class="com.springmvc.web.LogoutController" />
 	<bean class="com.springmvc.web.PersonController" />
 	<bean class="com.springmvc.web.BusinessUnitController" />
 	<bean class="com.springmvc.web.ItemController" />
 	<bean class="com.springmvc.web.CategoryController" />
+	<!-- fiche collaborateurs -->
+	<bean class="com.springmvc.web.CollabController"/>
 <!-- 	<bean class="com.springmvc.web.SkillController" /> -->
 	<bean class="com.springmvc.web.SearchController" />
 	<bean class="com.springmvc.web.TemplateController" />

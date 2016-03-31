@@ -35,6 +35,5 @@ public class Login {
 	public String toString() {
 		return "["+login+"/"+password+"]";
 	}
-	
-	
+		
 }

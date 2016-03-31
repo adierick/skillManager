@@ -1,7 +1,7 @@
 package com.springmvc.bo;
 
 import java.io.Serializable;
-
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.ws.soap.Addressing;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -37,6 +36,16 @@ public class Person implements Serializable {
 	@NotEmpty(message="{person.login.notBlank}")
 	private String login;
 	private String password;
+	//TODO
+//	private Byte[] picture_data;
+	private Date birth_date;
+	private String Tel;
+	private String hobby;
+	private Date date_entry_sii;
+	private String position_coeff;
+	private Position position;
+//	private int position_id;
+//	private String function;
 
 
 	/**
@@ -47,7 +56,9 @@ public class Person implements Serializable {
 	 * @param dateEmbauche
 	 * @param fonction
 	 */
-	public Person(String firstname, String lastname, String matricule, String email, /*byte[] picture*/ BusinessUnit bu, Boolean admin, String login, String password) {
+	public Person(String firstname, String lastname, String matricule, String email, /*byte[] picture*/ BusinessUnit bu, Boolean admin, String login, String password,
+			/*Byte[] picture_data, */
+			Boolean manager, Date birth_date, String Tel, String hobby, Date date_entry_sii, String position_coeff/*, String function*/) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -58,6 +69,14 @@ public class Person implements Serializable {
 		this.admin = admin;
 		this.login = login;
 		this.password = password;
+//		this.setPicture_data(picture_data);
+		this.manager = manager;
+		this.setBirth_date(birth_date);
+		this.setTel(Tel);
+		this.setHobby(hobby);
+		this.setDate_entry_sii(date_entry_sii);
+		this.setPosition_coeff(position_coeff);
+		//this.setFunction(function);
 	}
 	
 	public Person() {}
@@ -142,6 +161,15 @@ public class Person implements Serializable {
 	public void setLogin(String login) {
 		this.login = login;
 	}
+	
+	@ManyToOne
+	@JoinColumn(name="position_id")
+	public Position getPosition(){
+		return position;
+	}
+	public void setPosition(Position code){
+		this.position=code;
+	}
 
 /*	public String getPassword() {
 		return password;
@@ -185,5 +213,70 @@ public class Person implements Serializable {
 		this.manager = manager;
 	}
 
-	
+	public Date getBirth_date() {
+		return birth_date;
+	}
+
+	public void setBirth_date(Date birth_date) {
+		this.birth_date = birth_date;
+	}
+
+//	public Byte[] getPicture_data() {
+//		return picture_data;
+//	}
+//
+//	public void setPicture_data(Byte[] picture_data) {
+//		this.picture_data = picture_data;
+//	}
+
+	public String getTel() {
+		return Tel;
+	}
+
+	public void setTel(String tel) {
+		Tel = tel;
+	}
+
+	public String getHobby() {
+		return hobby;
+	}
+
+	public void setHobby(String hobby) {
+		this.hobby = hobby;
+	}
+
+	public Date getDate_entry_sii() {
+		return date_entry_sii;
+	}
+
+	public void setDate_entry_sii(Date date_entry_sii) {
+		this.date_entry_sii = date_entry_sii;
+	}
+
+	public String getPosition_coeff() {
+		return position_coeff;
+	}
+
+	public void setPosition_coeff(String position_coeff) {
+		this.position_coeff = position_coeff;
+	}
+/*
+	public String getFunction() {
+		return function;
+	}
+
+	public void setFunction(String function) {
+		this.function = function;
+	}
+*/
+/*
+	public int getPosition_id() {
+		return position_id;
+	}
+
+	public void setPosition_id(int position_id) {
+		this.position_id = position_id;
+	}
+*/
+
 }

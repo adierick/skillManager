@@ -70,10 +70,10 @@ import com.springmvc.web.editor.BusinessUnitEditor;
  * @version 5.1, //2014
  */
 @Controller
-//@RequestMapping("/person/*")
 @RequestMapping(value={"/person/*", "/skill/*"})
 public class PersonController {
 
+	
 	/** The liste persons. */
 	private List<Person> listePersons;
 	private List<Picture> listePictures;

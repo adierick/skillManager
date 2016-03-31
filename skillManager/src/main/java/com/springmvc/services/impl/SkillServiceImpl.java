@@ -14,10 +14,10 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Skill;
 import com.springmvc.services.Service;
+//import com.springmvc.services.Service;
 import com.springmvc.services.SkillService;
 
 /**

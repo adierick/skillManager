@@ -16,8 +16,7 @@
 				<div id="logo" onclick="location.href='<%=request.getContextPath()%>/main/login/login.do'"></div>
 			</div>
 		</div>
-		
-		
+				
 		<div class="container">
 			<div class="row">
 				<nav class="navbar navbar-default" role="navigation">
@@ -48,7 +47,12 @@
 					            <li><a href="#" onclick="listePersons('<%=request.getContextPath()%>', '${userSession.id}')" ><spring:message code='index.admin.person'/></a></li>
 					            <li><a href="#" onclick="listeBusinessUnits('<%=request.getContextPath()%>', '${userSession.id}')" ><spring:message code='index.admin.bu'/></a></li>
 					            <li><a href="#" onclick="listeItems('<%=request.getContextPath()%>', '${userSession.id}')" ><spring:message code='index.admin.item'/></a></li>
-					            <li><a href="#" onclick="listeCategories('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.category'/></a></li>
+					            <li><a href="#" onclick="listeCategories('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.category'/></a></li> 
+					            
+					            <%-- Ajout menu Gestions Fiche collaborateurs --%>
+					            <c:if test="${userSession.manager}">
+					            <li><a href="#" onclick="listeEmploies('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.emploies'/></a></li>
+					            </c:if>
 					            <li class="divider"></li>
 					            <li><a href="#" onclick="searchSkillManager('<%=request.getContextPath()%>')" ><spring:message code='index.admin.search'/></a></li>
 					          </ul>

@@ -1,16 +1,11 @@
 package com.springmvc.services.impl;
 
 import java.util.List;
-
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.springmvc.bo.Category;
-import com.springmvc.bo.Item;
 import com.springmvc.services.CategoryService;
 import com.springmvc.services.Service;
 

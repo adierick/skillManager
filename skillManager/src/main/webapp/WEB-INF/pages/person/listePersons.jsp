@@ -41,7 +41,7 @@
 									</td>
 									<td>
 										<c:out value="${person.matricule}"></c:out>
-									</td>
+									</td>									
 									<td>
 										<form:form modelAttribute="person" action="delete.do?matricule=${person.matricule}" id="deleteForm" name="deleteForm">
 											<span class="glyphicon glyphicon-remove" onclick="$(deleteForm).submit()" style="cursor:pointer"></span>

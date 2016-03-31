@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.springmvc.bo.Picture;
 
+
 public interface PictureService extends ISearchService<Picture> {
 	
 	public void updatePicture (Picture picture);

@@ -15,11 +15,11 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.springmvc.bo.Category;
 import com.springmvc.bo.Item;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.Service;
+//import com.springmvc.services.Service;
 
 /**
  * The Class ItemServiceImpl.
