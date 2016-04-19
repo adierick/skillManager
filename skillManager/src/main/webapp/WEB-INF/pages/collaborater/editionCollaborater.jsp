@@ -15,18 +15,18 @@
 	<div class="container">
 	    <div class="row">
 	        <div class="col-xs-12 col-sm-12 col-md-4 well well-sm">
-	           <form:form modelAttribute="collaborater" action="${type}AsManager.do" class="formulaire">
+	           <form:form modelAttribute="collaborater" items="${collabEdition}" action="${type}AsManager.do" class="formulaire">
 		            <div class="row">
 		                <div class="col-xs-6 col-md-6">
-		                    <input class="form-control" name="collaborater.firstname" placeholder="<spring:message code="collab.firstname"/>" type="text" required autofocus value="${person.collaborater.firstname}"  ${readonly} />
+		                    <input class="form-control" name="collaborater.firstname" placeholder="<spring:message code="collab.firstname"/>" type="text" required autofocus value="${collaborater.person.firstname}"  ${readonly} />
 		                </div>
 		                <div class="col-xs-6 col-md-6">
-		                    <input class="form-control" name="collaborater.lastname" placeholder="<spring:message code="collab.lastname"/>" type="text" required value="${person.collaborater.lastname}" ${readonly}/>
+		                    <input class="form-control" name="collaborater.lastname" placeholder="<spring:message code="collab.lastname"/>" type="text" required value="${collaborater.person.lastname}" ${readonly}/>
 		                </div>
 		            </div>
-		            <input class="form-control" name="collaborater.birth_date" placeholder="<spring:message code="collaborater.matricule"/>" type="text" required value="${person.collaborater.matricule}" ${readonly}/>
-		            <input class="form-control" name="collaborater.Tel" placeholder="<spring:message code="collab.Tel"/>" type="text"  required value="${person.collaborater.Tel}" ${readonly}/>
-		            <input class="form-control" name="collaborater.hobby" placeholder="<spring:message code="collab.hobby"/>" type="text" required value="${person.collaborater.hobby}"/>
+		            <input class="form-control" name="collaborater.birth_date" placeholder="<spring:message code="collaborater.matricule"/>" type="text" required value="${collaborater.person.matricule}" ${readonly}/>
+		            <input class="form-control" name="collaborater.Tel" placeholder="<spring:message code="collab.Tel"/>" type="text"  required value="${collaborater.person.Tel}" ${readonly}/>
+		            <input class="form-control" name="collaborater.hobby" placeholder="<spring:message code="collab.hobby"/>" type="text" required value="${collaborater.person.hobby}"/>
 		            <input class="form-control" name="collaborater.date_entry_sii" placeholder="<spring:message code="collab.date_entry_sii"/>" type="text" required value="${collaborater.date_enty_sii}"/>
 		            <input class="form-control" name="collaborater.position_coeff" placeholder="<spring:message code="collab.position_coeff"/>" type="text" required value="${collaboorater.position_coeff}"/>
 		          
@@ -44,7 +44,7 @@
 			            <label class="radio-inline" >
 			                <spring:message code="person.admin"/><form:checkbox path="person.admin"/>
 			            </label>
-			            <label class="radio-inline" id="CocheFicheCollab" onclick="afficher_cacher()">
+			            <label class="radio-inline">
 			                <spring:message code="person.manager"/><form:checkbox path="person.manager"  />
 			            </label>
 		            </c:if>

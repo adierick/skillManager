@@ -113,9 +113,11 @@ function listePersons(context, param) {
 function listeEmploies(context, param){
 	location.href=context + '/main/collaborater/listeEmploies.do';
 }
-function RMCA(context, param){
-	location.href=context+'main/collaborater/RMCA.do';
+
+function editionCHFR(context, param){
+	location.href=context + '/main/collaborater/editionCHFR.do';
 }
+
 function editionCollaborater(context, param){
 	location.href=context + '/main/collaborater/editionCollaborater.do?matricule=' + param;
 }

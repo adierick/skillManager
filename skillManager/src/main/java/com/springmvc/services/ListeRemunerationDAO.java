@@ -16,7 +16,7 @@ import com.springmvc.bo.Remuneration;
 public class ListeRemunerationDAO implements IRemunerationDAO{
 	private EntityManager entityManager;
 	@Override
-	public List<Remuneration> listeRemuneration() {
+	public List<Remuneration> afficheRemuneration() {
 		// TODO Auto-generated method stub
 		final CriteriaBuilder lCriteriaBuilder = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Remuneration> lCriteriaQuery = lCriteriaBuilder.createQuery(Remuneration.class);

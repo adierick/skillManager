@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import com.springmvc.bo.Person;
 import com.springmvc.constraints.FieldMatch;
 
+
+
+
 @FieldMatch(first = "firstPassword", second = "confirmPassword", message = "{person.password.confirm.notMatched}")
 @Component
 public class PersonFormData {
@@ -24,7 +27,6 @@ public class PersonFormData {
 		public PersonFormData(Person person) {
 			this.person = person;
 		}
-		
 		
 		public String getFirstPassword() {
 			return firstPassword;
@@ -45,6 +47,6 @@ public class PersonFormData {
 		public void setConfirmPassword(String confirmPassword) {
 			this.confirmPassword = confirmPassword;
 		}
-		
-		
+
+				
 }

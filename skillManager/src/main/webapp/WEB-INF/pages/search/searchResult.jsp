@@ -7,7 +7,7 @@
 
 <fieldset class="ellipse02" style="height:790px !important;">
 	<legend>
-		<spring:message code='search.doSearch' />
+		<spring:message code='collaborater.search' />
 	</legend>
 
 	<jsp:include page="searchForm.jsp"/>

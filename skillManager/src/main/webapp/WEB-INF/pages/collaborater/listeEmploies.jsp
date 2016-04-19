@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <fieldset class="ellipse01">
+
 			<legend></legend>
 			<div>
 				<div class="col-md-6">
@@ -34,12 +35,14 @@
 								<c:forEach var="collaborater" items="${listeCollaborateurs}" varStatus="status">
 							 	<tr>
 							 		<td>
-										<a href="editionCollaboraterAsManager.do?matricule=${collaborater.matricule}"><span class="glyphicon glyphicon-edit"></span> </a>
+									 	<a href="editionCollaboraterAsManager.do?matricule=${collaborater.matricule}"><span class="glyphicon glyphicon-edit"></span> </a>
+								<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
 									</td>
 							 		<td>
 										<c:out value="${collaborater.firstname} ${collaborater.lastname}"></c:out>
 									</td>	
 									<td>
+									<!-- parce que position est une objet dans la classe Person.java on met position.code comme ci-dessous -->
 										<c:out value="${collaborater.position.code}"></c:out>
 									</td>
 														

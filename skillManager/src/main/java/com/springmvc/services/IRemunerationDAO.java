@@ -5,5 +5,5 @@ import java.util.List;
 import com.springmvc.bo.Remuneration;
 
 public interface IRemunerationDAO {
-	List<Remuneration> listeRemuneration();
+	List<Remuneration> afficheRemuneration();
 }

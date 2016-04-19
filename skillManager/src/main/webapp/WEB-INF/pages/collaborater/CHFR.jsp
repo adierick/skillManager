@@ -3,33 +3,87 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<fieldset class="ellipse01">
-			<legend></legend>
-			<div>
+<div>
+	<c:set var="readonly" value =""/>
+	<c:if test="${!userSession.manager}">
+		<c:set var="readonly" value ="readonly='true'"/>
+	</c:if>
+	<div class="container">
+	<div class="col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title"><spring:message code='remuneration.choose.action'/></h3>
+						</div>
+						<table class="table table-hover" id="dev-table">					
+							<thead>
+								<tr>
+									<th></th>						  
+									<th><spring:message code='remuneration.brut'/></th>
+							   		<th><spring:message code='remuneration.fixe'/></th>
+							   		<th><spring:message code='remuneration.variable'/></th>
+							   		<th><spring:message code='remuneration.commentaire'/>
+			 						<th></th>
+								</tr>
+							</thead>
+							
+						 	<tbody>
+								<c:forEach var="collaborater" items="${listeCollaborateurs}" varStatus="status">
+							 	<tr>
+							 		<td>
+										 <input class="form-control" name="brut" placeholder="<spring:message code="remuneration.brut"/>" type="text" required value="${collaborater.firstname} ${collaborater.lastname}" ${readonly}/>
+									</td>	
+									<td>
+										<input class="from-control" name="fixe" placeholder="<spring:message code="remuneration.fixe"/>" type="text" required value="${collaborater.position.code}" ${readonly}/>
+									</td>
+									<td>
+										<input class="from-control" name="variable" placeholder="<spring:message code="remuneration.variable"/>" type="text" required value="${remuneration.variable}" ${readonly}/>
+									</td>
+									<td>
+										<textarea class="form-control" name="commentaire" placeholder="<spring:message code="remuneration.commentaire"/>" type="text" required value="${remuneration.commentaire}" ${readonly}></textarea>
+									</td>
+														
+		       					</tr>
+								</c:forEach>
+							</tbody>						
+						</table>
+					</div>
+				</div>
+				<div>
 				<div class="col-md-6">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title"><spring:message code='behaviour.choose.action'/></h3>
+							<h3 class="panel-title"><spring:message code='mission.choose.action'/></h3>
 						</div>
 						<table class="table table-hover" id="dev-table">
-							<thead>
-								<tr>
+							<tr>
 								<th></th>
 								  
-									<th><spring:message code='behaviour.strong_points'/></th>
-							   		<th><spring:message code='behaviour.areas_improvement'/></th>
+									<th><spring:message code='mission.client'/></th>
+									<th><spring:message code='missionentitedMission'/></th>							
+							   		<th><spring:message code='mission.activite'/></th>
+							   		<th><spring:message code='mission.dateDemarrage'/></th>
+							   		<th><spring:message code='mission.commentaire'/>
 			 					<th></th>
 								</tr>
 							</thead>
 							
 						 	<tbody>
-								<c:forEach var="behaviour" items="${listeBehaviours}" varStatus="status">
+								<c:forEach var="mission" items="${listeMissions}" varStatus="status">
 							 	<tr>
 							 		<td>
-										 <input class="form-control" name="behaviour.strong_points" placeholder="<spring:message code="behaviour.strong_points"/>" type="text" required value="${person.behaviour.strong_points}" ${readonly}/>
+										 <input class="form-control" name="mission.client" placeholder="<spring:message code="mission.client"/>" type="text" required value="${person.mission.brut}" ${readonly}/>
 									</td>	
 									<td>
-										<input class="from-control" name="behaviour.areas_improvement" placeholder="<spring:message code="behaviour.areas_improvement"/>" type="text" required value="${person.behaviour.areas_improvement}" ${readonly}/>
+										 <input class="form-control" name="mission.entitedMission" placeholder="<spring:message code="mission.entitedMission"/>" type="text" required value="${person.mission.entitedMission}" ${readonly}/>
+									</td>
+									<td>
+										<input class="from-control" name="mission.activite" placeholder="<spring:message code="mission.activite"/>" type="text" required value="${person.mission.fixe}" ${readonly}/>
+									</td>
+									<td>
+										<input class="from-control" name="mission.dateDemarrage" placeholder="<spring:message code="mission.dateDemarrage"/>" type="text" required value="${person.mission.variable}" ${readonly}/>
+									</td>
+									<td>
+										<input class="from-control" name="mission.commentaire" placeholder="<spring:message code="mission.commentaire"/>" type="text" required value="${person.mission.fixe}" ${readonly}/>
 									</td>
 														
 		       					</tr>
@@ -39,101 +93,57 @@
 					</div>
 				</div>
 			</div>
-</fieldset>
-<br>
-<fieldset class="ellipse01">
-			<legend></legend>
 			<div>
 				<div class="col-md-6">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title"><spring:message code='history_MGT.choose.action'/></h3>
-						</div>
-						<table class="table table-hover" id="dev-table">
-							<thead>
-								<tr>
-								<th></th>
-									<th><spring:message code='history_MGT.smil'/></th>
-							   		<th><spring:message code='histoy_MGT.maturity_employee'/></th>
-							   		<th><spring:message code='history_MGT.management_apply'/></th>
-			 					<th></th>
-								</tr>
-							</thead>
-							
-						 	<tbody>
-								<c:forEach var="history_MGT" items="${listeHistory_MGT}" varStatus="status">
-							 	<tr>
-							 		<td>
-										 <input class="form-control" name="history_MGT.smil" placeholder="<spring:message code="history_MGT.smil"/>" type="text" required value="${person.history_MGT.smil}" ${readonly}/>
-									</td>	
-									<td>
-										<input class="from-control" name="history_MGT.maturity_employee" placeholder="<spring:message code="history_MGT.maturity_employee"/>" type="text" required value="${person.history_MGT.maturity_employee}" ${readonly}/>
-									</td>
-									<td>
-										<input class="from-control" name="history_MGT.management_apply" placeholder="<spring:message code="history_MGT.management_apply"/>" type="text" required value="${person.history_MGT.management_apply}" ${readonly}/>
-									</td>
-															
-		       					</tr>
-								</c:forEach>
-							</tbody>						
-						</table>
-					</div>
-				</div>
-			</div>
-</fieldset>
-<br>
-<fieldset class="ellipse01">
-			<legend></legend>
-			<div>
-				<div class="col-md-6">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title"><spring:message code='formation.choose.action'/></h3>
+							<h3 class="panel-title"><spring:message code='career.choose.action'/></h3>
 						</div>
 						<table class="table table-hover" id="dev-table">
 							<thead>
 								<tr>
 								<th></th>
 								  
-									<th><spring:message code='formation.entitled'/></th>
-							   		<th><spring:message code='formation.date'/></th>   		
+									<th><spring:message code='career.poste'/></th>
+							   		<th><spring:message code='career.coefficient'/></th>
+							   		<th><spring:message code='career.date'/></th>
 			 					<th></th>
 								</tr>
 							</thead>
 							
 						 	<tbody>
-								<c:forEach var="formation" items="${listeFormations}" varStatus="status">
+								<c:forEach var="career" items="${listeCareers}" varStatus="status">
 							 	<tr>
 							 		<td>
-										 <input class="form-control" name="formation.entitled" placeholder="<spring:message code="formation.entitled"/>" type="text" required value="${person.formation.entitled}" ${readonly}/>
+										 <input class="form-control" name="career.poste" placeholder="<spring:message code="career.poste"/>" type="text" required value="${person.career.brut}" ${readonly}/>
 									</td>	
 									<td>
-										<input class="from-control" name="formation.date" placeholder="<spring:message code="formation.date"/>" type="date" required value="${person.formation.date}" ${readonly}/>
+										<input class="from-control" name="career.coefficient" placeholder="<spring:message code="career.coefficient"/>" type="text" required value="${person.career.fixe}" ${readonly}/>
+									</td>
+									<td>
+										<input class="from-control" name="career.date" placeholder="<spring:message code="career.date"/>" type="text" required value="${person.career.variable}" ${readonly}/>
 									</td>
 														
 		       					</tr>
 								</c:forEach>
-							</tbody>						
+							</tbody> 						
 						</table>
 					</div>
 				</div>
 			</div>
-</fieldset>
-<br>
-<fieldset class="ellipse01">
-			<legend></legend>
 			<div>
 				<div class="col-md-6">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title"><spring:message code='misc.choose.action'/></h3>
 						</div>
-						<c:forEach var="remarks" items="${listeRemarks}" varStatus="status">
-						<from>
-							<input class="from-control" name="remarks.remarks" placeholder="<spring:message code="remarks.remarks"/>" type="text" required value="${person.remarks.remarks}" ${readonly}/>
-						</from>
-						</c:forEach>	 	
+						<tr>
+			 					<th>
+									<textarea class="form-control" name="misc" placeholder="<spring:message code="misc.description"/>" type="text" required value="${person.person.misc.misc_description}"></textarea>
+								</th>
+			 				</tr>	 	
 					</div>
 				</div>
 			</div>
-</fieldset>
+	</div>
+</div>

@@ -2,6 +2,8 @@ package com.springmvc.bo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.ws.soap.Addressing;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -41,12 +45,52 @@ public class Person implements Serializable {
 	private Date birth_date;
 	private String Tel;
 	private String hobby;
+	private Date date_activity_pro;
 	private Date date_entry_sii;
 	private String position_coeff;
 	private Position position;
+	private Person manager_;
+	private List<Remuneration> remuneration;
+	private Mission missions;
+	private Career career;
+	private MISC misc;
+	
+	
+	public Person(Long id, String firstname, String lastname, String matricule, String email, BusinessUnit bu,
+			Boolean admin, Boolean manager, String login, String password, Date birth_date, String tel, String hobby,
+			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, List<Remuneration> remuneration, Person manager_, Mission missions, Career career/*, MISC misc*/) {
+		super();
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.matricule = matricule;
+		this.email = email;
+		this.bu = bu;
+		this.admin = admin;
+		this.manager = manager;
+		this.login = login;
+		this.password = password;
+		this.birth_date = birth_date;
+		this.Tel = tel;
+		this.hobby = hobby;
+		this.date_activity_pro = date_activity_pro;
+		this.date_entry_sii = date_entry_sii;
+		this.position_coeff = position_coeff;
+		this.position = position;
+		this.setRemuneration(remuneration);
+		this.manager_=manager_;
+		this.missions=missions;
+		this.career=career;
+//		this.misc=misc;
+	}
+	
+	//TODO : Person managerPerson;
+	// rajouter le lien 
 //	private int position_id;
 //	private String function;
 
+
+	
 
 	/**
 	 * 
@@ -56,28 +100,28 @@ public class Person implements Serializable {
 	 * @param dateEmbauche
 	 * @param fonction
 	 */
-	public Person(String firstname, String lastname, String matricule, String email, /*byte[] picture*/ BusinessUnit bu, Boolean admin, String login, String password,
-			/*Byte[] picture_data, */
-			Boolean manager, Date birth_date, String Tel, String hobby, Date date_entry_sii, String position_coeff/*, String function*/) {
-		super();
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.matricule = matricule;
-		this.email = email;
-		//this.picture = picture;
-		this.bu = bu;
-		this.admin = admin;
-		this.login = login;
-		this.password = password;
-//		this.setPicture_data(picture_data);
-		this.manager = manager;
-		this.setBirth_date(birth_date);
-		this.setTel(Tel);
-		this.setHobby(hobby);
-		this.setDate_entry_sii(date_entry_sii);
-		this.setPosition_coeff(position_coeff);
-		//this.setFunction(function);
-	}
+//	public Person(String firstname, String lastname, String matricule, String email, /*byte[] picture*/ BusinessUnit bu, Boolean admin, String login, String password,
+//			/*Byte[] picture_data, */
+//			Boolean manager, Date birth_date, String Tel, String hobby, Date date_entry_sii, String position_coeff/*, String function*/) {
+//		super();
+//		this.firstname = firstname;
+//		this.lastname = lastname;
+//		this.matricule = matricule;
+//		this.email = email;
+//		//this.picture = picture;
+//		this.bu = bu;
+//		this.admin = admin;
+//		this.login = login;
+//		this.password = password;
+////		this.setPicture_data(picture_data);
+//		this.manager = manager;
+//		this.setBirth_date(birth_date);
+//		this.setTel(Tel);
+//		this.setHobby(hobby);
+//		this.setDate_entry_sii(date_entry_sii);
+//		this.setPosition_coeff(position_coeff);
+//		//this.setFunction(function);
+//	}
 	
 	public Person() {}
 	/**
@@ -171,6 +215,7 @@ public class Person implements Serializable {
 		this.position=code;
 	}
 
+	
 /*	public String getPassword() {
 		return password;
 	}
@@ -278,5 +323,81 @@ public class Person implements Serializable {
 		this.position_id = position_id;
 	}
 */
+
+	public Date getDate_activity_pro() {
+		return date_activity_pro;
+	}
+
+	public void setDate_activity_pro(Date date_activity_pro) {
+		this.date_activity_pro = date_activity_pro;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="manager_id")
+	public Person getManager_() {
+		return manager_;
+	}
+
+	public void setManager_(Person firstname) {
+		this.manager_ = firstname;
+	}
+	
+	@OneToMany
+	@JoinColumn(name="persons_id")
+	public List<Remuneration> getRemuneration() {
+		return remuneration;
+	}
+
+	public void setRemuneration(List<Remuneration> remuneration) {
+		this.remuneration = remuneration;
+	}
+	
+//	@ManyToOne
+//	@JoinColumn(name="remuneration_id")
+//	public Remuneration getRemuneration() {
+//		return remuneration;
+//	}
+//	public void setRemuneration(Remuneration commentaire) {
+//		this.remuneration = commentaire;
+//	}
+//	@ManyToOne
+//	@JoinColumn(name="person_id")
+//	public List<Mission> getMissions() {
+//		return missions;
+//	}
+//
+//	public void setMissions(List<Mission> missions) {
+//		this.missions = missions;
+//	} 
+	
+	@ManyToOne
+	@JoinColumn(name="career_id")
+	public Career getCareer() {
+		return career;
+	}
+	public void setCareer(Career poste) {
+		this.career = poste;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="MISC_id")
+	public MISC getMisc() {
+		return misc;
+	}
+	public void setMisc(MISC misc_description) {
+		this.misc = misc_description;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="mission_id")
+	public Mission getMissions() {
+		return missions;
+	}
+
+	public void setMissions(Mission client) {
+		this.missions = client;
+	}
+
+
 
 }

@@ -10,8 +10,6 @@ import javax.persistence.Table;
 @Table(name="picture")
 public class Picture {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	private String picture_name;
 	private byte[] picture_data;
@@ -31,6 +29,8 @@ public class Picture {
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}

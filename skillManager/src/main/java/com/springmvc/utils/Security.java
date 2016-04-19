@@ -17,6 +17,8 @@ import com.springmvc.IConstants;
 import com.springmvc.bo.Person;
 import com.springmvc.model.Login;
 
+
+
 /**
  * The Class Security.
  *
@@ -93,5 +95,25 @@ public class Security {
 		}
 		else return false;
 	}
+
+	public boolean verifyManager(HttpSession session, HttpServletRequest request) throws IOException {
+		// TODO Auto-generated method stub
+		if(security.verifyLogin(request)){
+			Person connected =(Person) session.getAttribute(IConstants.USER_SESSION);
+			return connected.getManager()!=null && connected.getManager();
+		}
+		else return false;
+	}
+
 	
+	public boolean verifyPersoOrManager(String matricule, HttpSession session, HttpServletRequest request) throws IOException {
+		// TODO Auto-generated method stub
+		if(security.verifyLogin(request)){
+			Person connected =(Person) session.getAttribute(IConstants.USER_SESSION);
+			return connected.getMatricule().equals(matricule) || (connected.getManager()!=null && connected.getManager());
+		}
+		else return false;
+		
+	}
+
 }

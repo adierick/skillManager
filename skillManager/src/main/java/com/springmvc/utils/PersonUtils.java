@@ -3,6 +3,7 @@ package com.springmvc.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -44,7 +45,7 @@ public class PersonUtils {
 			return ERROR_FORWARD;
 		}
 	}
-	
+
 	public static String loadPersonDetailAsAdmin(String matricule, Model model, HttpSession session, HttpServletRequest request, 
 			PersonService service, PictureService pictureService) throws IOException {
 		Security secure = Security.getInstance();
@@ -106,4 +107,37 @@ public class PersonUtils {
 		model.addAttribute("selectedMatricule", matricule);
 
 	}
+
+	public static String loadPersonDetailAsManager(String matricule, Model model, HttpSession session,
+			HttpServletRequest request, PersonService servicePerson, PictureService pictureService) throws IOException {
+		// TODO Auto-generated method stub
+		Security secure = Security.getInstance();
+		if (secure.verifyPersoOrManager(matricule, session, request)){
+			Person personForForm = servicePerson.getPerson(matricule);
+			//personForForm.getRemuneration().size();
+			model.addAttribute("person", new PersonFormData(personForForm));
+			model.addAttribute("type", "update");
+			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
+
+			try {
+				formUploadPicture(matricule, model, session, request, pictureService);
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			if(secure.verifyManager(session, request)){
+				return "collaborater/editionCollaboraterFull";
+			}else{
+				return ERROR_FORWARD;
+			}
+		}
+		
+		else {
+			return ERROR_FORWARD;
+		}
+	}
+
+	
 }

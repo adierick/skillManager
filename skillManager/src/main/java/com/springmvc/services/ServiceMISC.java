@@ -13,4 +13,9 @@ public class ServiceMISC {
 	public List<MISC> listeMISC(){
 		return null;
 	}
+
+	public List<MISC> listeAllMISC() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

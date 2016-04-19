@@ -5,12 +5,10 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.view.InternalResourceView;
 
 import com.springmvc.model.Login;
-import com.springmvc.utils.Security;
 
 public class JstlView extends InternalResourceView {
 	@Override

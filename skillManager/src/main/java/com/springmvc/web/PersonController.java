@@ -176,7 +176,7 @@ public class PersonController {
 		}
 
 	}
-	
+	   
 	/**
 	 * Update person.
 	 *
@@ -412,7 +412,7 @@ public class PersonController {
 		Person personForMerge;
 		Security secure = Security.getInstance();
 		if (secure.verifyLogin(request)) {
-
+  
 			if(binding.hasErrors()) {
 				model.addAttribute("type", "update");
 				return PersonUtils.SUCCESS_EDIT;	

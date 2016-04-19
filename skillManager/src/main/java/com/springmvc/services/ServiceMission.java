@@ -2,15 +2,15 @@ package com.springmvc.services;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.springmvc.bo.Mission;
 
-@Component
-@Transactional
-public class ServiceMission implements IServiceMission{
-	public List<Mission> listeMission(){
-		return null;
-	}
+public interface ServiceMission extends IServiceMission{
+
+	public List<Mission> listeMission();
+	public List<Mission> listeAllMission();
+	public Mission getMission(int idmission);
+
+	public Mission mergeMission(Mission missionForMerge);
+
+		
 }
