@@ -3,15 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<!-- Include Bootstrap Datepicker -->
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
-
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-
 <style type="text/css">
 /**
  * Override feedback icon position
@@ -42,97 +33,129 @@
 		<div class="row">
 			<!-- modification col-md-4 en col-md-12 -->
 			<div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
-				<form:form modelAttribute="person" action="update.do"
-					class="formulaire">
-					<div class="row">
-						<div class="col-xs-6 col-md-6">
+				<form:form modelAttribute="person" action="update.do" class="formulaire">
+
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.firstname" /></label>
+						<div class="col-sm-4">
 							<input class="form-control" name="person.firstname"
 								placeholder="<spring:message code="person.firstname"/>"
 								type="text" required autofocus
 								value="${person.person.firstname}" ${readonly} />
 						</div>
-						<div class="col-xs-6 col-md-6">
+						
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.sii" /></label>
+						<div class="col-sm-4">
+								<input type="text" class="form-control" id="datePicker3"
+									name="date" required value="${person.person.date_entry_sii}"
+									${readonly} /> 
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.lastname" /></label>
+						<div class="col-sm-4">
 							<input class="form-control" name="person.lastname"
 								placeholder="<spring:message code="person.lastname"/>"
 								type="text" required value="${person.person.lastname}"
 								${readonly} />
 						</div>
-					</div>
-
-					<%-- 		            <form id="eventForm" method="post" class="form-horizontal">					 --%>
-					<div class="form-group">
-						<div class="input-group input-append date">
-							<input type="text" class="form-control" id="datePicker"
-								name="date" required value="${person.person.birth_date}"
-								${readonly} /> <span class="input-group-addon"> </span>
-							<!-- 					                    <span class="glyphicon glyphicon-calendar"> 
-					                    </span>-->
-
+						
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.position.coeff" /></label>
+						<div class="col-sm-4">
+							<input class="form-control" name="person.position_coeff"
+								placeholder="<spring:message code="person.position_coeff"/>"
+								type="text" required value="${person.person.position_coeff}"
+								${readonly} />
 						</div>
 					</div>
-					<%-- 					</form> --%>
-
-					<%--  		            <input class="form-control"  name="person.person.birth_date" placeholder="<spring:message code="person.person.birth_date"/>" type="text" required value="${person.person.birth_date}" ${readonly}/>  --%>
-					<input class="form-control" name="person.tel"
-						placeholder="<spring:message code="person.person.tel"/>"
-						type="text" required value="${person.person.tel}" ${readonly} />
-					<input class="form-control" name="person.hobby"
-						placeholder="<spring:message code="person.hobby"/>" type="text"
-						required value="${person.person.hobby}" ${readonly} />
-					<%-- 					<form id="eventForm2" method="post" class="form-horizontal">  --%>
+					
+					
+					
 					<div class="form-group">
-						<div class="input-group input-append date">
-							<input type="text" class="form-control" id="datePicker2"
-								name="date" required value="${person.person.date_activity_pro}"
-								${readonly} /> <span class="input-group-addon"></span>
-							<!-- 									                    <span class="glyphicon glyphicon-calendar"> 
-<!-- 									                </span>  -->
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.birth" /></label>
+						<div class="col-sm-4">
+								<input type="text" class="form-control" id="datePicker"
+									name="date" required value="${person.person.birth_date}"
+									${readonly} /> 
+						</div>
+						
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.position.code" /></label>
+						<div class="col-sm-4">
+							<input class="form-control" name="person.position.code"
+								placeholder="<spring:message code="person.person.position.code"/>"
+								type="text" required value="${person.person.position.code}"
+								${readonly} />
 						</div>
 					</div>
-					<%-- 				 	</form>					 --%>
-
-					<%-- 					<form id="eventForm3" method="post" class="form-horizontal"> --%>
+					
+					
 					<div class="form-group">
-						<div class="input-group input-append date">
-							<input type="text" class="form-control" id="datePicker3"
-								name="date" required value="${person.person.date_entry_sii}"
-								${readonly} /> <span class="input-group-addon"></span>
-							<!-- 					                    <span class="glyphicon glyphicon-calendar"> </span>-->
-
-
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.phone" /></label>
+						<div class="col-sm-4">
+							<input class="form-control" name="person.tel"
+								placeholder="<spring:message code="person.person.tel"/>"
+								type="text" required value="${person.person.tel}" ${readonly} />
 						</div>
-					</div>
-					<%-- 					</form> --%>
-
-					<%--  		         	<input class="form-control" name="person.person.date_entry_sii" placeholder="<spring:message code="person.date_entry_sii"/>" type="date" required value="${person.person.date_entry_sii}" ${readonly}/>  --%>
-					<input class="form-control" name="person.position_coeff"
-						placeholder="<spring:message code="person.person.position_coeff"/>"
-						type="text" required value="${person.person.position_coeff}"
-						${readonly} />
-					<input class="form-control" name="person.position.code"
-						placeholder="<spring:message code="person.person.position.code"/>"
-						type="text" required value="${person.person.position.code}"
-						${readonly} />
-
-					<%-- 					<textarea class="form-control" path="person.person.misc.misc_description" placeholder="<spring:message code="misc.description"/>" type="text" required value="${person.person.misc.misc_description}" ${readonly}></textarea> --%>
-
-					<input class="form-control" name="person.manager_.lastname"
-						placeholder="<spring:message code="person.person.manager_.lastname"/>"
-						type="text" required
-						value="${person.person.manager_.firstname} ${person.person.manager_.lastname }"
-						${readonly} />
-
-					<div></div>
-					<!-- 				</div> -->
-					<label for=""><spring:message code="person.bu" /></label>
-					<div class="row">
-						<div class="col-xs-4 col-md-4">
+						
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.manager" /></label>
+						<div class="col-sm-4">
+							<input class="form-control" name="person.manager_.lastname"
+								placeholder="<spring:message code="person.person.manager_.lastname"/>"
+								type="text" required
+								value="${person.person.manager_.firstname} ${person.person.manager_.lastname }"
+								${readonly} />
+						</div>
+					</div>	
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.hobby" /></label>
+						<div class="col-sm-4">
+							<input class="form-control" name="person.hobby"
+								placeholder="<spring:message code="person.hobby"/>" type="text"
+								required value="${person.person.hobby}" ${readonly} />
+						</div>
+						
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.bu" /></label>
+						<div class="col-sm-4">
 							<form:select path="person.bu" cssClass="form-control">
 								<form:option value="" label="---" />
 								<form:options items="${listBu}" itemLabel="label" />
 							</form:select>
 						</div>
-					</div>
+					</div>	
+					
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.activity" /></label>
+						<div class="col-sm-4">
+								<input type="text" class="form-control" id="datePicker2"
+									name="date" required value="${person.person.date_activity_pro}"
+									${readonly} /> 
+						</div>
+						
+					</div>		
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 					<div class="col-md-6">
 						<div class="panel panel-primary">
@@ -265,7 +288,7 @@
 						</div>
 					</div>
 					<form:hidden path="person.id" />
-					<input type="submit" title="update person" class="submitButton" />
+					<button class="btn btn-lg btn-primary btn-block" type="submit">${type}</button>
 				</form:form>
 			</div>
 		</div>

@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
+import com.springmvc.bo.MISC;
 import com.springmvc.bo.Person;
-import com.springmvc.bo.Remuneration;
 import com.springmvc.bo.Skill;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.services.ItemService;
+import com.springmvc.services.MiscService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
-import com.springmvc.services.ServiceRemuneration;
 import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.PersonUtils;
@@ -40,26 +40,17 @@ import com.springmvc.web.editor.BusinessUnitEditor;
 @Controller
 @RequestMapping(value="/collaborater/*")
 public class CollabController {
-//	public List<Person> listePersons;
-//	public List<Mission> listeMission;
-//	public List<Remuneration> listeRemuneration;
-//	public List<Career> listeCareer;
-//	public List<MISC> listMISC;
-	//@Autowired
-	//private IServiceListCollab service;
 	
 	private final PersonService servicePerson = Context.getInstance().getApplicationContext().getBean(PersonService.class);
 	private final ItemService serviceItem = Context.getInstance().getApplicationContext().getBean(ItemService.class);
 	private final PictureService pictureService = Context.getInstance().getApplicationContext().getBean(PictureService.class);
 		
 	private final SkillService serviceSkill = Context.getInstance().getApplicationContext().getBean(SkillService.class);
-//	private final ServiceMission serviceMission = Context.getInstance().getApplicationContext().getBean(ServiceMission.class);
-	private final ServiceRemuneration serviceRemuneration = Context.getInstance().getApplicationContext().getBean(ServiceRemuneration.class);
-//	private final ServiceCareer serviceCareer = Context.getInstance().getApplicationContext().getBean(ServiceCareer.class);
-//	private final ServiceMISC serviceMISC = Context.getInstance().getApplicationContext().getBean(ServiceMISC.class);
+	
+	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
+	
 
 	@RequestMapping(value="/collaborater/listeEmploies.do")
-//	@RequestMapping(method = RequestMethod.GET)
 	public String afficher(ModelMap pModel){
 		//lancement du service et récupération de données en base pour person
 		final List<Person> listCollab = servicePerson.listeAllPersons();
@@ -145,6 +136,7 @@ public class CollabController {
 
 			personForMerge = servicePerson.getPerson(person.getPerson().getId());	
 			
+			/** mise à jour de la table person **/
 			personForMerge.setFirstname(person.getPerson().getFirstname());
 			personForMerge.setLastname(person.getPerson().getLastname());
 //			personForMerge.setBirth_date(person.getPerson().getBirth_date());
@@ -153,15 +145,25 @@ public class CollabController {
 //			personForMerge.setDate_activity_pro(person.getPerson().getDate_activity_pro());
 //			personForMerge.setDate_entry_sii(person.getPerson().getDate_entry_sii());
 			personForMerge.setPosition_coeff(person.getPerson().getPosition_coeff());
+			personForMerge.setBu(person.getPerson().getBu());
+			
+			/** mise à jour de la table position **/
 //			personForMerge.setMissions(person.getPerson().getMissions());
+			
+			/** mise à jour de la table position **/
 //			personForMerge.setPosition(person.getPerson().getPosition());
+			
+			/** mise à jour de la table position **/
 //			personForMerge.setManager_(person.getPerson().getManager_());
-//			personForMerge.setBu(person.getPerson().getBu());
+			
+			
+			/** mise à jour de la table position **/
 //			personForMerge.setMisc(person.getPerson().getMisc());
 			
-			// mmisc = iscService.getMisc(id);
-			// misc.setDescr(...);
-			// miscService.merge(misc);
+			/** mise à jour de la table misc associé **/
+			MISC misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
+			misc.setMisc_description(person.getPerson().getMisc().getMisc_description());
+			miscService.updateMISC(misc);
 			
 			personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
 			

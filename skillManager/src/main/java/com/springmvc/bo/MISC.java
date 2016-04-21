@@ -1,14 +1,14 @@
 package com.springmvc.bo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -20,13 +20,13 @@ public class MISC implements Serializable{
 	private static final long serialVersionUID = -7919526593945129428L;
 	private Long idactivity_prestation;
 	private String misc_description;
-	private List<Person> persons;
+	private Person person;
 	
-	public MISC(Long idactivity_prestation, String misc_description, List<Person> persons) {
+	public MISC(Long idactivity_prestation, String misc_description, Person persons) {
 		super();
 		this.idactivity_prestation = idactivity_prestation;
 		this.misc_description = misc_description;
-		this.persons = persons;
+		this.person = persons;
 	}
 	public MISC() {
 		super();
@@ -48,20 +48,20 @@ public class MISC implements Serializable{
 		this.misc_description = misc_description;
 	}
 	
-	@OneToMany
-	@JoinColumn(name="MISC_id")
-	public List<Person> getPersons() {
-		return persons;
+	@OneToOne(fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
+	public Person getPerson() {
+		return person;
 	}
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 	
 	
 	@Override
 	public String toString() {
 		return "MISC [idactivity_prestation=" + idactivity_prestation + ", misc_description=" + misc_description
-				+ ", persons=" + persons + "]";
+				+ ", persons=" + person + "]";
 	}
 	
 

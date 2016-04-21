@@ -281,7 +281,7 @@ input[type=checkbox] {
 	background-color:#FFFFFF;
 	background-image: url('../img/lightblue-back.jpg');
     background-repeat: repeat-x;
-    height: 800px; /*480px;*/
+    height: 785px !important; /*480px;*/
     padding-left: 20px;
 }
 
@@ -888,7 +888,7 @@ form.formulaire fieldset div th span {
 
 
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
-body { padding-top: 60px; }
+body { }
 .nav.nav-justified > li > a { position: relative; }
 .nav.nav-justified > li > a:hover,
 .nav.nav-justified > li > a:focus { background-color: transparent; }
