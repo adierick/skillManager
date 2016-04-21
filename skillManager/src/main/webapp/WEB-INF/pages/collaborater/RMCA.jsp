@@ -47,7 +47,7 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.sii" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker3"
-									name="date" required value="${person.person.date_entry_sii}"
+									name="person.date_entry_sii" required value="${person.person.date_entry_sii}"
 									${readonly} /> 
 						</div>
 					</div>
@@ -74,16 +74,16 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.birth" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker"
-									name="date" required value="${person.person.birth_date}"
+									name="person.birth_date" required value="${person.person.birth_date}"
 									${readonly} /> 
 						</div>
 						
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.position.code" /></label>
 						<div class="col-sm-4">
-							<input class="form-control" name="person.position.code"
-								placeholder="<spring:message code="person.person.position.code"/>"
-								type="text" required value="${person.person.position.code}"
-								${readonly} />
+							<form:select path="person.position" cssClass="form-control">
+								<form:option value="" label="---" />
+								<form:options items="${listPosition}" itemValue="id" />
+							</form:select>
 						</div>
 					</div>
 					
@@ -127,17 +127,11 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.activity" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker2"
-									name="date" required value="${person.person.date_activity_pro}"
+									name="person.date_activity_pro" required value="${person.person.date_activity_pro}"
 									${readonly} /> 
 						</div>
 					</div>		
 					
-
-
-
-
-
-
 
 					<%-- ------------ --%> 
 					<%-- REMUNERATION --%> 
@@ -175,7 +169,6 @@
 							</table>
 						</div>
 					</div>
-					
 					
 					<%-- ------------ --%> 
 					<%--    MISSION   --%> 
@@ -218,6 +211,13 @@
 							</div>
 						</div>
 					</div>
+					
+					
+					
+					
+					<%-- ------------ --%> 
+					<%--    CAREER    --%> 
+					<%-- ------------ --%>  
 					<div>
 						<div class="col-md-6">
 							<div class="panel panel-primary">
@@ -230,7 +230,6 @@
 									<thead>
 										<tr>
 											<th></th>
-
 											<th><spring:message code='career.poste' /></th>
 											<th><spring:message code='career.coefficient' /></th>
 											<th><spring:message code='career.date' /></th>
@@ -238,21 +237,22 @@
 									</thead>
 
 									<tbody>
-
+									<c:forEach var="career" items="${person.person.career}" varStatus="status">
 										<tr>
-											<td><a
-												href="editionCollaboraterAsManager.do?matricule=${career.poste}"><span
-													class="glyphicon glyphicon-edit"></span> </a></td>
-											<td>${person.person.career.poste}</td>
-											<td>${person.person.career.coefficient}</td>
-											<td>${person.person.career.date}</td>
-
+											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
+		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
+											</td>
+											<td>${career.poste}</td>
+											<td>${career.coefficient}</td>
+											<td>${career.date}</td>
 										</tr>
+									</c:forEach>
 									</tbody>
 								</table>
 							</div>
 						</div>
 					</div>
+					
 					<div class="col-md-6">
 						<div class="panel panel-primary">
 							<div class="panel-heading">

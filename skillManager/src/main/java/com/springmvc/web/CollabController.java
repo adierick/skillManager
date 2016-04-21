@@ -3,6 +3,7 @@ package com.springmvc.web;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +24,14 @@ import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.MISC;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.Position;
 import com.springmvc.bo.Skill;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.MiscService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
+import com.springmvc.services.PositionService;
 import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.PersonUtils;
@@ -36,7 +39,9 @@ import com.springmvc.utils.Security;
 import com.springmvc.utils.SkillUtils;
 import com.springmvc.utils.Translation;
 import com.springmvc.web.editor.BusinessUnitEditor;
+import com.springmvc.web.editor.DateEditor;
 import com.springmvc.web.editor.PersonEditor;
+import com.springmvc.web.editor.PositionEditor;
 
 @Controller
 @RequestMapping(value="/collaborater/*")
@@ -49,6 +54,8 @@ public class CollabController {
 	private final SkillService serviceSkill = Context.getInstance().getApplicationContext().getBean(SkillService.class);
 	
 	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
+	
+	private final PositionService positionService = Context.getInstance().getApplicationContext().getBean(PositionService.class);
 	
 
 	@RequestMapping(value="/collaborater/listeEmploies.do")
@@ -140,23 +147,20 @@ public class CollabController {
 			/** mise à jour de la table person **/
 			personForMerge.setFirstname(person.getPerson().getFirstname());
 			personForMerge.setLastname(person.getPerson().getLastname());
-//			personForMerge.setBirth_date(person.getPerson().getBirth_date());
+			personForMerge.setBirth_date(person.getPerson().getBirth_date());
 			personForMerge.setTel(person.getPerson().getTel());
 			personForMerge.setHobby(person.getPerson().getHobby());
-//			personForMerge.setDate_activity_pro(person.getPerson().getDate_activity_pro());
-//			personForMerge.setDate_entry_sii(person.getPerson().getDate_entry_sii());
+			personForMerge.setDate_activity_pro(person.getPerson().getDate_activity_pro());
+			personForMerge.setDate_entry_sii(person.getPerson().getDate_entry_sii());
 			personForMerge.setPosition_coeff(person.getPerson().getPosition_coeff());
 			personForMerge.setBu(person.getPerson().getBu());
 			personForMerge.setManager_(person.getPerson().getManager_());
 			
-			/** mise à jour de la table position **/
+			/** mise à jour de la table mission **/
 //			personForMerge.setMissions(person.getPerson().getMissions());
 			
 			/** mise à jour de la table position **/
-//			personForMerge.setPosition(person.getPerson().getPosition());
-			
-			/** mise à jour de la table position **/
-//			personForMerge.setMisc(person.getPerson().getMisc());
+			personForMerge.setPosition(person.getPerson().getPosition());
 			
 			/** mise à jour de la table misc associé **/
 			MISC misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
@@ -208,10 +212,17 @@ public class CollabController {
 		return servicePerson.getManagerList();
 	}
 	
+	@ModelAttribute("listPosition")
+	public Collection<Position> populatePosition() {
+		return positionService.listeAllPositions();
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		dataBinder.registerCustomEditor(BusinessUnit.class, new BusinessUnitEditor());
 		dataBinder.registerCustomEditor(Person.class, new PersonEditor());
+		dataBinder.registerCustomEditor(Position.class, new PositionEditor());
+		dataBinder.registerCustomEditor(Date.class, new DateEditor());
 	}
 	
 	

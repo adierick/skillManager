@@ -56,13 +56,13 @@ public class Person implements Serializable {
 	private Person manager_;
 	private Set<Remuneration> remuneration;
 	private Set<Mission> missions;
-	private Career career;
+	private Set<Career> career;
 	private MISC misc;
 	
 	
 	public Person(Long id, String firstname, String lastname, String matricule, String email, BusinessUnit bu,
 			Boolean admin, Boolean manager, String login, String password, Date birth_date, String tel, String hobby,
-			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, Set<Remuneration> remuneration, Person manager_, Set<Mission> missions, Career career/*, MISC misc*/) {
+			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, Set<Remuneration> remuneration, Person manager_, Set<Mission> missions, Set<Career> career/*, MISC misc*/) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -326,22 +326,12 @@ public class Person implements Serializable {
 		this.missions = missions;
 	}
 	
-//	@ManyToOne
-//	@JoinColumn(name="person_id")
-//	public List<Mission> getMissions() {
-//		return missions;
-//	}
-//
-//	public void setMissions(List<Mission> missions) {
-//		this.missions = missions;
-//	} 
-	
-	@ManyToOne
-	@JoinColumn(name="career_id")
-	public Career getCareer() {
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="persons_id")
+	public Set<Career> getCareer() {
 		return career;
 	}
-	public void setCareer(Career poste) {
+	public void setCareer(Set<Career> poste) {
 		this.career = poste;
 	}
 	
