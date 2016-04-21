@@ -2,7 +2,6 @@ package com.springmvc.bo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,43 +18,31 @@ public class Mission implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7071899330326671534L;
-	
+
 	private int idmission;
 	private String client;
 	private String activite;
 	private Date dateDemarrage;
 	private String commentaire;
 	private String entitedMission;
-	private List<Person> persons;
-	
-//	public Mission(int idmission, String client, String activite, Date dateDemarrage, String commentaire,
-//			String entitedMission) {
-//		super();
-//		this.idmission = idmission;
-//		this.client = client;
-//		this.activite = activite;
-//		this.dateDemarrage = dateDemarrage;
-//		this.commentaire = commentaire;
-//		this.entitedMission = entitedMission;
-//	}
+	private Person persons;
 
+
+	public Mission(int idmission, String client, String activite, Date dateDemarrage, String commentaire,
+			String entitedMission, Person persons) {
+		super();
+		this.idmission = idmission;
+		this.client = client;
+		this.activite = activite;
+		this.dateDemarrage = dateDemarrage;
+		this.commentaire = commentaire;
+		this.entitedMission = entitedMission;
+		this.persons = persons;
+	}
 
 	public String getEntitedMission() {
 		return entitedMission;
 	}
-
-	public Mission(int idmission, String client, String activite, Date dateDemarrage, String commentaire,
-		String entitedMission, List<Person> persons) {
-	super();
-	this.idmission = idmission;
-	this.client = client;
-	this.activite = activite;
-	this.dateDemarrage = dateDemarrage;
-	this.commentaire = commentaire;
-	this.entitedMission = entitedMission;
-	this.persons = persons;
-}
-
 	public void setEntitedMission(String entitedMission) {
 		this.entitedMission = entitedMission;
 	}
@@ -104,14 +90,13 @@ public class Mission implements Serializable{
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
 	}
-	
-	@OneToMany
-	@JoinColumn(name="mission_id")
-	public List<Person> getPersons() {
+
+	@ManyToOne
+	@JoinColumn(name="persons_id")
+	public Person getPersons() {
 		return persons;
 	}
-
-	public void setPersons(List<Person> persons) {
+	public void setPersons(Person persons) {
 		this.persons = persons;
 	}
 

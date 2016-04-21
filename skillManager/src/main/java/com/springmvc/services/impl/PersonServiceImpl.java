@@ -94,6 +94,12 @@ public class PersonServiceImpl extends Service implements PersonService {
 		return (Person) sqlCriteria.list().get(0);
 	}
 	
+	public Collection<Person> getManagerList() {
+		Criteria sqlCriteria = getSession().createCriteria(Person.class);
+		sqlCriteria.add(Restrictions.eq("manager", true)); 
+		return sqlCriteria.list();
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.springmvc.services.PersonService#deletePerson(java.lang.Long)
 	 */

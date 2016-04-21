@@ -36,6 +36,7 @@ import com.springmvc.utils.Security;
 import com.springmvc.utils.SkillUtils;
 import com.springmvc.utils.Translation;
 import com.springmvc.web.editor.BusinessUnitEditor;
+import com.springmvc.web.editor.PersonEditor;
 
 @Controller
 @RequestMapping(value="/collaborater/*")
@@ -146,16 +147,13 @@ public class CollabController {
 //			personForMerge.setDate_entry_sii(person.getPerson().getDate_entry_sii());
 			personForMerge.setPosition_coeff(person.getPerson().getPosition_coeff());
 			personForMerge.setBu(person.getPerson().getBu());
+			personForMerge.setManager_(person.getPerson().getManager_());
 			
 			/** mise à jour de la table position **/
 //			personForMerge.setMissions(person.getPerson().getMissions());
 			
 			/** mise à jour de la table position **/
 //			personForMerge.setPosition(person.getPerson().getPosition());
-			
-			/** mise à jour de la table position **/
-//			personForMerge.setManager_(person.getPerson().getManager_());
-			
 			
 			/** mise à jour de la table position **/
 //			personForMerge.setMisc(person.getPerson().getMisc());
@@ -204,9 +202,17 @@ public class CollabController {
 	public Collection<BusinessUnit> populateBusinessUnit() {
 		return servicePerson.listeAllBusinessUnits();
 	}
+	
+	@ModelAttribute("listManager")
+	public Collection<Person> populateManager() {
+		return servicePerson.getManagerList();
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		dataBinder.registerCustomEditor(BusinessUnit.class, new BusinessUnitEditor());
+		dataBinder.registerCustomEditor(Person.class, new PersonEditor());
 	}
+	
 	
 }

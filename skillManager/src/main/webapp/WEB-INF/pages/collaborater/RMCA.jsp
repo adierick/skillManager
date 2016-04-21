@@ -31,7 +31,6 @@
 	</c:if>
 	<div class="container">
 		<div class="row">
-			<!-- modification col-md-4 en col-md-12 -->
 			<div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
 				<form:form modelAttribute="person" action="update.do" class="formulaire">
 
@@ -71,8 +70,6 @@
 						</div>
 					</div>
 					
-					
-					
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.birth" /></label>
 						<div class="col-sm-4">
@@ -99,13 +96,12 @@
 								type="text" required value="${person.person.tel}" ${readonly} />
 						</div>
 						
-						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.manager" /></label>
+						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.manager.name" /></label>
 						<div class="col-sm-4">
-							<input class="form-control" name="person.manager_.lastname"
-								placeholder="<spring:message code="person.person.manager_.lastname"/>"
-								type="text" required
-								value="${person.person.manager_.firstname} ${person.person.manager_.lastname }"
-								${readonly} />
+							<form:select path="person.manager_" cssClass="form-control">
+								<form:option value="" label="---" />
+								<form:options items="${listManager}" itemValue="id" />
+							</form:select>
 						</div>
 					</div>	
 					
@@ -134,7 +130,6 @@
 									name="date" required value="${person.person.date_activity_pro}"
 									${readonly} /> 
 						</div>
-						
 					</div>		
 					
 
@@ -144,19 +139,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+					<%-- ------------ --%> 
+					<%-- REMUNERATION --%> 
+					<%-- ------------ --%>  
 					<div class="col-md-6">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
@@ -167,35 +152,34 @@
 							<table class="table table-hover" id="dev-table">
 								<thead>
 									<tr>
-										<th></th>
-
+										<th><span  class="addButton"></span></th>
 										<th><spring:message code='remuneration.brut' /></th>
 										<th><spring:message code='remuneration.fixe' /></th>
 										<th><spring:message code='remuneration.variable' /></th>
 										<th><spring:message code='remuneration.commentaire' />
 									</tr>
 								</thead>
-
 								<tbody>
-									<!-- person.person.remuneration à la place de listeRemunerations-->
-									<c:forEach var="remuneration" items="${listeRemunerations}"
-										varStatus="status">
+									<c:forEach var="remuneration" items="${person.person.remuneration}" varStatus="status">
 										<tr>
-											<td><a href=""><span
-													class="glyphicon glyphicon-edit"></span> </a> <%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
+											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
+		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
 											</td>
-											<!-- 											remuneration.brut a la place de person.remuneration.brut -->
 											<td>${remuneration.brut}</td>
 											<td>${remuneration.fixe}</td>
 											<td>${remuneration.variable}</td>
 											<td>${remuneration.commentaire}</td>
-
 										</tr>
 									</c:forEach>
 								</tbody>
 							</table>
 						</div>
 					</div>
+					
+					
+					<%-- ------------ --%> 
+					<%--    MISSION   --%> 
+					<%-- ------------ --%>  
 					<div>
 						<div class="col-md-6">
 							<div class="panel panel-primary">
@@ -217,18 +201,18 @@
 									</thead>
 
 									<tbody>
-										<%-- 						 	<c:forEach var="mission" items="${listeMissions}" varStatus="status"> --%>
+									<c:forEach var="mission" items="${person.person.missions}" varStatus="status">
 										<tr>
-											<td><a
-												onclick="location.href='<%=request.getContextPath()%>/main/collaborater/editionMission.do'"><span
-													class="glyphicon glyphicon-edit"></span> </a></td>
-											<td>${person.person.missions.client}</td>
-											<td>${person.person.missions.entitedMission}</td>
-											<td>${person.person.missions.activite}</td>
-											<td>${person.person.missions.dateDemarrage}</td>
-											<td>${person.person.missions.commentaire}</td>
+											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
+		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
+											</td>
+											<td>${mission.client}</td>
+											<td>${mission.entitedMission}</td>
+											<td>${mission.activite}</td>
+											<td>${mission.dateDemarrage}</td>
+											<td>${mission.commentaire}</td>
 										</tr>
-										<%-- 		       					</c:forEach> --%>
+									</c:forEach>
 									</tbody>
 								</table>
 							</div>

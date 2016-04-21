@@ -1,7 +1,6 @@
 package com.springmvc.bo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,10 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.springmvc.bo.Person;
 
 @Entity
 @Table(name="remuneration")
@@ -26,7 +22,7 @@ public class Remuneration implements Serializable{
 	
 	private Long idREMUNERATION;
 	
-	private double brut;
+	private String brut;
 	private double fixe;
 	private double variable;
 	private String commentaire;
@@ -38,7 +34,7 @@ public class Remuneration implements Serializable{
 	public Remuneration() {
 		super();
 	}
-	public Remuneration(Long idREMUNERATION, double brut, double fixe, double variable, String commentaire, Person persons) {
+	public Remuneration(Long idREMUNERATION, String brut, double fixe, double variable, String commentaire, Person persons) {
 		super();
 		this.idREMUNERATION = idREMUNERATION;
 		this.brut = brut;
@@ -49,10 +45,17 @@ public class Remuneration implements Serializable{
 	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public double getBrut() {
+	public Long getIdREMUNERATION() {
+		return idREMUNERATION;
+	}
+	public void setIdREMUNERATION(Long idREMUNERATION) {
+		this.idREMUNERATION = idREMUNERATION;
+	}
+	
+	public String getBrut() {
 		return brut;
 	}
-	public void setBrut(double brut) {
+	public void setBrut(String brut) {
 		this.brut = brut;
 	}
 	public double getFixe() {
@@ -73,22 +76,9 @@ public class Remuneration implements Serializable{
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
 	}
-	public Long getIdREMUNERATION() {
-		return idREMUNERATION;
-	}
-	public void setIdREMUNERATION(Long idREMUNERATION) {
-		this.idREMUNERATION = idREMUNERATION;
-	}
+
 	
 	
-//	@OneToMany(fetch=FetchType.EAGER)  // la relation est chargée par défaut
-//	@JoinColumn(name="persons_id")
-//	public Collection<Person> getPersons() {
-//		return persons;
-//	}
-//	public void setPersons(Collection<Person> persons) {
-//		this.persons = persons;
-//	}
 	@ManyToOne
 	@JoinColumn(name="persons_id")
 	public Person getPersons() {
