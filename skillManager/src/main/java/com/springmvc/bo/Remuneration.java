@@ -95,6 +95,6 @@ public class Remuneration implements Serializable, Comparable<Remuneration>{
 	}
 	@Override
 	public int compareTo(Remuneration o) {
-		return o.getBrut().compareTo(brut);
+		return -o.getBrut().compareTo(brut);
 	}
 }
