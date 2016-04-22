@@ -3,9 +3,13 @@ package com.springmvc.bo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.xml.ws.soap.Addressing;
+
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
@@ -50,15 +59,16 @@ public class Person implements Serializable {
 	private String position_coeff;
 	private Position position;
 	private Person manager_;
-	private List<Remuneration> remuneration;
-	private Mission missions;
-	private Career career;
+	private SortedSet<Remuneration> remuneration;
+	private SortedSet<Mission> missions;
+	private SortedSet<Career> career;
 	private MISC misc;
 	
 	
 	public Person(Long id, String firstname, String lastname, String matricule, String email, BusinessUnit bu,
 			Boolean admin, Boolean manager, String login, String password, Date birth_date, String tel, String hobby,
-			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, List<Remuneration> remuneration, Person manager_, Mission missions, Career career/*, MISC misc*/) {
+			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, SortedSet<Remuneration> remuneration, 
+			Person manager_, SortedSet<Mission> missions, SortedSet<Career> career/*, MISC misc*/) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -89,39 +99,6 @@ public class Person implements Serializable {
 //	private int position_id;
 //	private String function;
 
-
-	
-
-	/**
-	 * 
-	 * @param id
-	 * @param nom
-	 * @param prenom
-	 * @param dateEmbauche
-	 * @param fonction
-	 */
-//	public Person(String firstname, String lastname, String matricule, String email, /*byte[] picture*/ BusinessUnit bu, Boolean admin, String login, String password,
-//			/*Byte[] picture_data, */
-//			Boolean manager, Date birth_date, String Tel, String hobby, Date date_entry_sii, String position_coeff/*, String function*/) {
-//		super();
-//		this.firstname = firstname;
-//		this.lastname = lastname;
-//		this.matricule = matricule;
-//		this.email = email;
-//		//this.picture = picture;
-//		this.bu = bu;
-//		this.admin = admin;
-//		this.login = login;
-//		this.password = password;
-////		this.setPicture_data(picture_data);
-//		this.manager = manager;
-//		this.setBirth_date(birth_date);
-//		this.setTel(Tel);
-//		this.setHobby(hobby);
-//		this.setDate_entry_sii(date_entry_sii);
-//		this.setPosition_coeff(position_coeff);
-//		//this.setFunction(function);
-//	}
 	
 	public Person() {}
 	/**
@@ -216,14 +193,6 @@ public class Person implements Serializable {
 	}
 
 	
-/*	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}*/
-	
 	public String getPassword() {
 		return password;
 	}
@@ -258,6 +227,7 @@ public class Person implements Serializable {
 		this.manager = manager;
 	}
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	public Date getBirth_date() {
 		return birth_date;
 	}
@@ -342,62 +312,46 @@ public class Person implements Serializable {
 		this.manager_ = firstname;
 	}
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="persons_id")
-	public List<Remuneration> getRemuneration() {
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Remuneration> getRemuneration() {
 		return remuneration;
 	}
 
-	public void setRemuneration(List<Remuneration> remuneration) {
+	public void setRemuneration(SortedSet<Remuneration> remuneration) {
 		this.remuneration = remuneration;
 	}
 	
-//	@ManyToOne
-//	@JoinColumn(name="remuneration_id")
-//	public Remuneration getRemuneration() {
-//		return remuneration;
-//	}
-//	public void setRemuneration(Remuneration commentaire) {
-//		this.remuneration = commentaire;
-//	}
-//	@ManyToOne
-//	@JoinColumn(name="person_id")
-//	public List<Mission> getMissions() {
-//		return missions;
-//	}
-//
-//	public void setMissions(List<Mission> missions) {
-//		this.missions = missions;
-//	} 
+
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="persons_id")
+	@OrderBy("dateDemarrage")
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Mission> getMissions() {
+		return missions;
+	}
+
+	public void setMissions(SortedSet<Mission> missions) {
+		this.missions = missions;
+	}
 	
-	@ManyToOne
-	@JoinColumn(name="career_id")
-	public Career getCareer() {
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="persons_id")
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Career> getCareer() {
 		return career;
 	}
-	public void setCareer(Career poste) {
+	public void setCareer(SortedSet<Career> poste) {
 		this.career = poste;
 	}
 	
-	@ManyToOne
-	@JoinColumn(name="MISC_id")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
 	public MISC getMisc() {
 		return misc;
 	}
 	public void setMisc(MISC misc_description) {
 		this.misc = misc_description;
 	}
-
-	@ManyToOne
-	@JoinColumn(name="mission_id")
-	public Mission getMissions() {
-		return missions;
-	}
-
-	public void setMissions(Mission client) {
-		this.missions = client;
-	}
-
-
 
 }

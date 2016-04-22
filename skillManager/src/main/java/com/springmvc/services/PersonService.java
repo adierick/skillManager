@@ -74,5 +74,7 @@ public interface PersonService extends ISearchService<Person> {
 	public int personCount();
 	public Collection<Person> listpersonBu(BusinessUnit bu);
 	public List<PersonDto> getPersonsByBu(String buLabel);
+	
+	public Collection<Person> getManagerList();
 
 }

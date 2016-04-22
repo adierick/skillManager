@@ -281,7 +281,7 @@ input[type=checkbox] {
 	background-color:#FFFFFF;
 	background-image: url('../img/lightblue-back.jpg');
     background-repeat: repeat-x;
-    height: 800px; /*480px;*/
+    height: 785px !important; /*480px;*/
     padding-left: 20px;
 }
 
@@ -581,6 +581,7 @@ form.formulaire fieldset div th span {
     cursor: pointer;
     padding: 0px;
     height: 23px !important;
+    width: 23px !important;
 }
 
 .submitButton {
@@ -792,7 +793,8 @@ form.formulaire fieldset div th span {
 
 /* USER PROFILE PAGE */
  .card {
-    margin-top: 20px;
+/*     margin-top: 20px; */
+    margin-top: 0px;
     padding: 30px;
     background-color: rgba(214, 224, 226, 0.2);
     -webkit-border-top-left-radius:5px;
@@ -814,7 +816,8 @@ form.formulaire fieldset div th span {
     background-color: rgba(255, 255, 255, 1);
 }
 .card.hovercard .card-background {
-    height: 130px;
+/*     height: 130px; */
+	height: 90px;
 }
 .card-background img {
     -webkit-filter: blur(25px);
@@ -866,7 +869,7 @@ form.formulaire fieldset div th span {
     text-overflow: ellipsis;
 }
 .card.hovercard .bottom {
-    padding: 0 20px;
+    padding: 0 0px;
     margin-bottom: 17px;
 }
 .btn-pref .btn {
@@ -888,7 +891,7 @@ form.formulaire fieldset div th span {
 
 
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
-body { padding-top: 60px; }
+body { }
 .nav.nav-justified > li > a { position: relative; }
 .nav.nav-justified > li > a:hover,
 .nav.nav-justified > li > a:focus { background-color: transparent; }
@@ -1201,4 +1204,20 @@ body { padding-top: 60px; }
     .dropdown.dropdown-lg .dropdown-menu {
         min-width: 500px;
     }
+}
+
+
+
+
+
+
+
+
+/** modal popup **/
+.modal-backdrop.in {
+    z-index: -1 !important;
+}
+
+.datepicker.dropdown-menu {
+    z-index: 2000 !important;
 }

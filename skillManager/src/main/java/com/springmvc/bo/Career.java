@@ -1,32 +1,31 @@
 package com.springmvc.bo;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="career")
-public class Career {
+public class Career implements Comparable<Career> {
 	
 	private Long idcareer;
 	private String poste;
 	private String coefficient;
 	private Date date;
-	private List<Person>persons;
+	private Person persons;
 	
 	
 	public Career() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Career(Long idcareer, String poste, String coefficient, Date date, List<Person> persons) {
+	public Career(Long idcareer, String poste, String coefficient, Date date, Person persons) {
 		super();
 		this.idcareer = idcareer;
 		this.poste = poste;
@@ -66,13 +65,18 @@ public class Career {
 		return "Career [idcareer=" + idcareer + ", poste=" + poste + ", coefficient=" + coefficient + ", date=" + date
 				+ ", persons=" + persons + "]";
 	}
-	@OneToMany
-	@JoinColumn(name="career_id")
-	public List<Person> getPersons() {
+	
+	@ManyToOne
+	@JoinColumn(name="persons_id")
+	public Person getPersons() {
 		return persons;
 	}
-	public void setPersons(List<Person> persons) {
+	public void setPersons(Person persons) {
 		this.persons = persons;
+	}
+	@Override
+	public int compareTo(Career o) {
+		return o.getDate().compareTo(date);
 	}
 	
 }

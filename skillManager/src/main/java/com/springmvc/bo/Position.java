@@ -70,8 +70,7 @@ public class Position implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Position [id=" + id + ", code=" + code + ", trs_label_key=" + trs_label_key + ", persons=" + persons
-				+ "]";
+		return code;
 	}
 
 }
