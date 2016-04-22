@@ -48,8 +48,8 @@ public class MISC implements Serializable{
 		this.misc_description = misc_description;
 	}
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.LAZY, mappedBy="misc")
+//	@PrimaryKeyJoinColumn
 	public Person getPerson() {
 		return person;
 	}

@@ -24,13 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
+import com.springmvc.bo.Career;
 import com.springmvc.bo.MISC;
 import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Position;
 import com.springmvc.bo.Skill;
+import com.springmvc.formdata.CareerFormData;
 import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
+import com.springmvc.services.CareerService;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.MiscService;
 import com.springmvc.services.MissionService;
@@ -44,7 +47,6 @@ import com.springmvc.utils.Security;
 import com.springmvc.utils.SkillUtils;
 import com.springmvc.utils.Translation;
 import com.springmvc.web.editor.BusinessUnitEditor;
-import com.springmvc.web.editor.DateEditor;
 import com.springmvc.web.editor.PersonEditor;
 import com.springmvc.web.editor.PositionEditor;
 
@@ -60,6 +62,7 @@ public class CollabController {
 	
 	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
 	private final MissionService missionService = Context.getInstance().getApplicationContext().getBean(MissionService.class);
+	private final CareerService careerService = Context.getInstance().getApplicationContext().getBean(CareerService.class);
 	
 	private final PositionService positionService = Context.getInstance().getApplicationContext().getBean(PositionService.class);
 	
@@ -106,6 +109,25 @@ public class CollabController {
 		}
 		else return PersonUtils.ERROR_FORWARD;
 	}
+	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateCareer.do")
+	public String updateMission(@ModelAttribute("career") CareerFormData career, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+		Security secure = Security.getInstance();
+		if (secure.verifyLogin(request)) {
+			Person person = servicePerson.getPerson(career.getPersonId());
+			
+			if(career!=null && career.getCareer()!=null) {
+				Career careerToSave = career.getCareer();
+				careerToSave.setPersons(person);
+				
+				careerService.createCareer(careerToSave);
+			}
+			
+			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));			
+			return PersonUtils.loadPersonDetailAsManager(person.getMatricule(), model, session, request, servicePerson, pictureService);
+			
+		}
+		else return PersonUtils.ERROR_FORWARD;
+	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/collaborater/update.do")
 	public String updatePerson(@ModelAttribute("person") PersonFormData person, Model model, HttpSession session, HttpServletRequest request) throws IOException {
@@ -136,14 +158,15 @@ public class CollabController {
 			if(personForMerge.getMisc()==null) {
 				//create new one
 				misc = new MISC(null, person.getPerson().getMisc().getMisc_description(), personForMerge);
-				miscService.createMISC(misc);
+				misc = miscService.createMISC(misc);
 			} else {
 				misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
 				misc.setMisc_description(person.getPerson().getMisc().getMisc_description());
+//				personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
 				miscService.updateMISC(misc);
 			}
 			
-			personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
+			personForMerge.setMisc(misc);
 			
 			Person personMerged = servicePerson.mergePerson(personForMerge);
 

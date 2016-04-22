@@ -47,7 +47,9 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.sii" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker3"
-									name="person.date_entry_sii" required value="<fmt:formatDate  value="${person.person.date_entry_sii}"  pattern="dd-MM-yyyy" />"
+									name="person.date_entry_sii" 
+									placeholder="<spring:message code="person.date.sii"/>"
+									required value="<fmt:formatDate  value="${person.person.date_entry_sii}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
 					</div>
@@ -75,6 +77,7 @@
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker"
 									name="person.birth_date" required 
+									placeholder="<spring:message code="person.date.birth"/>"
 									value="<fmt:formatDate  value="${person.person.birth_date}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
@@ -129,6 +132,7 @@
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker2"
 									name="person.date_activity_pro" required 
+									placeholder="<spring:message code="person.date.activity"/>"
 									value="<fmt:formatDate  value="${person.person.date_activity_pro}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
@@ -236,7 +240,13 @@
 								<table class="table table-hover" id="dev-table">
 									<thead>
 										<tr>
-											<th></th>
+											<th>
+											<div>
+												<input type="button" title="<spring:message code='career.add'/>" class="addButton"
+													data-toggle="modal" data-target="#myModalCareer"
+												/>
+											</div>
+											</th>
 											<th><spring:message code='career.poste' /></th>
 											<th><spring:message code='career.coefficient' /></th>
 											<th><spring:message code='career.date' /></th>
@@ -246,9 +256,7 @@
 									<tbody>
 									<c:forEach var="career" items="${person.person.career}" varStatus="status">
 										<tr>
-											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
-		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
-											</td>
+											<td></td>
 											<td>${career.poste}</td>
 											<td>${career.coefficient}</td>
 											<td><fmt:formatDate  value="${career.date}"  pattern="dd-MM-yyyy" /></td>
@@ -277,7 +285,7 @@
 						</div>
 					</div>
 					<form:hidden path="person.id" />
-					<button class="btn btn-lg btn-primary btn-block" type="submit">${type}</button>
+					<button class="btn btn-lg btn-success btn-block" type="submit">${type}</button>
 				</form:form>
 			</div>
 		</div>
@@ -286,6 +294,7 @@
 
 <!-- MODAL POPUPS -->
 <%@include file="./editionMission.jsp" %>
+<%@include file="./editionCareer.jsp" %>
 
 
 <script type="text/javascript">

@@ -44,6 +44,7 @@
 						<div class="col-sm-4">
 							<input type="text" class="form-control" id="datePicker4"
 								name="mission.dateDemarrage" required
+								placeholder="<spring:message code="mission.dateDemarrage"/>"
 								value="<fmt:formatDate  value="${mission.mission.dateDemarrage}"  pattern="dd-MM-yyyy" />"
 								${readonly} 
 								/>
