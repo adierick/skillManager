@@ -581,6 +581,7 @@ form.formulaire fieldset div th span {
     cursor: pointer;
     padding: 0px;
     height: 23px !important;
+    width: 23px !important;
 }
 
 .submitButton {
@@ -792,7 +793,8 @@ form.formulaire fieldset div th span {
 
 /* USER PROFILE PAGE */
  .card {
-    margin-top: 20px;
+/*     margin-top: 20px; */
+    margin-top: 0px;
     padding: 30px;
     background-color: rgba(214, 224, 226, 0.2);
     -webkit-border-top-left-radius:5px;
@@ -814,7 +816,8 @@ form.formulaire fieldset div th span {
     background-color: rgba(255, 255, 255, 1);
 }
 .card.hovercard .card-background {
-    height: 130px;
+/*     height: 130px; */
+	height: 90px;
 }
 .card-background img {
     -webkit-filter: blur(25px);
@@ -866,7 +869,7 @@ form.formulaire fieldset div th span {
     text-overflow: ellipsis;
 }
 .card.hovercard .bottom {
-    padding: 0 20px;
+    padding: 0 0px;
     margin-bottom: 17px;
 }
 .btn-pref .btn {
@@ -1201,4 +1204,20 @@ body { }
     .dropdown.dropdown-lg .dropdown-menu {
         min-width: 500px;
     }
+}
+
+
+
+
+
+
+
+
+/** modal popup **/
+.modal-backdrop.in {
+    z-index: -1 !important;
+}
+
+.datepicker.dropdown-menu {
+    z-index: 2000 !important;
 }

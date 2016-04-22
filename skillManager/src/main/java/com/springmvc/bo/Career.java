@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="career")
-public class Career {
+public class Career implements Comparable<Career> {
 	
 	private Long idcareer;
 	private String poste;
@@ -73,6 +73,10 @@ public class Career {
 	}
 	public void setPersons(Person persons) {
 		this.persons = persons;
+	}
+	@Override
+	public int compareTo(Career o) {
+		return o.getDate().compareTo(date);
 	}
 	
 }

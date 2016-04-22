@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,10 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.xml.ws.soap.Addressing;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
@@ -54,15 +59,16 @@ public class Person implements Serializable {
 	private String position_coeff;
 	private Position position;
 	private Person manager_;
-	private Set<Remuneration> remuneration;
-	private Set<Mission> missions;
-	private Set<Career> career;
+	private SortedSet<Remuneration> remuneration;
+	private SortedSet<Mission> missions;
+	private SortedSet<Career> career;
 	private MISC misc;
 	
 	
 	public Person(Long id, String firstname, String lastname, String matricule, String email, BusinessUnit bu,
 			Boolean admin, Boolean manager, String login, String password, Date birth_date, String tel, String hobby,
-			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, Set<Remuneration> remuneration, Person manager_, Set<Mission> missions, Set<Career> career/*, MISC misc*/) {
+			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, SortedSet<Remuneration> remuneration, 
+			Person manager_, SortedSet<Mission> missions, SortedSet<Career> career/*, MISC misc*/) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -221,6 +227,7 @@ public class Person implements Serializable {
 		this.manager = manager;
 	}
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	public Date getBirth_date() {
 		return birth_date;
 	}
@@ -307,31 +314,35 @@ public class Person implements Serializable {
 	
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="persons_id")
-	public Set<Remuneration> getRemuneration() {
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Remuneration> getRemuneration() {
 		return remuneration;
 	}
 
-	public void setRemuneration(Set<Remuneration> remuneration) {
+	public void setRemuneration(SortedSet<Remuneration> remuneration) {
 		this.remuneration = remuneration;
 	}
 	
 
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="persons_id")
-	public Set<Mission> getMissions() {
+	@OrderBy("dateDemarrage")
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Mission> getMissions() {
 		return missions;
 	}
 
-	public void setMissions(Set<Mission> missions) {
+	public void setMissions(SortedSet<Mission> missions) {
 		this.missions = missions;
 	}
 	
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="persons_id")
-	public Set<Career> getCareer() {
+	@Sort(type = SortType.NATURAL) 
+	public SortedSet<Career> getCareer() {
 		return career;
 	}
-	public void setCareer(Set<Career> poste) {
+	public void setCareer(SortedSet<Career> poste) {
 		this.career = poste;
 	}
 	

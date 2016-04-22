@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="mission")
-public class Mission implements Serializable{
+public class Mission implements Serializable, Comparable<Mission>{
 	/**
 	 * 
 	 */
@@ -28,8 +28,10 @@ public class Mission implements Serializable{
 	private Person persons;
 
 
-	public Mission(int idmission, String client, String activite, Date dateDemarrage, String commentaire,
-			String entitedMission, Person persons) {
+
+	public Mission(int idmission, String client, String activite,
+			Date dateDemarrage, String commentaire, String entitedMission,
+			Person persons) {
 		super();
 		this.idmission = idmission;
 		this.client = client;
@@ -39,6 +41,13 @@ public class Mission implements Serializable{
 		this.entitedMission = entitedMission;
 		this.persons = persons;
 	}
+	
+	
+	
+	public Mission() {
+	}
+
+
 
 	public String getEntitedMission() {
 		return entitedMission;
@@ -47,7 +56,6 @@ public class Mission implements Serializable{
 		this.entitedMission = entitedMission;
 	}
 
-	public Mission(){}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -106,6 +114,13 @@ public class Mission implements Serializable{
 		return "Mission [idmission=" + idmission + ", client=" + client + ", activite=" + activite + ", dateDemarrage="
 				+ dateDemarrage + ", commentaire=" + commentaire + ", entitedMission=" + entitedMission + ", person="
 				+ persons + "]";
+	}
+
+
+
+	@Override
+	public int compareTo(Mission o) {
+		return o.getDateDemarrage().compareTo(dateDemarrage);
 	}
 
 

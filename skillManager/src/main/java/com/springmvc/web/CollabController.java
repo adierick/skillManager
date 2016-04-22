@@ -2,6 +2,7 @@ package com.springmvc.web;
 
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -23,12 +25,15 @@ import com.springmvc.Context;
 import com.springmvc.IConstants;
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.MISC;
+import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Position;
 import com.springmvc.bo.Skill;
+import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.MiscService;
+import com.springmvc.services.MissionService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
 import com.springmvc.services.PositionService;
@@ -54,6 +59,7 @@ public class CollabController {
 	private final SkillService serviceSkill = Context.getInstance().getApplicationContext().getBean(SkillService.class);
 	
 	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
+	private final MissionService missionService = Context.getInstance().getApplicationContext().getBean(MissionService.class);
 	
 	private final PositionService positionService = Context.getInstance().getApplicationContext().getBean(PositionService.class);
 	
@@ -66,30 +72,6 @@ public class CollabController {
 		return "collaborater/listeEmploies";
 	}
 	
-	/*
-	@RequestMapping(value="/collaborater/editionCHFR.do")
-	public String afficherRMCA(ModelMap pModel){
-		//lancement du service et récupération de données en base pour person
-		return "collaborater/CHFR";
-	}
-*/	
-/*	
-	@RequestMapping(method=RequestMethod.GET, value="/collaborater/editionCollaborater.do")
-	public String personDetail(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
-		boolean isManager = Security.getInstance().verifyManager(session, request);
-		
-		Person collabEdition = servicePerson.getPerson(matricule);
-		//List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
-		
-		model.addAttribute("collabEdition", collabEdition);
-		
-		if (isManager) {
-			return PersonUtils.loadPersonDetailAsManager(matricule, model, session, request, servicePerson, pictureService);
-		}
-		return PersonUtils.loadPersonDetail(matricule, model, session, request, servicePerson, pictureService);
-	}
-*/
-
 	/**
 	 * Person detail.
 	 *
@@ -97,42 +79,32 @@ public class CollabController {
 	 * @param model the model
 	 * @throws IOException 
 	 */
-	
-	
 	@RequestMapping(method=RequestMethod.GET, value="/collaborater/editionCollaboraterAsManager.do")
 	public String personDetailAsManager(@RequestParam("matricule") String matricule, Model model ,HttpSession session, HttpServletRequest request) throws IOException {
 		Person person = servicePerson.getPerson(matricule);
 		List<Skill> listeSkills = SkillUtils.refreshListSkill(person, serviceSkill, serviceItem);
 		model.addAttribute("collabEdition", listeSkills);
-//		List<Remuneration> listRemuneration = serviceRemuneration.listeAllRemuneration();
-//		model.addAttribute("listeRemunerations", listRemuneration);
 		return PersonUtils.loadPersonDetailAsManager(matricule, model, session, request, servicePerson, pictureService);
 	}
 
-	@RequestMapping(value="/collaborater/RMCA.do")
-	public String AfficherRMCA(ModelMap pModel){
-//		final List<Remuneration> listRemuneration = serviceRemuneration.listeAllRemuneration();
-//		pModel.addAttribute("listeRemunerations", listRemuneration);
-//		final List<Mission> listMission = serviceMission.listeAllMission();
-//		pModel.addAttribute("listeMissions", listMission);
-//		final List<Career> listCareer = serviceCareer.listeAllCareer();
-//		pModel.addAttribute("listeCareers", listCareer);
-//		final List<MISC> listMISC = serviceMISC.listeAllMISC();
-//		pModel.addAttribute("listeMISC", listMISC);
-		return "collaborater/RMCA";
-	}
+	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateMission.do")
+	public String updateMission(@ModelAttribute("mission") MissionFormData mission, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+		Security secure = Security.getInstance();
+		if (secure.verifyLogin(request)) {
+			Person person = servicePerson.getPerson(mission.getPersonId());
+			
+			if(mission!=null && mission.getMission()!=null) {
+				Mission missionToSave = mission.getMission();
+				missionToSave.setPersons(person);
+				
+				missionService.createMission(missionToSave);
+			}
+			
+			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));			
+			return PersonUtils.loadPersonDetailAsManager(person.getMatricule(), model, session, request, servicePerson, pictureService);
 
-	@RequestMapping(value="/collaborater/CHFR.do")
-	public String AfficherCHFR(ModelMap pModel){
-//		final List<Behaviour> listBehaviour = service.listeAllBehaviour();
-//		pModel.addAttribute("listeBehaviours", listBehaviour);
-//		final List<History_MGT> listHistoryMGT = service.listeHistory_MGT();
-//		pModel.addAttribute("listeHistory_MGT", listHistoryMGT);
-//		final List<Formation> listFormation = service.listeAllFormation();
-//		pModel.addAttribute("listeFormations", listFormation);
-//		final List<Remarks> listRemarks = service.listeAllRemarks();
-//		pModel.addAttribute("listeRemarks", listRemarks);
-		return "collaborater/CHFR";
+		}
+		else return PersonUtils.ERROR_FORWARD;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/collaborater/update.do")
@@ -156,16 +128,20 @@ public class CollabController {
 			personForMerge.setBu(person.getPerson().getBu());
 			personForMerge.setManager_(person.getPerson().getManager_());
 			
-			/** mise à jour de la table mission **/
-//			personForMerge.setMissions(person.getPerson().getMissions());
-			
 			/** mise à jour de la table position **/
 			personForMerge.setPosition(person.getPerson().getPosition());
 			
 			/** mise à jour de la table misc associé **/
-			MISC misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
-			misc.setMisc_description(person.getPerson().getMisc().getMisc_description());
-			miscService.updateMISC(misc);
+			MISC misc = null;
+			if(personForMerge.getMisc()==null) {
+				//create new one
+				misc = new MISC(null, person.getPerson().getMisc().getMisc_description(), personForMerge);
+				miscService.createMISC(misc);
+			} else {
+				misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
+				misc.setMisc_description(person.getPerson().getMisc().getMisc_description());
+				miscService.updateMISC(misc);
+			}
 			
 			personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
 			
@@ -178,29 +154,6 @@ public class CollabController {
 		else return PersonUtils.ERROR_FORWARD;
 
 	}
-	
-//	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateMission.do")
-//	public String updateMission(@ModelAttribute("mission") MissionFormData mission, Model model, HttpSession session, HttpServletRequest request) throws IOException {
-//
-//		Mission missionForMerge;
-//		Security secure = Security.getInstance();
-//		if (secure.verifyLogin(request)) {
-//			
-//			missionForMerge = serviceMission.getMission(mission.getMission().getIdmission());
-//			
-//			missionForMerge.setEntitedMission(mission.getMission().getEntitedMission());
-//			
-//			Mission missionForMerged = serviceMission.mergeMission(missionForMerge);
-//	
-//			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));
-//		
-//			return "collaborater/editionMission";
-//
-//		}
-//		else return "collaborater/listeEmploies";
-//	}
-	
-	
 	
 	@ModelAttribute("listBu")
 	public Collection<BusinessUnit> populateBusinessUnit() {
@@ -222,7 +175,7 @@ public class CollabController {
 		dataBinder.registerCustomEditor(BusinessUnit.class, new BusinessUnitEditor());
 		dataBinder.registerCustomEditor(Person.class, new PersonEditor());
 		dataBinder.registerCustomEditor(Position.class, new PositionEditor());
-		dataBinder.registerCustomEditor(Date.class, new DateEditor());
+		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd-MM-yyyy"), true));
 	}
 	
 	

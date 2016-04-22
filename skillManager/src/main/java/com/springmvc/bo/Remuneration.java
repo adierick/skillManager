@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="remuneration")
-public class Remuneration implements Serializable{
+public class Remuneration implements Serializable, Comparable<Remuneration>{
 
 	/**
 	 * 
@@ -92,5 +92,9 @@ public class Remuneration implements Serializable{
 	public String toString() {
 		return "Remuneration [idREMUNERATION=" + idREMUNERATION + ", brut=" + brut + ", fixe=" + fixe + ", variable="
 				+ variable + ", commentaire=" + commentaire + ", persons=" + persons + "]";
+	}
+	@Override
+	public int compareTo(Remuneration o) {
+		return o.getBrut().compareTo(brut);
 	}
 }

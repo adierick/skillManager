@@ -36,42 +36,26 @@
 			        </div>
 			    </div>
 			    <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
-<!-- 			        <div class="btn-group" role="group"> -->
-<!-- 			            <button type="button" id="following" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
-<%-- 			                <div class="hidden-xs"><spring:message code="personnal.data"/></div> --%>
-<!-- 			            </button> -->
-<!-- 			        </div> -->
 			        <div class="btn-group" role="group">
-			            <button type="button" id="rmca" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star " aria-hidden="true"></span>
+			            <button type="button" id="rmca" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 			                <div class="hidden-xs"><spring:message code="rmca.data"/></div>
 			            </button>
 			        </div>
 			          <div class="btn-group" role="group">
-			            <button type="button" id="chfr" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-star " aria-hidden="true"></span>
+			            <button type="button" id="chfr" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star " aria-hidden="true"></span>
 			                <div class="hidden-xs"><spring:message code='person.chfr'/></div>
 			            </button>
 			        </div>
-<!-- 			        <div class="btn-group" role="group"> -->
-<!-- 			            <button type="button" id="favorites" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-picture " aria-hidden="true"></span> -->
-<%-- 			                <div class="hidden-xs"><spring:message code='person.picture'/></div> --%>
-<!-- 			            </button> -->
-<!-- 			        </div> -->
 			    </div>
 			<fieldset class="ellipse01">
 				<div class="well">
 			      <div class="tab-content">
-<!-- 			        <div class="tab-pane fade in active" id="tab1"> -->
-<%-- 			       		 <%@include file="../collaborater/editionCollaborater.jsp" %> --%>
-<!-- 			        </div> -->
-			        <div class="tab-pane fade in active" id="tab2">
+			        <div class="tab-pane fade in active" id="tab1">
 			         	<%@include file="../collaborater/RMCA.jsp" %>
 			        </div>
-			        <div class="tab-pane fade in" id="tab3">
+			        <div class="tab-pane fade in" id="tab2">
 			        	<%@include file="../collaborater/CHFR.jsp" %>
 			        </div>
-<!-- 			        <div class="tab-pane fade in" id="tab4"> -->
-<%-- 			         	<%@include file="../collaborater/pictureCollaborater.jsp" %>			        	 --%>
-<!-- 			      </div> -->
 			    </div>		
 			</div>
 		</fieldset>

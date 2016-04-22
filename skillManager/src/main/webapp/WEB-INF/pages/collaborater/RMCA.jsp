@@ -47,7 +47,7 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.sii" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker3"
-									name="person.date_entry_sii" required value="${person.person.date_entry_sii}"
+									name="person.date_entry_sii" required value="<fmt:formatDate  value="${person.person.date_entry_sii}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
 					</div>
@@ -74,7 +74,8 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.birth" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker"
-									name="person.birth_date" required value="${person.person.birth_date}"
+									name="person.birth_date" required 
+									value="<fmt:formatDate  value="${person.person.birth_date}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
 						
@@ -127,7 +128,8 @@
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.date.activity" /></label>
 						<div class="col-sm-4">
 								<input type="text" class="form-control" id="datePicker2"
-									name="person.date_activity_pro" required value="${person.person.date_activity_pro}"
+									name="person.date_activity_pro" required 
+									value="<fmt:formatDate  value="${person.person.date_activity_pro}"  pattern="dd-MM-yyyy" />"
 									${readonly} /> 
 						</div>
 					</div>		
@@ -183,10 +185,16 @@
 								</div>
 								<table class="table table-hover" id="dev-table">
 									<tr>
-										<th></th>
+										<th>
+											<div>
+												<input type="button" title="<spring:message code='mission.add'/>" class="addButton"
+													data-toggle="modal" data-target="#myModal"
+												/>
+											</div>
+										</th>
 
 										<th><spring:message code='mission.client' /></th>
-										<th><spring:message code='missionentitedMission' /></th>
+										<th><spring:message code='mission.entitedMission' /></th>
 										<th><spring:message code='mission.activite' /></th>
 										<th><spring:message code='mission.dateDemarrage' /></th>
 										<th><spring:message code='mission.commentaire' />
@@ -196,13 +204,15 @@
 									<tbody>
 									<c:forEach var="mission" items="${person.person.missions}" varStatus="status">
 										<tr>
-											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
-		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
+											<td>
+<%-- 												<a href="#" onclick="editMission('<%=request.getContextPath()%>', '${person.person.matricule}', ${mission.idmission})"  > --%>
+<!-- 													<span class="glyphicon glyphicon-edit"></span>  -->
+<!-- 												</a>  -->
 											</td>
 											<td>${mission.client}</td>
 											<td>${mission.entitedMission}</td>
 											<td>${mission.activite}</td>
-											<td>${mission.dateDemarrage}</td>
+											<td><fmt:formatDate  value="${mission.dateDemarrage}"  pattern="dd-MM-yyyy" /></td>
 											<td>${mission.commentaire}</td>
 										</tr>
 									</c:forEach>
@@ -211,9 +221,6 @@
 							</div>
 						</div>
 					</div>
-					
-					
-					
 					
 					<%-- ------------ --%> 
 					<%--    CAREER    --%> 
@@ -244,7 +251,7 @@
 											</td>
 											<td>${career.poste}</td>
 											<td>${career.coefficient}</td>
-											<td>${career.date}</td>
+											<td><fmt:formatDate  value="${career.date}"  pattern="dd-MM-yyyy" /></td>
 										</tr>
 									</c:forEach>
 									</tbody>
@@ -264,8 +271,6 @@
 							<div class="table table-hover" id="dev-table">
 								<form:textarea path="person.misc.misc_description" rows="5"
 									cols="77"></form:textarea>
-
-								<%-- 		<textarea class="form-control" path="person.person.misc.misc_description" placeholder="<spring:message code="misc.description"/>" type="text" required value="${person.person.misc.misc_description}"></textarea> --%>
 							</div>
 
 
@@ -279,65 +284,23 @@
 	</div>
 </div>
 
+<!-- MODAL POPUPS -->
+<%@include file="./editionMission.jsp" %>
 
 
 <script type="text/javascript">
 	$(document).ready(
 			function() {
-				/*  $('#datePicker', '#datePicker2', '#datePicker3')
-				      .datepicker({
-				          format: 'dd-mm-yyyy',
-				          autoclose: true
-				      })
-				      .on('changeDate', function(e) {
-				          // Revalidate the date field
-				          $('#eventForm', '#eventForm2', '#eventForm3').formValidation('revalidateField', 'date');
-				      });
-				 */
+				//Date picker
 				$("input[id*='datePicker']").each(
 						function(key, element) {
 							$(element).datepicker({
 								format : 'dd-mm-yyyy',
 								autoclose : true
 
-							}).on(
-									'changeDate',
-									function(e) {
-										// Revalidate the date field
-										$('#eventForm', '#eventForm2',
-												'#eventForm3').formValidation(
-												'revalidateField', 'date');
-									});
+							});
 						});
-
-				$('#eventForm', '#eventForm2', '#eventForm3').formValidation({
-					framework : 'bootstrap',
-					icon : {
-						valid : 'glyphicon glyphicon-ok',
-						invalid : 'glyphicon glyphicon-remove',
-						validating : 'glyphicon glyphicon-refresh'
-					},
-					fields : {
-						name : {
-							validators : {
-								notEmpty : {
-									message : 'The name is required'
-								}
-							}
-						},
-						date : {
-							validators : {
-								notEmpty : {
-									message : 'The date is required'
-								},
-								date : {
-									format : 'DD-MM-YYYY',
-									autoclose : true,
-									message : 'The date is not a valid'
-								}
-							}
-						}
-					}
-				});
+			    
 			});
+	
 </script>

@@ -12,8 +12,11 @@ import org.springframework.ui.Model;
 
 import com.springmvc.Context;
 import com.springmvc.IConstants;
+import com.springmvc.bo.MISC;
+import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Picture;
+import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PictureFormData;
 import com.springmvc.services.PersonService;
@@ -114,9 +117,17 @@ public class PersonUtils {
 		Security secure = Security.getInstance();
 		if (secure.verifyPersoOrManager(matricule, session, request)){
 			Person personForForm = servicePerson.getPerson(matricule);
-			//personForForm.getRemuneration().size();
+			if(personForForm.getMisc()==null) {
+				// populate new object to create if doesn't exist yet
+				personForForm.setMisc(new MISC(null, null, personForForm));
+			}
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");
+			
+			// new mission for create
+			MissionFormData mission = new MissionFormData(new Mission(), personForForm.getId());
+			model.addAttribute("mission", mission);
+			
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
 
 			try {

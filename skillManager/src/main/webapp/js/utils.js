@@ -204,3 +204,12 @@ function refreshSkillStarsOut(id, initialLevel) {
 function sortSearchTable(contextPath, colIndex) {
 	location.href=contextPath+"/main/search/sortTable.do?colIndex="+colIndex;
 }
+
+
+//RMCA
+//function addMission(context, param) {
+//	location.href=context + '/main/mission/addMission.do?matricule=' + param;
+//}
+//function editMission(context, matricule, idMission) {
+//	location.href=context + '/main/mission/editMission.do?matricule=' + matricule + '&id='+idMission;
+//}
