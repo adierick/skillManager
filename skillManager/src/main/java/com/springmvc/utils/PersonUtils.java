@@ -119,7 +119,8 @@ public class PersonUtils {
 			Person personForForm = servicePerson.getPerson(matricule);
 			if(personForForm.getMisc()==null) {
 				// populate new object to create if doesn't exist yet
-				personForForm.setMisc(new MISC(null, null, personForForm));
+				personForForm.setMisc(new MISC(null, null
+						, personForForm));
 			}
 			model.addAttribute("person", new PersonFormData(personForForm));
 			model.addAttribute("type", "update");

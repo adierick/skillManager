@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.xml.ws.soap.Addressing;
 
@@ -346,7 +347,10 @@ public class Person implements Serializable {
 		this.career = poste;
 	}
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+//	@OneToOne(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
+//	@PrimaryKeyJoinColumn
+	@OneToOne(optional=false)
+    @JoinColumn(name="MISC_id")
 	public MISC getMisc() {
 		return misc;
 	}

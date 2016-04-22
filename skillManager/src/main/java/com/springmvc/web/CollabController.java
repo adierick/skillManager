@@ -136,14 +136,15 @@ public class CollabController {
 			if(personForMerge.getMisc()==null) {
 				//create new one
 				misc = new MISC(null, person.getPerson().getMisc().getMisc_description(), personForMerge);
-				miscService.createMISC(misc);
+				misc = miscService.createMISC(misc);
 			} else {
 				misc = miscService.getMISC(personForMerge.getMisc().getIdactivity_prestation());
 				misc.setMisc_description(person.getPerson().getMisc().getMisc_description());
+//				personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
 				miscService.updateMISC(misc);
 			}
 			
-			personForMerge.getMisc().setMisc_description(person.getPerson().getMisc().getMisc_description());
+			personForMerge.setMisc(misc);
 			
 			Person personMerged = servicePerson.mergePerson(personForMerge);
 
