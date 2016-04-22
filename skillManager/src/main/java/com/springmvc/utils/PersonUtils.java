@@ -12,10 +12,12 @@ import org.springframework.ui.Model;
 
 import com.springmvc.Context;
 import com.springmvc.IConstants;
+import com.springmvc.bo.Career;
 import com.springmvc.bo.MISC;
 import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Picture;
+import com.springmvc.formdata.CareerFormData;
 import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PictureFormData;
@@ -128,6 +130,10 @@ public class PersonUtils {
 			// new mission for create
 			MissionFormData mission = new MissionFormData(new Mission(), personForForm.getId());
 			model.addAttribute("mission", mission);
+			
+			// new career for create
+			CareerFormData career = new CareerFormData(new Career(), personForForm.getId());
+			model.addAttribute("career", career);
 			
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
 

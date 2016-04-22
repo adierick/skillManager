@@ -5,32 +5,34 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
 
-import com.springmvc.bo.Mission;
+import com.springmvc.bo.Career;
 
 @Component
-public class MissionFormData {
+public class CareerFormData {
 	@Valid
-	private Mission mission;
+	private Career career;
 	
 	private Long personId;
 	
-	public MissionFormData(){
+	public CareerFormData(){
 	}
 	
 
-	public MissionFormData(Mission mission, Long personId) {
-		this.mission = mission;
+	public CareerFormData(Career career, Long personId) {
+		this.career = career;
 		this.personId = personId;
 	}
 
 
-	public Mission getMission() {
-		return mission;
+	public Career getCareer() {
+		return career;
 	}
 
-	public void setMission(Mission mission) {
-		this.mission = mission;
+
+	public void setCareer(Career career) {
+		this.career = career;
 	}
+
 
 	public Long getPersonId() {
 		return personId;

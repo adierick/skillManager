@@ -37,6 +37,13 @@
 						                          		<span class="glyphicon glyphicon-picture"></span> 
 						                          		<br/><spring:message code='index.trombinoscope.light'/>
 						                          </a>
+									            <c:if test="${userSession.manager}">
+						                          <a href="#" class="btn btn-warning btn-lg" role="button" 
+						                          		 onclick="listeEmploies('<%=request.getContextPath()%>', '${userSession.id}')"  >
+						                          		<span class="glyphicon glyphicon-list-alt"></span> 
+						                          		<br/><spring:message code='index.admin.emploies.light'/>
+						                          </a>
+									            </c:if>
 					                        </div>
 					                    </div>
 					                    <a href="<%=request.getContextPath()%>/main/logout"" class="btn btn-danger btn-lg btn-block" role="button"><span class="glyphicon glyphicon-off"></span> </a>
