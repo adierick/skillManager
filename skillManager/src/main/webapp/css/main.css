@@ -37,6 +37,12 @@ body,p {
 	color: #fff;
 }
 
+input[type=file] {
+    height: 30px;
+    cursor: pointer;
+    width: 305px;
+}
+
 p {
 	padding: 2px 8px;
 }
