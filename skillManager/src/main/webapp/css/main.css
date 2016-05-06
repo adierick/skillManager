@@ -38,7 +38,7 @@ body,p {
 }
 
 input[type=file] {
-    height: 30px;
+    height: 35px !important;
     cursor: pointer;
     width: 305px;
 }

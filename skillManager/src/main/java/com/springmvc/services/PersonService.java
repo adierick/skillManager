@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.Position;
 import com.springmvc.bo.dto.webservice.PersonDto;
 
 
@@ -76,5 +77,6 @@ public interface PersonService extends ISearchService<Person> {
 	public List<PersonDto> getPersonsByBu(String buLabel);
 	
 	public Collection<Person> getManagerList();
+	public Collection<Person> listpersonPosition(Position position);
 
 }
