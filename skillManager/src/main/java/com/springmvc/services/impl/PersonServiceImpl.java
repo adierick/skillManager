@@ -11,13 +11,17 @@ package com.springmvc.services.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Person;
+import com.springmvc.bo.Position;
+import com.springmvc.bo.Skill;
 import com.springmvc.bo.dto.webservice.PersonDto;
 //import com.springmvc.bo.dto.webservice.PersonDto;
 import com.springmvc.services.PersonService;
@@ -198,6 +202,17 @@ public class PersonServiceImpl extends Service implements PersonService {
 			personsDto.add(new PersonDto(p));
 		}
 		return personsDto;
+	}
+
+	@Override
+	public Collection<Person> listpersonPosition(Position position) {
+		Criteria sqlCriteria = getSession().createCriteria(Person.class);
+		sqlCriteria.createAlias( "position", "position" );
+		sqlCriteria.add(
+				Restrictions.eq("position.id", position.getId())
+				);
+		sqlCriteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return sqlCriteria.list();
 	}
 
 
