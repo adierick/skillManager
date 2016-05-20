@@ -17,10 +17,12 @@ import com.springmvc.bo.MISC;
 import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Picture;
+import com.springmvc.bo.Remuneration;
 import com.springmvc.formdata.CareerFormData;
 import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.formdata.PictureFormData;
+import com.springmvc.formdata.RemunerationFormData;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
 
@@ -134,6 +136,11 @@ public class PersonUtils {
 			// new career for create
 			CareerFormData career = new CareerFormData(new Career(), personForForm.getId());
 			model.addAttribute("career", career);
+			
+			// new remuneration for create
+			RemunerationFormData remuneration = new RemunerationFormData(new Remuneration(), personForForm.getId());
+			model.addAttribute("remuneration", remuneration);
+			
 			
 			session.setAttribute(IConstants.ID_COLLAB, personForForm.getId());
 

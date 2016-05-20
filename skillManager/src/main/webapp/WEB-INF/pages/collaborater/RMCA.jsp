@@ -152,20 +152,38 @@
 							<table class="table table-hover" id="dev-table">
 								<thead>
 									<tr>
-										<th><span  class="addButton"></span></th>
-										<th><spring:message code='remuneration.brut' /></th>
+										<th>
+											<div>
+												<input type="button" title="<spring:message code='remuneration.add'/>" class="addButton"
+													data-toggle="modal" data-target="#myModalRemuneration"
+												/>
+											</div>
+										</th>
+										<th><spring:message code='remuneration.annee' /></th>
 										<th><spring:message code='remuneration.fixe' /></th>
 										<th><spring:message code='remuneration.variable' /></th>
 										<th><spring:message code='remuneration.commentaire' />
 									</tr>
 								</thead>
 								<tbody>
+								<%
+								int i = 0;
+								%>
 									<c:forEach var="remuneration" items="${person.person.remuneration}" varStatus="status">
 										<tr>
-											<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a> 
-		<%-- 	 <a href="#" onclick="editionCHFR('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.collab'/></a>  --%>
-											</td>
-											<td>${remuneration.brut}</td>
+											<td></td>
+											<%
+											if(i!=0) {
+											%>
+												<td>N-<%=i %></td>
+											<%
+											} else {
+											%>
+												<td>N</td>
+											<%
+											}
+											i++;
+											%>
 											<td>${remuneration.fixe}</td>
 											<td>${remuneration.variable}</td>
 											<td>${remuneration.commentaire}</td>
@@ -188,6 +206,7 @@
 									</h3>
 								</div>
 								<table class="table table-hover" id="dev-table">
+									<thead>
 									<tr>
 										<th>
 											<div>
@@ -295,6 +314,7 @@
 <!-- MODAL POPUPS -->
 <%@include file="./editionMission.jsp" %>
 <%@include file="./editionCareer.jsp" %>
+<%@include file="./editionRemuneration.jsp" %>
 
 
 <script type="text/javascript">

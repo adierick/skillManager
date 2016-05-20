@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.ws.soap.Addressing;
 
 import org.hibernate.annotations.Sort;
@@ -316,6 +317,7 @@ public class Person implements Serializable {
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="persons_id")
 	@Sort(type = SortType.NATURAL) 
+	@Size(min=0, max=3)
 	public SortedSet<Remuneration> getRemuneration() {
 		return remuneration;
 	}

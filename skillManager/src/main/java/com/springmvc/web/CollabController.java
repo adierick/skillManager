@@ -29,10 +29,12 @@ import com.springmvc.bo.MISC;
 import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Position;
+import com.springmvc.bo.Remuneration;
 import com.springmvc.bo.Skill;
 import com.springmvc.formdata.CareerFormData;
 import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
+import com.springmvc.formdata.RemunerationFormData;
 import com.springmvc.services.CareerService;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.MiscService;
@@ -40,6 +42,7 @@ import com.springmvc.services.MissionService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
 import com.springmvc.services.PositionService;
+import com.springmvc.services.RemunerationService;
 import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.PersonUtils;
@@ -63,6 +66,7 @@ public class CollabController {
 	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
 	private final MissionService missionService = Context.getInstance().getApplicationContext().getBean(MissionService.class);
 	private final CareerService careerService = Context.getInstance().getApplicationContext().getBean(CareerService.class);
+	private final RemunerationService remunerationService = Context.getInstance().getApplicationContext().getBean(RemunerationService.class);
 	
 	private final PositionService positionService = Context.getInstance().getApplicationContext().getBean(PositionService.class);
 	
@@ -110,7 +114,7 @@ public class CollabController {
 		else return PersonUtils.ERROR_FORWARD;
 	}
 	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateCareer.do")
-	public String updateMission(@ModelAttribute("career") CareerFormData career, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+	public String updateCarrer(@ModelAttribute("career") CareerFormData career, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
 		if (secure.verifyLogin(request)) {
 			Person person = servicePerson.getPerson(career.getPersonId());
@@ -120,6 +124,25 @@ public class CollabController {
 				careerToSave.setPersons(person);
 				
 				careerService.createCareer(careerToSave);
+			}
+			
+			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));			
+			return PersonUtils.loadPersonDetailAsManager(person.getMatricule(), model, session, request, servicePerson, pictureService);
+			
+		}
+		else return PersonUtils.ERROR_FORWARD;
+	}
+	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateRemuneration.do")
+	public String updateRemuneration(@ModelAttribute("remuneration") RemunerationFormData remuneration, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+		Security secure = Security.getInstance();
+		if (secure.verifyLogin(request)) {
+			Person person = servicePerson.getPerson(remuneration.getPersonId());
+			
+			if(remuneration!=null && remuneration.getRemuneration()!=null) {
+				Remuneration remunerationToSave = remuneration.getRemuneration();
+				remunerationToSave.setPersons(person);
+				
+				remunerationService.createRemuneration(remunerationToSave);
 			}
 			
 			model.addAttribute(IConstants.VALIDATION_MSG, Translation.getInstance().getTranslation(ITranslations.PERSONNAL_DATA_SAVED));			
