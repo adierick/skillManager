@@ -34,7 +34,6 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
 				<form:form modelAttribute="person" action="update.do" class="formulaire">
 
-
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="textinput"><spring:message code="person.firstname" /></label>
 						<div class="col-sm-4">
@@ -280,8 +279,6 @@
 								<form:textarea path="person.misc.misc_description" rows="5"
 									cols="77"></form:textarea>
 							</div>
-
-
 						</div>
 					</div>
 					<form:hidden path="person.id" />

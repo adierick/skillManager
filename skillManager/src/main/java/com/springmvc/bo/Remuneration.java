@@ -78,7 +78,6 @@ public class Remuneration implements Serializable, Comparable<Remuneration>{
 	}
 
 	
-	
 	@ManyToOne
 	@JoinColumn(name="persons_id")
 	public Person getPersons() {

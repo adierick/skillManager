@@ -64,12 +64,15 @@ public class Person implements Serializable {
 	private SortedSet<Mission> missions;
 	private SortedSet<Career> career;
 	private MISC misc;
-	
-	
+	private Set<Behaviour> behaviour;
+//	private SortedSet<HistoryMGT> historyMGT;
+//	private SortedSet<Formation> formation;
+//	private Remarks remarks;
+		
 	public Person(Long id, String firstname, String lastname, String matricule, String email, BusinessUnit bu,
 			Boolean admin, Boolean manager, String login, String password, Date birth_date, String tel, String hobby,
 			Date date_activity_pro, Date date_entry_sii, String position_coeff, Position position, SortedSet<Remuneration> remuneration, 
-			Person manager_, SortedSet<Mission> missions, SortedSet<Career> career/*, MISC misc*/) {
+			Person manager_, SortedSet<Mission> missions, SortedSet<Career> career, Set<Behaviour> behaviour/*, MISC misc*/) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -93,6 +96,7 @@ public class Person implements Serializable {
 		this.missions=missions;
 		this.career=career;
 //		this.misc=misc;
+		this.behaviour=behaviour;
 	}
 	
 	//TODO : Person managerPerson;
@@ -357,5 +361,44 @@ public class Person implements Serializable {
 	public void setMisc(MISC misc_description) {
 		this.misc = misc_description;
 	}
+
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="persons_id")
+	@Sort(type = SortType.NATURAL) 
+	public Set<Behaviour> getBehaviour() {
+		return behaviour;
+	}
+	public void setBehaviour(Set<Behaviour> behaviour) {
+		this.behaviour = behaviour;
+	}
+
+//	@OneToMany(fetch=FetchType.EAGER)
+//	@JoinColumn(name="persons_id")
+//	public SortedSet<HistoryMGT> getHistoryMGT() {
+//		return historyMGT;
+//	}
+//
+//	public void setHistoryMGT(SortedSet<HistoryMGT> historyMGT) {
+//		this.historyMGT = historyMGT;
+//	}
+//
+//	@OneToMany(fetch=FetchType.EAGER)
+//	@JoinColumn(name="persons_id")
+//	public SortedSet<Formation> getFormation() {
+//		return formation;
+//	}
+//	public void setFormation(SortedSet<Formation> formation) {
+//		this.formation = formation;
+//	}
+//
+//	@OneToOne(optional=false)
+//    @JoinColumn(name="remarks_id")
+//	public Remarks getRemarks() {
+//		return remarks;
+//	}
+//
+//	public void setRemarks(Remarks remarks) {
+//		this.remarks = remarks;
+//	}
 
 }

@@ -43,7 +43,7 @@
 			        </div>
 			          <div class="btn-group" role="group">
 			            <button type="button" id="chfr" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star " aria-hidden="true"></span>
-			                <div class="hidden-xs"><spring:message code='person.chfr'/></div>
+			                <div class="hidden-xs"><spring:message code='chfr.data'/></div>
 			            </button>
 			        </div>
 			    </div>
