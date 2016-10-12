@@ -16,6 +16,7 @@
 	<bean class="com.springmvc.web.BusinessUnitController" />
 	<bean class="com.springmvc.web.ItemController" />
 	<bean class="com.springmvc.web.CategoryController" />
+	<bean class="com.springmvc.web.PositionController" />
 	<!-- fiche collaborateurs -->
 	<bean class="com.springmvc.web.CollabController"/>
 <!-- 	<bean class="com.springmvc.web.SkillController" /> -->

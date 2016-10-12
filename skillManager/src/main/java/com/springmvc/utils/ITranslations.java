@@ -27,9 +27,11 @@ public interface ITranslations {
 	
 	/** The bu data saved. */
 	String BU_DATA_SAVED = "bu.data.saved";
+	String POSITION_DATA_SAVED = "position.data.saved";
 	
 	/** The bu data deleted. */
 	String BU_DATA_DELETED = "bu.data.deleted";
+	String POSITION_DATA_DELETED = "position.data.deleted";
 
 	/** The item data saved. */
 	String ITEM_DATA_SAVED = "item.data.saved";

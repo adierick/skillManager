@@ -48,6 +48,7 @@
 					            <li><a href="#" onclick="listeBusinessUnits('<%=request.getContextPath()%>', '${userSession.id}')" ><spring:message code='index.admin.bu'/></a></li>
 					            <li><a href="#" onclick="listeItems('<%=request.getContextPath()%>', '${userSession.id}')" ><spring:message code='index.admin.item'/></a></li>
 					            <li><a href="#" onclick="listeCategories('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.category'/></a></li> 
+					            <li><a href="#" onclick="listePosition('<%=request.getContextPath()%>', '${userSession.id}')"  ><spring:message code='index.admin.position'/></a></li> 
 					            
 					            <%-- Ajout menu Gestions Fiche collaborateurs --%>
 					            <c:if test="${userSession.manager}">

@@ -134,6 +134,10 @@ function listeBusinessUnits(context, param) {
 	location.href=context + '/main/businessunit/listeBusinessUnits.do';
 }
 
+function listePosition(context, param) {
+	location.href=context + '/main/position/listePositions.do';
+}
+
 function listSkill(context, param) {
 	location.href=context + '/main/skill/listeSkills.do?matricule=' + param;
 }
