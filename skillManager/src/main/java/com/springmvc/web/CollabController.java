@@ -3,6 +3,7 @@ package com.springmvc.web;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -26,31 +27,24 @@ import com.springmvc.IConstants;
 import com.springmvc.bo.Behaviour;
 import com.springmvc.bo.BusinessUnit;
 import com.springmvc.bo.Career;
-import com.springmvc.bo.Formation;
-import com.springmvc.bo.HistoryMGT;
 import com.springmvc.bo.MISC;
+import com.springmvc.bo.ManagementLevel;
 import com.springmvc.bo.Mission;
 import com.springmvc.bo.Person;
 import com.springmvc.bo.Position;
-import com.springmvc.bo.Remarks;
 import com.springmvc.bo.Skill;
 import com.springmvc.formdata.BehaviourFormData;
 import com.springmvc.formdata.CareerFormData;
-import com.springmvc.formdata.FormationFormData;
-import com.springmvc.formdata.HistoryMGTFromData;
 import com.springmvc.formdata.MissionFormData;
 import com.springmvc.formdata.PersonFormData;
 import com.springmvc.services.BehaviourService;
 import com.springmvc.services.CareerService;
-import com.springmvc.services.FormationService;
-import com.springmvc.services.HistoryMGTService;
 import com.springmvc.services.ItemService;
 import com.springmvc.services.MiscService;
 import com.springmvc.services.MissionService;
 import com.springmvc.services.PersonService;
 import com.springmvc.services.PictureService;
 import com.springmvc.services.PositionService;
-import com.springmvc.services.RemarksService;
 import com.springmvc.services.SkillService;
 import com.springmvc.utils.ITranslations;
 import com.springmvc.utils.PersonUtils;
@@ -74,8 +68,7 @@ public class CollabController {
 	private final MiscService miscService = Context.getInstance().getApplicationContext().getBean(MiscService.class);
 	private final MissionService missionService = Context.getInstance().getApplicationContext().getBean(MissionService.class);
 	private final CareerService careerService = Context.getInstance().getApplicationContext().getBean(CareerService.class);
-//	private final BehaviourService behaviourService = Context.getInstance().getApplicationContext().getBean(BehaviourService.class);
-	
+	private final BehaviourService behaviourService = Context.getInstance().getApplicationContext().getBean(BehaviourService.class);
 	private final PositionService positionService = Context.getInstance().getApplicationContext().getBean(PositionService.class);
 	
 	@RequestMapping(value="/collaborater/listeEmploies.do")
@@ -139,7 +132,8 @@ public class CollabController {
 		}
 		else return PersonUtils.ERROR_FORWARD;
 	}
-/*	
+
+	
 	@RequestMapping(method=RequestMethod.POST, value="/collaborater/updateBehaviour.do")
 	public String updateBehaviour(@ModelAttribute("behaviour") BehaviourFormData behaviour, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		Security secure = Security.getInstance();
@@ -159,7 +153,7 @@ public class CollabController {
 		}
 		else return PersonUtils.ERROR_FORWARD;
 	}
-*/
+
 	@RequestMapping(method=RequestMethod.POST, value="/collaborater/update.do")
 	public String updatePerson(@ModelAttribute("person") PersonFormData person, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 
@@ -209,11 +203,17 @@ public class CollabController {
 
 	}
 	
+	
 	@ModelAttribute("listBu")
 	public Collection<BusinessUnit> populateBusinessUnit() {
 		return servicePerson.listeAllBusinessUnits();
 	}
 	
+	@ModelAttribute("listManagement")
+	public List<ManagementLevel> managementLevel() {
+	        return Arrays.asList(ManagementLevel.values());
+	}
+
 	@ModelAttribute("listManager")
 	public Collection<Person> populateManager() {
 		return servicePerson.getManagerList();

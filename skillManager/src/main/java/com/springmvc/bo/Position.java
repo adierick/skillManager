@@ -29,7 +29,6 @@ public class Position implements Serializable{
 	
 	public Position() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Position(Long idposition, String code, String trs_label_key, List<Person> persons) {
 		super();

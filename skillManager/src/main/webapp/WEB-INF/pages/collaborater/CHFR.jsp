@@ -23,7 +23,13 @@
 							</div>
 							<table class="table table-hover" id="dev-table">
 								<thead>
-									<th><span  class="addButton"></span></th>
+									<th>
+										<div>
+											<input type="button"
+												title="<spring:message code='behaviour.add'/>"
+												class="addButton" data-toggle="modal" data-target="#myModalBehaviour" />
+										</div>
+									</th>
 									<th><spring:message code='behaviour.strong_points'/></th>
 									<th><spring:message code='behaviour.areas_improvement'/></th>
 								</thead>
@@ -47,34 +53,65 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<spring:message code='history_MGT.choose.action'/>
+									<spring:message code='history_MGT.choose.action' />
 								</h3>
-								</div>
-								<table>
-									<thead>
-									<th><spring:message code='personality_type'></spring:message></th>
-									<th></th>
-									</thead>
-								</table>	
+							</div>
+							<table class="table table-hover">
 								<table class="table table-hover">
 									<thead>
-										<th><spring:message code='history_MGT.smil'/></th>
-										<th><spring:message code='histoy_MGT.maturity_employee'/></th>
-										<th><spring:message code='history_MGT.management_style'/></th>
-										<th><spring:message code='history_MGT.management_apply'/></th>
+										<th>
+											<div>
+												<input type="button"
+													title="<spring:message code='formation.add'/>"
+													class="addButton" data-toggle="modal"
+													data-target="#myModalHistoryMGT" />
+											</div>
+										</th>
+
+										<th><label class="col-sm-2 control-label" for="textinput"><spring:message
+													code="history_MGT.personality_type" /></label></th>
+										<th><c:forEach var="historyMGT"
+												items="${person.person.historyMGT}" varStatus="status">
+												<input class="form-control"
+													placeholder="<spring:message code="history_MGT.personality_type"/>"
+													type="text" autofocus
+													value="${historyMGT.personality_type}" ${readonly} />
+											</c:forEach></th>
+									</thead>
+								</table>
+								<table class="table table-hover">
+									<thead>
+										<th></th>
+										<th><spring:message code='history_MGT.smil' /></th>
+										<th><spring:message code='histoy_MGT.maturity_employee' /></th>
+										<th><spring:message code='history_MGT.management_style' /></th>
+										<th><spring:message code='history_MGT.management_apply' /></th>
 									</thead>
 									<tbody>
-<%-- 								<c:forEach var="historyMGT" items="${person.person.historyMGT}" varStatus="status"> --%>
-<!-- 									<tr> -->
-<!-- 										<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a></td> -->
-<%-- 										<td>${historyMGT.smil}</td> --%>
-<%-- 										<td>${historyMGT.maturity_employee}</td> --%>
-<%-- 										<td>${historyMGT.management_style}</td> --%>
-<%-- 										<td>${historyMGT.management_apply}</td> --%>
-<!-- 									</tr>	 -->
-<%-- 								</c:forEach> --%>
-								</tbody>
+										<c:forEach var="historyMGT"
+											items="${person.person.historyMGT}" varStatus="status">
+											<tr>
+												<td><a href=""><span
+														class="glyphicon glyphicon-edit"></span> </a></td>
+												<td>${historyMGT.smil}</td>
+												<td>${historyMGT.maturity_employee}</td>
+												<td>
+													<form:select path="person.historyMGT" cssClass="form-control">
+														<form:option value="historyMGT.management_style" label="---" />
+														<form:options items="${listManagement}"/>
+													</form:select> 
+												<td>
+													<form:select path="person.historyMGT"
+														cssClass="form-control">
+														<form:option value="history.management_apply" label="---" />
+														<form:options items="${listManagement}"/>
+													</form:select>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
 								</table>
+							</table>
 						</div>
 					</div>
 						<!---------------->
@@ -89,17 +126,24 @@
 							</div>	
 								<table class="table table-hover" id="dev-table">
 									<thead>
+									<th>
+										<div>
+											<input type="button"
+												title="<spring:message code='formation.add'/>"
+												class="addButton" data-toggle="modal" data-target="#myModalFormation" />
+										</div>
+									</th>
 									<th><spring:message code='formation.entitled'></spring:message></th>
 									<th><spring:message code='formation.date'></spring:message></th>
 									</thead>
 									<tbody>
-<%-- 								<c:forEach var="formation" items="${person.person.formation}" varStatus="status"> --%>
-<!-- 									<tr> -->
-<!-- 										<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a></td> -->
-<%-- 										<td>${formation.entitled}</td> --%>
-<%-- 										<td>${formation.date}</td> --%>
-<!-- 									</tr>	 -->
-<%-- 								</c:forEach> --%>
+								<c:forEach var="formation" items="${person.person.formation}" varStatus="status">
+									<tr>
+										<td><a href=""><span class="glyphicon glyphicon-edit"></span> </a></td>
+										<td>${formation.entitled}</td>
+										<td><fmt:formatDate  value="${formation.date}"  pattern="dd-MM-yyyy" /></td>
+									</tr>	
+								</c:forEach>
 								</tbody>
 								</table>
 						</div>					
@@ -116,17 +160,16 @@
 							</div>
 
 							<div class="table table-hover" id="dev-table">
-								<textarea rows="5" cols="77"></textarea> 
+								<form:textarea path="person.remarks.remarks" rows="5" cols="77"></form:textarea> 
 							</div>
 						</div>
 					</div>
+					<form:hidden path="person.firstname" />
+					<button class="btn btn-lg btn-success btn-block" type="submit">${type}</button>
 				</form:form>
 			</div>	
 		</div>
 	</div>
 </div>	
 				
-<!-- <a href="#" class="btn btn-warning btn-lg" role="button"> -->
-<!-- 	<span class="glyphicon glyphicon-alert"></span> <br/> -->
-<!-- 	UNDER CONSTRUCTION -->
-<!-- </a> -->
+
