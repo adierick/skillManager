@@ -62,7 +62,7 @@
 										<th>
 											<div>
 												<input type="button"
-													title="<spring:message code='formation.add'/>"
+													title="<spring:message code='history_MGT.add'/>"
 													class="addButton" data-toggle="modal"
 													data-target="#myModalHistoryMGT" />
 											</div>
@@ -148,10 +148,11 @@
 								</table>
 						</div>					
 					</div>	
+									
 					<!--------------------->
 					<!------REMARQUES------>
 					<!--------------------->
-					<div class="col-md-6">
+					<div>
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<h3 class="panel-title">
@@ -160,7 +161,7 @@
 							</div>
 
 							<div class="table table-hover" id="dev-table">
-								<form:textarea path="person.remarks.remarks" rows="5" cols="77"></form:textarea> 
+								<form:textarea path="person.remarks.remarks" style="width: 591px; height: 89px;"></form:textarea> 
 							</div>
 						</div>
 					</div>
@@ -171,5 +172,8 @@
 		</div>
 	</div>
 </div>	
-				
 
+<!-- MODAL POPUPS -->
+<%@include file="./editionBehaviour.jsp" %>
+<%@include file="./editionHistoryMGT.jsp" %>
+<%@include file="./editionFormation.jsp" %>

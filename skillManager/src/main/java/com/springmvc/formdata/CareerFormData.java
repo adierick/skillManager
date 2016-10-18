@@ -1,6 +1,5 @@
 package com.springmvc.formdata;
 
-
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
@@ -9,6 +8,7 @@ import com.springmvc.bo.Career;
 
 @Component
 public class CareerFormData {
+	
 	@Valid
 	private Career career;
 	

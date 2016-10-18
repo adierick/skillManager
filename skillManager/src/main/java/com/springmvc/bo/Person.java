@@ -369,8 +369,8 @@ public class Person implements Serializable {
 	public Set<Behaviour> getBehaviour() {
 		return behaviour;
 	}
-	public void setBehaviour(Set<Behaviour> behaviour) {
-		this.behaviour = behaviour;
+	public void setBehaviour(Set<Behaviour> strong_points) {
+		this.behaviour = strong_points;
 	}
 	
 	
